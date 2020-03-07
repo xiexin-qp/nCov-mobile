@@ -1,6 +1,6 @@
 <template>
   <div class="home qui-page qui-fx-ver">
-    <header-com title="示例"></header-com>
+    <header-com title="项目示例"></header-com>
     <scroll-list ref="scroll" @loadMore="showList" pullUpLoad>
       <div @click="goDetail" class="data-list qui-fx-jsb qui-bd-b" v-for="data in dataList" :key="data.id">
         <span>{{ data.name }}</span>
