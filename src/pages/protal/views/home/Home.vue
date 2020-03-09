@@ -1,6 +1,8 @@
 <template>
   <div class="home qui-page qui-fx-ver">
     <header-com title="疫情日报"></header-com>
+    <van-button type="info" @click="add">信息按钮</van-button>
+    <van-button type="info" @click="detail">信息按钮</van-button>
     <scroll-list ref="scroll" @loadMore="showList" pullUpLoad>
       <div
         @click="goDetail"
@@ -18,12 +20,15 @@
 <script>
 import HeaderCom from '@com/HeaderCom'
 import ScrollList from '@com/ScrollList'
+import { Button } from 'vant'
+
 import { store, actions } from '../../store'
 export default {
   name: 'Home',
   components: {
     HeaderCom,
-    ScrollList
+    ScrollList,
+    [Button.name]: Button,
   },
   computed: {
     count: () => store.count
@@ -54,6 +59,12 @@ export default {
     },
     goDetail() {
       this.$router.push('/detail')
+    },
+    add(){
+      this.$router.push('/addStudent')
+    },
+    detail(){
+      this.$router.push('/reportDetail')
     }
   }
 }
