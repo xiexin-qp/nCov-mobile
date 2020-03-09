@@ -2,12 +2,7 @@
   <div class="home qui-page qui-fx-ver">
     <header-com title="疫情日报"></header-com>
     <scroll-list ref="scroll" @loadMore="showList" pullUpLoad>
-      <div
-        @click="goDetail"
-        class="data-list qui-fx-jsb qui-bd-b"
-        v-for="data in dataList"
-        :key="data.id"
-      >
+      <div @click="goDetail" class="data-list qui-fx-jsb qui-bd-b" v-for="data in dataList" :key="data.id">
         <span>{{ data.name }}</span>
         <span>{{ data.number }}</span>
       </div>
@@ -67,4 +62,3 @@ export default {
   }
 }
 </style>
-db.createUser({user:'canpoint',pwd:'canpoint',roles:[{role:'readWrite',db:'canpoint'}]})

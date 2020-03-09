@@ -12,8 +12,8 @@ function resultBack(res) {
 }
 
 // 响应式数据
-const projectName = 'demo' // 此处写项目名作为存储值
-const localData = window.sessionStorage.getItem(projectName) || '{}'
+const projectName = 'protal_yq' // 此处写项目名作为存储值
+const localData = window.localStorage.getItem(projectName) || '{}'
 const getState = (state, val) => {
   return JSON.parse(localData)[state] || val
 }
@@ -24,9 +24,9 @@ const store = Vue.observable({
 // 修改数据
 const setStore = ({ key, data, isLocal = true }) => {
   if (isLocal) {
-    const localData = JSON.parse(sessionStorage.getItem(projectName) || '{}')
+    const localData = JSON.parse(localStorage.getItem(projectName) || '{}')
     localData[key] = data
-    window.sessionStorage.setItem(projectName, JSON.stringify(localData))
+    window.localStorage.setItem(projectName, JSON.stringify(localData))
   }
   store[key] = data
 }

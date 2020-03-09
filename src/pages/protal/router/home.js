@@ -9,10 +9,10 @@
 const Home = [
   {
     module: 'home',
-    path: 'Home',
+    path: 'Login',
     type: 'index',
     keepAlive: true,
-    title: '首页'
+    title: '登录'
   },
   {
     module: 'home',
