@@ -19,7 +19,6 @@
 import HeaderCom from '@com/HeaderCom'
 import ScrollList from '@com/ScrollList'
 import { store, actions } from '../../store'
-import $ajax from '@u/ajax-serve'
 export default {
   name: 'Home',
   components: {
