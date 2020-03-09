@@ -82,7 +82,7 @@ export default {
           id: 1,
           name: '疫情日报',
           icon: app,
-          url: 'protal',
+          url: 'daily',
           randomNum: 3
         }
       ]
