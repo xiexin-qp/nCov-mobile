@@ -7,6 +7,8 @@ import Vue from 'vue'
 import {
   Dialog,
   Toast,
+  Tabs,
+  Tab,
   Loading,
   Notify,
   RadioGroup,
@@ -20,6 +22,8 @@ import {
 
 Vue.use(Dialog)
 Vue.use(Toast)
+Vue.use(Tabs)
+Vue.use(Tab)
 Vue.use(Loading)
 Vue.use(Notify)
 Vue.use(RadioGroup)
