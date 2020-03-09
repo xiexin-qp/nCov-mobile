@@ -18,6 +18,21 @@ const Home = [
     module: 'home',
     path: 'Detail',
     title: '详情'
+  },
+  {
+    module: 'home',
+    path: 'AddReport',
+    title: '疫情上报'
+  },
+  {
+    module: 'home',
+    path: 'AddStudent',
+    title: '疫情上报'
+  },
+  {
+    module: 'home',
+    path: 'ReportDetail',
+    title: '上报详情'
   }
 ]
 
