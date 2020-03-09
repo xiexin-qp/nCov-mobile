@@ -24,7 +24,7 @@ export default {
   components: {},
   computed: {},
   data() {
-    return { logo, tip: '获取验证码', loginForm: { phone: '', code: '' } }
+    return { logo, tip: '获取验证码', loginForm: { phone: '18702707106', code: '666666' } }
   },
   async mounted() {},
   methods: {
@@ -46,7 +46,9 @@ export default {
         }
       }, 1000)
     },
-    login() {}
+    login() {
+      this.$router.push('/home')
+    }
   }
 }
 </script>

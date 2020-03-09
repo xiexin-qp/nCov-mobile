@@ -9,12 +9,7 @@
     </div>
     <div class="fx-f1">
       <div :class="['qui-fx-wp qui-list qui-bd-b', { 'qui-list--toogle': toogle }]">
-        <div
-          @click="goApp(app.url)"
-          class="app-list qui-fx-ac-jc"
-          v-for="(app, index) in appList"
-          :key="index"
-        >
+        <div @click="goApp(app.url)" class="app-list qui-fx-ac-jc" v-for="(app, index) in appList" :key="index">
           <div class="app-img" :style="{ backgroundColor: bgCol[app.randomNum] }">
             <img :src="app.icon" alt />
           </div>
@@ -73,7 +68,7 @@ export default {
           id: 3,
           name: '项目模块',
           icon: app,
-          url: 'demo',
+          url: 'protal',
           randomNum: 2
         }
       ],
@@ -82,8 +77,22 @@ export default {
           id: 1,
           name: '疫情日报',
           icon: app,
-          url: 'daily',
+          url: 'protal',
           randomNum: 3
+        },
+        {
+          id: 1,
+          name: '家长注册',
+          icon: app,
+          url: 'registerParent',
+          randomNum: 2
+        },
+        {
+          id: 1,
+          name: '教职工注册',
+          icon: app,
+          url: 'registerTeacher',
+          randomNum: 1
         }
       ]
     }

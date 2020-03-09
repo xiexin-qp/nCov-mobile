@@ -16,23 +16,19 @@ const Home = [
   },
   {
     module: 'home',
-    path: 'Detail',
-    title: '详情'
+    path: 'Home',
+    title: '疫情日报',
+    keepAlive: true
   },
   {
     module: 'home',
-    path: 'AddReport',
-    title: '疫情上报'
+    path: 'Personal',
+    title: '个人中心'
   },
   {
     module: 'home',
-    path: 'AddStudent',
-    title: '疫情上报'
-  },
-  {
-    module: 'home',
-    path: 'ReportDetail',
-    title: '上报详情'
+    path: 'Personal',
+    title: '我的班级'
   }
 ]
 

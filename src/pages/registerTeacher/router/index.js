@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './home'
-import Report from './report'
 
 /**
  * @des 路由界面统计
  */
-const RouterPage = [...Home, ...Report]
+const RouterPage = [
+  ...Home
+]
 
 /**
  * @des 路由界面遍历配置

@@ -1,7 +1,7 @@
 <template>
   <div :class="'qui-fx-f1 qui-of scroll-list ' + className" ref="wrapper">
-    <div :class="{'scroll-padd': isPadd}">
-      <no-data v-if="isEmpty && isShow" msg="暂无数据"></no-data>
+    <div :class="{ 'scroll-padd': isPadd }">
+      <no-data v-if="isEmpty && isShow && false" msg="暂无数据"></no-data>
       <slot></slot>
     </div>
   </div>
