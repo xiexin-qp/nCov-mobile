@@ -2,36 +2,34 @@
   <div class="qui-page qui-flex-ver">
     <popup-box
       v-model="isShow"
-      @confirm="isShow = false"
+      @confirm="choose"
       :cancel-text="'取消'"
       width="80"
       height="80"
     >
       <div slot="title" style="padding: 10px; text-align:center">
-        <van-search v-model="searchName" placeholder="请输入姓名" />
+        <van-search v-model="searchName" placeholder="请输入姓名进行搜索" />
       </div>
       <div class="info-list">
         <div
-          style="height: 2rem; line-height: 2rem; padding-left: 10px"
-          class="qui-bd-b"
-          v-for="i in 20"
-          :key="i"
-        >{{ i }}</div>
+          style="height: 2rem; line-height: 2rem; padding-left: 10px;"
+          :class="['qui-bd-b',currentIndex === index ? 'active' : '']"
+          v-for="(item,index) in studentList"
+          :key="item.id"
+          @click="chooseStudent(item,index)"
+        >{{ item.name }}</div>
       </div>
     </popup-box>
     <div class="qui-fx-f1 qui-fx-ver">
       <select-data title="测量部位" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
-      <select-data title="学生姓名" :select-list="studentList" v-model="studentTag" @confirm="chooseStudent"></select-data>
       <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item qui-fx-ac qui-bd-b" v-if="role === 'me'">
           <div class="tip">姓名</div>
-          <div class="submit-input qui-fx-f1" @click="isShow = true">
-            <input class="input" readonly v-model="dataForm.name" type="text" />
-          </div>
+           <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.name }}</div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item qui-fx-ac qui-bd-b" v-else>
           <div class="tip">姓名</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="studentTag = true">{{ dataForm.name }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="isShow = true">{{ dataForm.name }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -47,13 +45,13 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">测量部位</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.type }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.part }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">是否接触疫情人员</div>
           <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-switch v-model="dataForm.isTrue" />
+            <van-switch v-model="dataForm.isTrue" size="22px"/>
           </div>
         </div>
         <div class="submit-area qui-fx-ver">
@@ -92,8 +90,9 @@ import PopupBox from '@com/PopupBox'
 import SelectData from '@c/common/SelectData'
 import validateForm from '@u/validate'
 import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup, Search } from 'vant'
+import { actions } from '../../store'
 const yzForm = {
-  name: '请输入姓名',
+  name: '请选择学生',
   temp: '请输入体温',
   type: '请选择测量部位'
 }
@@ -130,58 +129,58 @@ export default {
           text: '额头、面部'
         }
       ],
+      role: 'teacher',
       dataForm: {
-        name: '李雷',
+        name: '请选择学生',
         temp: '',
         isTrue: true,
         health: [],
         remark: '',
-        type: '请选择'
+        part: '请选择测量部位'
       },
-      studentList: [
-        {
-          id: 1,
-          text: '李雷'
-        },
-        {
-          id: 2,
-          text: '韩梅梅'
-        },
-        {
-          id: 3,
-          text: '刘芳'
-        },
-        {
-          id: 4,
-          text: '刘芳'
-        },
-        {
-          id: 5,
-          text: '刘芳'
-        },
-        {
-          id: 6,
-          text: '刘芳'
-        }
-      ],
-      studentTag:false,
-
+      studentList: [],
+      studentTag: false,
+      currentIndex: '',
+      curVal: '',
     }
   },
-  async mounted() {},
+  watch:{
+    searchName (curVal) {
+      this.curVal = curVal
+      this.studentGet()
+    }
+  },
+  async mounted() {
+    this.role = this.$route.query.id
+    console.log(this.role)
+    if (this.role === 'me') {
+      this.dataForm.name = '张敏'
+    } else  {
+      this.studentGet()
+    }
+  },
   methods: {
-    onSearch() {},
+    async studentGet(){
+      const res = await actions.getStudent({name: this.curVal})
+      this.studentList = res.data
+      console.log('resres',res.data)
+    },
     submitForm() {
       validateForm(yzForm, this.dataForm, () => {})
     },
-    // 选择身份
     chooseType(item) {
-      this.dataForm.type = item.text
+      this.dataForm.part = item.text
     },
-    chooseStudent(item) {
-      this.dataForm.name = item.text
+    chooseStudent(record, index){
+      this.chooseItem = record
+      this.currentIndex = index
+      console.log('a+',record)
     },
+    choose(){
+      this.dataForm.name = this.chooseItem.name
+      this.isShow = false
     }
+  }
 }
 </script>
 
@@ -250,4 +249,9 @@ export default {
     text-align: center;
   }
 }
+.active{
+  background-color: #7d88fc;
+  color: #fff;
+}
+* { touch-action: pan-y; } 
 </style>
