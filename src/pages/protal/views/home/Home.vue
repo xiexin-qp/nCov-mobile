@@ -170,7 +170,13 @@ export default {
       this.$router.push('/personal')
     },
     nowReport() {
-      this.$router.push('/addReport')
+      // this.$router.push('/addReport')
+      this.$router.push({
+        query: {
+          id: this.role
+        },
+        path: '/addReport'
+      })
     },
     reportDetail() {
       this.$router.push('/reportDetail')
