@@ -27,7 +27,7 @@ const Home = [
   },
   {
     module: 'home',
-    path: 'Personal',
+    path: 'MyClass',
     title: '我的班级'
   }
 ]

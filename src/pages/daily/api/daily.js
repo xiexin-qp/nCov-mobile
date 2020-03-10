@@ -6,11 +6,13 @@
 
 import hostEnv from '@config'
 
-let homeApi = {
+let dailyApi = {
+  getPersonInfo: '/daily/person#get', // 获取个人日报
+  getDetail: '/getDemoInfo#get' // 获取详情
 }
 
-for (let val in homeApi) {
-  homeApi[val] = `${hostEnv}${homeApi[val]}`
+for (let val in dailyApi) {
+  dailyApi[val] = `${hostEnv}${dailyApi[val]}`
 }
 
-export default homeApi
+export default dailyApi

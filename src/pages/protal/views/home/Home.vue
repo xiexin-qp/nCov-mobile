@@ -28,69 +28,57 @@
         </div>
         <div v-if="role === 'me'" class="title qui-fx-jsb">
           <span>今日上报</span>
-          <span @click="nowReport">立即上报</span>
+          <span @click="nowReport(0)">立即上报</span>
         </div>
         <div v-else class="title qui-fx-jsb">
-          <span>今日上报情况<span class="num">（学生共36人）</span></span>
-          <span @click="nowReport">立即上报</span>
+          <span>今日上报情况<span class="num">（学生共{{ total }}人）</span></span>
+          <span @click="nowReport(1)">立即上报</span>
         </div>
         <div class="list" v-if="role === 'me'">
           <ul>
-            <li class="warn" @click="reportDetail">
+            <li :class="item.status === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
-                  <span>测温：腋下38.5</span>
-                  <span>症状：发烧，咳嗽</span>
+                  <span>测温：{{ item.part }} {{ item.heat }}</span>
+                  <span>症状：{{item.sym }}</span>
                 </div>
-                <span class="detail">查看详情</span>
+                <span class="detail" @click="reportDetail(item.id)">查看详情</span>
               </div>
               <div class="date">
-                <span>2020-02-01 09:00:00</span>
-              </div>
-            </li>
-            <li class="normal">
-              <div class="info qui-fx-jsb">
-                <div class="qui-fx-ver">
-                  <span>测温：腋下38.5</span>
-                  <span>症状：发烧，咳嗽</span>
-                </div>
-                <span class="detail">查看详情</span>
-              </div>
-              <div class="date">
-                <span>2020-02-01 09:00:00</span>
+                <span>{{ item.time }}</span>
               </div>
             </li>
           </ul>
         </div>
         <div class="report qui-fx-ver" v-else>
           <div class="gather qui-fx-jsa">
-            <div class="unappear" @click="getStudentCase(0)">
+            <div class="unappear" @click="classDaily(0)">
               <div class="data qui-fx-ver">
-                <span>5</span>
+                <span>{{ unappearNum }}</span>
                 <span>未上报</span>
               </div>
             </div>
-            <div class="unusual" @click="getStudentCase(1)">
+            <div class="unusual" @click="classDaily(1)">
               <div class="data qui-fx-ver">
-                <span>5</span>
+                <span>{{ unusualNum }}</span>
                 <span>异常</span>
               </div>
             </div>
-            <div class="fever" @click="getStudentCase(2)">
+            <div class="fever" @click="classDaily(2)">
               <div class="data qui-fx-ver">
-                <span>5</span>
+                <span>{{ feverNum }}</span>
                 <span>发热</span>
               </div>
             </div>
           </div>
           <div class="student-list">
             <ul>
-              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in 10" :key="i">
+              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i">
                 <div class="student qui-fx-ac">
-                  <img src="" alt="" :onerror="errorImg" />
-                  <span>李斯特</span>
+                  <img :src="item.photoPic" alt="" :onerror="errorImg" />
+                  <span>{{ item.name }}</span>
                 </div>
-                <span>未上报</span>
+                <span>{{ item.type === 0 ? '未上报' : item.type === 1 ? '异常' : '发热'}}</span>
               </li>
             </ul>
           </div>
@@ -120,7 +108,12 @@ export default {
       errorImg: 'this.src="' + require('@a/img/photo.png') + '"',
       normalImg,
       warnImg,
-      dataList: [],
+      personList: [],
+      collectLIst: [],
+      unappearNum:0,
+      unusualNum:0,
+      feverNum:0,
+      total:0,
       title: '班级',
       userName: '朱旭',
       role: 'me',
@@ -140,40 +133,64 @@ export default {
   },
   async mounted() {
     this.showList()
+    this.classDaily()
   },
   methods: {
     async showList(tag = false) {
-      const res = await actions.getIndex()
+      const res = await actions.getPersonInfo()
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {
           this.$notify('数据加载完毕')
           return
         }
-        this.dataList = this.dataList.concat(res.data)
+        this.personList = this.personList.concat(res.data)
         this.$nextTick(() => {
           this.$refs.scroll.refresh()
         })
       } else {
-        this.dataList = res.data
-        this.$refs.scroll.init(this.dataList)
+        this.personList = res.data
+        this.$refs.scroll.init(this.personList)
       }
     },
-    getStudentCase(type) {
-      //0:未上报，1：异常，2：发热
-      console.log(type)
+    async classDaily(type = 0, tag = false) {
+      const res = await actions.getClassInfo()
+      if (tag) {
+        // 加载下一页
+        if (res.data.length === 0) {
+          this.$notify('数据加载完毕')
+          return
+        }
+        this.collectLIst = this.collectLIst.concat(res.data.filter(ele=>{
+          return ele.type === type
+        }))
+        this.$nextTick(() => {
+          this.$refs.scroll.refresh()
+        })
+      } else {
+        this.total = res.total
+        this.unappearNum = res.unappearNum
+        this.unusualNum = res.unusualNum
+        this.feverNum = res.feverNum
+        this.collectLIst = res.data.filter(ele=>{
+          return ele.type === type
+        })
+        this.$refs.scroll.init(this.collectLIst)
+      }
     },
     getDate(date, type) {
       console.log(date, type)
+      this.showList()
+      this.classDaily(0)
     },
     goPersonal() {
       this.$router.push('/personal')
     },
-    nowReport() {
-      this.$router.push('/addReport')
+    nowReport(type) {
+      this.$router.push({path:'/addReport',query:{type}})
     },
-    reportDetail() {
-      this.$router.push('/reportDetail')
+    reportDetail(id) {
+      this.$router.push({path:'/reportDetail',query:{id}})
     }
   }
 }
