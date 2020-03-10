@@ -3,12 +3,18 @@
     <header-com title="疫情上报" isBack></header-com>
     <div class="qui-fx-f1 qui-fx-ver">
       <select-data title="测量部位" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
+      <select-data title="学生姓名" :select-list="studentList" v-model="studentTag" @confirm="chooseStudent"></select-data>
       <div class="submit-form qui-fx-f1">
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">姓名</div>
           <div class="submit-input qui-fx-f1">
             <input class="input" readonly v-model="dataForm.name" type="text" />
           </div>
+        </div>
+        <div class="submit-item qui-fx-ac qui-bd-b">
+          <div class="tip">姓名</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="studentTag = true">{{ dataForm.name }}</div>
+          <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">体温</div>
@@ -104,7 +110,35 @@ export default {
         health: [],
         remark: '',
         type: '请选择'
-      }
+      },
+      studentList: [
+        {
+          id: 1,
+          text: '李雷'
+        },
+        {
+          id: 2,
+          text: '韩梅梅'
+        },
+        {
+          id: 3,
+          text: '刘芳'
+        },
+        {
+          id: 4,
+          text: '刘芳'
+        },
+        {
+          id: 5,
+          text: '刘芳'
+        },
+        {
+          id: 6,
+          text: '刘芳'
+        }
+      ],
+      studentTag:false,
+
     }
   },
   async mounted() {
@@ -116,6 +150,9 @@ export default {
     // 选择身份
     chooseType(item) {
       this.dataForm.type = item.text
+    },
+    chooseStudent(item) {
+      this.dataForm.name = item.text
     },
   }
 }
@@ -148,6 +185,12 @@ export default {
         height: 66px;
         line-height: 66px;
       }
+    }
+    .rit-icon {
+      width: 30px;
+      height: 30px;
+      background:url('../../assets/img/select.png') no-repeat;
+      background-size: 100%;
     }
   }
   .submit-area {

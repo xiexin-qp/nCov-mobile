@@ -17,7 +17,7 @@
     </div>
     <div class="set-info div-shadow">
       <van-cell-group :border="false">
-        <van-cell title="体温" :value="`${detailInfo.temp}℃${detailInfo.title}`" value-class="value-class"/>
+        <van-cell title="体温" :value="`${detailInfo.temp}℃(${detailInfo.title})`" value-class="value-class"/>
         <van-cell title="测量部位" :value="detailInfo.part" />
         <van-cell title="是否接触疫情人员" :value="detailInfo.isState" />
         <van-cell title="附带症状" :value="detailInfo.symptom" />
@@ -34,6 +34,8 @@ import HeaderCom from '@com/HeaderCom'
 import img from '@a/img/detail.png'
 import tempyc from '@a/img/tempyc.png'
 import { Cell, CellGroup } from 'vant';
+import { actions } from '../../store'
+
 export default {
   name: 'ReportDetail',
   components: {
@@ -58,16 +60,21 @@ export default {
         name:'刘家长',
         time:'2020-03-07',
         remark:'没有其他症状',
-        title:'(发热)'
+        title:'发热'
       }
     }
   },
   computed: {
   },
   mounted () {
+    this.detailGet()
   },
   methods: {
-    
+    async detailGet(){
+      const res = await actions.getReportDetail()
+      console.log('===',res.data)
+      this.detailInfo=res.data
+    }
   }
 }
 </script>
