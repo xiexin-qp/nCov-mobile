@@ -1,30 +1,57 @@
 <template>
   <div class="qui-page qui-flex-ver">
-    <header-com title="疫情上报" isBack></header-com>
+    <popup-box
+      v-model="isShow"
+      @confirm="choose"
+      :cancel-text="'取消'"
+      width="80"
+      height="80"
+    >
+      <div slot="title" style="padding: 10px; text-align:center">
+        <van-search v-model="searchName" placeholder="请输入姓名进行搜索" />
+      </div>
+      <div class="info-list">
+        <div
+          style="height: 2rem; line-height: 2rem; padding-left: 10px;"
+          :class="['qui-bd-b',currentIndex === index ? 'active' : '']"
+          v-for="(item,index) in studentList"
+          :key="item.id"
+          @click="chooseStudent(item,index)"
+        >{{ item.name }}</div>
+      </div>
+    </popup-box>
     <div class="qui-fx-f1 qui-fx-ver">
       <select-data title="测量部位" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
       <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item qui-fx-ac qui-bd-b" v-if="role === 'me'">
           <div class="tip">姓名</div>
-          <div class="submit-input qui-fx-f1">
-            <input class="input" readonly v-model="dataForm.name" type="text" />
-          </div>
+           <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.name }}</div>
+        </div>
+        <div class="submit-item qui-fx-ac qui-bd-b" v-else>
+          <div class="tip">姓名</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="isShow = true">{{ dataForm.name }}</div>
+          <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">体温</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.temp" type="text" placeholder="请输入测量值，正常值为36.2～37.3" />
+            <input
+              class="input"
+              v-model="dataForm.temp"
+              type="text"
+              placeholder="请输入测量值，正常值为36.2～37.3"
+            />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
-            <div class="tip">测量部位</div>
-            <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.type }}</div>
-            <div class="rit-icon"></div>
-          </div>
+          <div class="tip">测量部位</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.part }}</div>
+          <div class="rit-icon"></div>
+        </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">是否接触疫情人员</div>
           <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-switch v-model="dataForm.isTrue" />
+            <van-switch v-model="dataForm.isTrue" size="22px"/>
           </div>
         </div>
         <div class="submit-area qui-fx-ver">
@@ -42,45 +69,50 @@
         <div class="submit-area qui-fx-ver">
           <div>其他说明</div>
           <div class="qui-fx-f1">
-            <textarea class="text-area" v-model="dataForm.remark" 
+            <textarea
+              class="text-area"
+              v-model="dataForm.remark"
               placeholder="1.其他不舒服症状，如呕吐、头晕等
-  2.如有确诊、隔离、疑似症状，请详细说明情况"></textarea>
+  2.如有确诊、隔离、疑似症状，请详细说明情况"
+            ></textarea>
           </div>
         </div>
         <div class="submit-bottom">
           <div class="submit-btn" @click="submitForm">提交</div>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script>
-import HeaderCom from '@com/HeaderCom'
+import PopupBox from '@com/PopupBox'
 import SelectData from '@c/common/SelectData'
 import validateForm from '@u/validate'
-import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup } from 'vant'
+import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup, Search } from 'vant'
+import { actions } from '../../store'
 const yzForm = {
-  name: '请输入姓名',
+  name: '请选择学生',
   temp: '请输入体温',
   type: '请选择测量部位'
 }
 export default {
   name: 'AddReport',
   components: {
-    HeaderCom,
+    [Search.name]: Search,
     [Checkbox.name]: Checkbox,
     [CheckboxGroup.name]: CheckboxGroup,
     [RadioGroup.name]: RadioGroup,
     [Radio.name]: Radio,
     [Switch.name]: Switch,
-    SelectData
+    SelectData,
+    PopupBox
   },
-  computed: {
-  },
+  computed: {},
   data() {
-    return { 
+    return {
+      searchName: '',
+      isShow: false,
       detail: {},
       typeTag: false,
       typeList: [
@@ -97,31 +129,65 @@ export default {
           text: '额头、面部'
         }
       ],
+      role: 'teacher',
       dataForm: {
-        name: '李雷',
-        temp:'',
+        name: '请选择学生',
+        temp: '',
         isTrue: true,
         health: [],
         remark: '',
-        type: '请选择'
-      }
+        part: '请选择测量部位'
+      },
+      studentList: [],
+      studentTag: false,
+      currentIndex: '',
+      curVal: '',
+    }
+  },
+  watch:{
+    searchName (curVal) {
+      this.curVal = curVal
+      this.studentGet()
     }
   },
   async mounted() {
+    this.role = this.$route.query.id
+    console.log(this.role)
+    if (this.role === 'me') {
+      this.dataForm.name = '张敏'
+    } else  {
+      this.studentGet()
+    }
   },
   methods: {
+    async studentGet(){
+      const res = await actions.getStudent({name: this.curVal})
+      this.studentList = res.data
+      console.log('resres',res.data)
+    },
     submitForm() {
       validateForm(yzForm, this.dataForm, () => {})
     },
-    // 选择身份
     chooseType(item) {
-      this.dataForm.type = item.text
+      this.dataForm.part = item.text
     },
+    chooseStudent(record, index){
+      this.chooseItem = record
+      this.currentIndex = index
+      console.log('a+',record)
+    },
+    choose(){
+      this.dataForm.name = this.chooseItem.name
+      this.isShow = false
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+/deep/ .van-search {
+  padding: 0 !important;
+}
 .submit-form {
   .mar-t20 {
     margin-top: 20px;
@@ -148,6 +214,12 @@ export default {
         height: 66px;
         line-height: 66px;
       }
+    }
+    .rit-icon {
+      width: 30px;
+      height: 30px;
+      background:url('../../assets/img/select.png') no-repeat;
+      background-size: 100%;
     }
   }
   .submit-area {
@@ -177,4 +249,9 @@ export default {
     text-align: center;
   }
 }
+.active{
+  background-color: #7d88fc;
+  color: #fff;
+}
+* { touch-action: pan-y; } 
 </style>

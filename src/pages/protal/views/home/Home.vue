@@ -189,6 +189,15 @@ export default {
     nowReport(type) {
       this.$router.push({path:'/addReport',query:{type}})
     },
+    /*nowReport() {
+      // this.$router.push('/addReport')
+      this.$router.push({
+        query: {
+          id: this.role
+        },
+        path: '/addReport'
+      })
+    }, */
     reportDetail(id) {
       this.$router.push({path:'/reportDetail',query:{id}})
     }
