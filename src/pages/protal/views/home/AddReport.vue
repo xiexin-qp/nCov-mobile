@@ -17,13 +17,13 @@
           v-for="(item,index) in studentList"
           :key="item.id"
           @click="chooseStudent(item,index)"
-        >{{ item.name }}</div>
+        >{{ item.studentName }}</div>
       </div>
     </popup-box>
     <div class="qui-fx-f1 qui-fx-ver">
       <select-data title="测量部位" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
       <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b" v-if="role === 'me'">
+        <div class="submit-item qui-fx-ac qui-bd-b" v-if="role === 0">
           <div class="tip">姓名</div>
            <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.name }}</div>
         </div>
@@ -37,7 +37,7 @@
           <div class="submit-input qui-fx-f1">
             <input
               class="input"
-              v-model="dataForm.temp"
+              v-model="dataForm.tiwen"
               type="text"
               placeholder="请输入测量值，正常值为36.2～37.3"
             />
@@ -45,24 +45,24 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">测量部位</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.part }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.body }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">是否接触疫情人员</div>
           <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-switch v-model="dataForm.isTrue" size="22px"/>
+            <van-switch v-model="dataForm.isContact" size="22px"/>
           </div>
         </div>
         <div class="submit-area qui-fx-ver">
           <div>附带症状</div>
           <div class="qui-fx-f1" style="padding: 10px 0 ">
-            <van-checkbox-group v-model="dataForm.health">
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="1">咳嗽</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="2">腹泻</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="3">咽痛</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="4">乏力</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="5">鼻塞流涕</van-checkbox>
+            <van-checkbox-group v-model="dataForm.symptom">
+              <van-checkbox style="margin-bottom: 10px" shape="square" name="1-咳嗽">咳嗽</van-checkbox>
+              <van-checkbox style="margin-bottom: 10px" shape="square" name="2-腹泻">腹泻</van-checkbox>
+              <van-checkbox style="margin-bottom: 10px" shape="square" name="3-咽痛">咽痛</van-checkbox>
+              <van-checkbox style="margin-bottom: 10px" shape="square" name="4-乏力">乏力</van-checkbox>
+              <van-checkbox style="margin-bottom: 10px" shape="square" name="5-鼻塞流涕">鼻塞流涕</van-checkbox>
             </van-checkbox-group>
           </div>
         </div>
@@ -71,7 +71,7 @@
           <div class="qui-fx-f1">
             <textarea
               class="text-area"
-              v-model="dataForm.remark"
+              v-model="dataForm.remarks"
               placeholder="1.其他不舒服症状，如呕吐、头晕等
   2.如有确诊、隔离、疑似症状，请详细说明情况"
             ></textarea>
@@ -90,11 +90,11 @@ import PopupBox from '@com/PopupBox'
 import SelectData from '@c/common/SelectData'
 import validateForm from '@u/validate'
 import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup, Search } from 'vant'
-import { actions } from '../../store'
+import { store, actions } from '../../store'
 const yzForm = {
   name: '请选择学生',
-  temp: '请输入体温',
-  type: '请选择测量部位'
+  tiwen: '请输入体温',
+  body: '请选择测量部位'
 }
 export default {
   name: 'AddReport',
@@ -129,55 +129,112 @@ export default {
           text: '额头、面部'
         }
       ],
-      role: 'teacher',
+      role: 0,
       dataForm: {
         name: '请选择学生',
-        temp: '',
-        isTrue: true,
-        health: [],
-        remark: '',
-        part: '请选择测量部位'
+        tiwen: '',
+        symptom: [],
+        remarks: '',
+        body: '请选择测量部位'
       },
       studentList: [],
       studentTag: false,
       currentIndex: '',
       curVal: '',
+      body: '',
+      searchList:{
+        // name: '',
+        gradeId: '',
+        classId: '',
+      }
     }
   },
   watch:{
     searchName (curVal) {
-      this.curVal = curVal
+      // this.searchList.name = curVal
       this.studentGet()
     }
   },
   async mounted() {
-    this.role = this.$route.query.id
-    console.log(this.role)
-    if (this.role === 'me') {
-      this.dataForm.name = '张敏'
+    this.role = this.$route.query.type
+    console.log(store.userInfo)
+    if (this.role === 0) {
+      this.dataForm.name = store.userInfo.type === 2 ? store.userInfo.userName : store.userInfo.studentName
     } else  {
+      this.searchList.gradeId = store.userInfo.gradeId
+      this.searchList.classId = store.userInfo.classId
       this.studentGet()
     }
   },
   methods: {
     async studentGet(){
-      const res = await actions.getStudent({name: this.curVal})
+      const res = await actions.getStudentList(this.searchList)
       this.studentList = res.data
       console.log('resres',res.data)
     },
     submitForm() {
-      validateForm(yzForm, this.dataForm, () => {})
+      validateForm(yzForm, this.dataForm, () => {
+      // console.log('dataForm',this.dataForm.symptom)
+        if(this.dataForm.symptom.length > 0) {
+          this.dataForm.otherSymptom = this.dataForm.symptom.map(item => {
+            return {id:item.split('-')[0],name:item.split('-')[1]}
+          })
+        }
+        if(
+          (this.role === 0 && store.userInfo.type === 1) || 
+          (this.role !== 0 && (store.userInfo.type === 2 || store.userInfo.type === 4))
+        ) {
+          this.dataForm.body = this.body
+          this.dataForm.reportName = store.userInfo.userName
+          this.dataForm.phone = store.userInfo.phone
+          this.dataForm.userCode = store.userInfo.code
+          this.dataForm.reportType = '1'
+          this.dataForm.isContact = this.dataForm.isContact ? '1' : '0'
+          this.dataForm.studentName = store.userInfo.studentName
+          this.dataForm.studentCode = store.userInfo.studentCode
+          this.dataForm.studentNo = store.userInfo.studentNo
+          this.dataForm.gradeId = store.userInfo.gradeId
+          this.dataForm.gradeName = store.userInfo.gradeName
+          this.dataForm.classId = store.userInfo.classId
+          this.dataForm.className = store.userInfo.className
+          this.dataForm.photoImg = store.userInfo.photoImg
+          actions.studentReport(this.dataForm).then(() => {
+            this.$toast.success({ message: '提交成功' })
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
+          })
+        } else if(this.role === 0 && store.userInfo.type !== 1 ){
+          this.dataForm.teacherName = store.userInfo.userName
+          this.dataForm.teacherCode = store.userInfo.code
+          this.dataForm.teacherNo = store.userInfo.teacherNo
+          this.dataForm.body = this.body
+          this.dataForm.isContact = this.dataForm.isContact ? '1' : '0'
+          this.dataForm.reportName = store.userInfo.userName
+          this.dataForm.phone = store.userInfo.phone
+          this.dataForm.userCode = store.userInfo.code
+          this.dataForm.reportType = '2'
+          this.dataForm.photoImg = store.userInfo.photoImg
+          actions.teacherReport(this.dataForm).then(() => {
+            this.$toast.success({ message: '提交成功' })
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
+          })
+        }
+      })
+      // addReport
     },
     chooseType(item) {
-      this.dataForm.part = item.text
+      this.body = item.id
+      this.dataForm.body = item.text
     },
     chooseStudent(record, index){
       this.chooseItem = record
       this.currentIndex = index
-      console.log('a+',record)
     },
     choose(){
-      this.dataForm.name = this.chooseItem.name
+      this.dataForm.name = this.chooseItem.studentName
       this.isShow = false
     }
   }
