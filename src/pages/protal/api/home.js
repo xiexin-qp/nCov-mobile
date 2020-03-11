@@ -11,7 +11,11 @@ let homeApi = {
   getIndex: 'http://yapi.demo.qunar.com/mock/5691/getDemoList#get', // 获取列表
   getDetail: 'http://yapi.demo.qunar.com/mock/5691/getDemoInfo#get', // 获取详情
   getReportDetail: '/report/detail#get', // 获取详情
-  getStudent: '/daily/myClass#get' // 获取详情
+  getStudent: '/daily/myClass#get', // 获取详情
+  studentReport: 'http://39.97.164.4:8090/studentReport#post', // 学生上报
+  teacherReport: 'http://39.97.164.4:8090/teacherReport#post', // 教职工上报
+  getStudentList: 'http://39.97.164.4:8090/studentList#get', // 学生列表
+  // http://39.97.164.4:8090/studentList?gradeId=g1&classId=a1
 }
 
 for (let val in homeApi) {
