@@ -19,6 +19,7 @@
 
 <script>
 import logo from '@a/img/logo.png'
+import $ajax from '@u/ajax-serve'
 export default {
   name: 'Login',
   components: {},
@@ -26,7 +27,14 @@ export default {
   data() {
     return { logo, tip: '获取验证码', loginForm: { phone: '18702707106', code: '666666' } }
   },
-  async mounted() {},
+  async mounted() {
+    $ajax.postQuery({
+      url: 'http://localhost:8090/addOrder',
+      params: {
+        title: '555'
+      }
+    })
+  },
   methods: {
     getYzm() {
       if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.loginForm.phone) || this.loginForm.phone === '') {
