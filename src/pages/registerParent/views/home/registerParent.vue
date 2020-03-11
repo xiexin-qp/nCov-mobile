@@ -1,64 +1,67 @@
 <template>
   <div class="home qui-page qui-fx-ver">
     <header-com title="家长注册"></header-com>
-    <div class="qui-fx-f1 qui-fx-ver">
-      <date-time v-model="timeTag" @get-date="getDate"></date-time>
-      <select-data title="学生班级" :select-list="classList" v-model="classTag" @confirm="chooseClass"></select-data>
-      <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">学生姓名</div>
-          <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.name" type="text" placeholder="请输入姓名" />
-          </div>
+ <div class="qui-fx-f1 qui-fx-ver">
+    <date-time v-model="timeTag" @get-date="getDate"></date-time>
+    <select-data title="学生班级" :select-list="classList" v-model="classTag" @confirm="chooseClass"></select-data>
+    <div class="submit-form qui-fx-f1">
+      <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="tip">学生姓名</div>
+        <div class="submit-input qui-fx-f1">
+          <input class="input" v-model="dataForm.name" type="text" placeholder="请输入姓名" />
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">性别</div>
-          <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-radio-group class="qui-fx-ac" v-model="dataForm.sex">
-              <van-radio name="1">男</van-radio>
-              <van-radio name="2" style="margin-left: 15px">女</van-radio>
-            </van-radio-group>
-          </div>
+      </div>
+            <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="tip">性别</div>
+        <div class="submit-input qui-fx-f1 qui-fx-je">
+          <van-radio-group class="qui-fx-ac" v-model="dataForm.sex">
+            <van-radio name="1">男</van-radio>
+            <van-radio name="2" style="margin-left: 15px">女</van-radio>
+          </van-radio-group>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">学生班级</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="classTag = true">{{ dataForm.className }}</div>
-          <div class="rit-icon"></div>
+      </div>
+      <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="tip">学生班级</div>
+        <div class="submit-input qui-tx-r qui-fx-f1" @click="classTag = true">{{ dataForm.className }}</div>
+        <div class="rit-icon"></div>
+      </div>
+                   <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="tip">学生学号</div>
+        <div class="submit-input qui-fx-f1">
+          <input class="input" v-model="dataForm.number" type="text" placeholder="请输入学号" />
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">学生学号</div>
-          <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.number" type="text" placeholder="请输入学号" />
-          </div>
-        </div>
+      </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">出生日期</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('birthday')">{{ dataForm.birthday }}</div>
+          <div
+            class="submit-input qui-tx-r qui-fx-f1"
+            @click="showDate('birthday')"
+          >{{ dataForm.birthday }}</div>
           <div class="rit-icon"></div>
+        </div>  
+                   <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="tip">家长姓名</div>
+        <div class="submit-input qui-fx-f1">
+          <input class="input" v-model="dataForm.parentname" type="text" placeholder="请输入家长姓名" />
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">家长姓名</div>
-          <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.parentname" type="text" placeholder="请输入家长姓名" />
-          </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">家长手机号</div>
-          <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.parenttelphone" type="text" placeholder="请输入家长手机号" />
-          </div>
+                   <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="tip">家长手机号</div>
+        <div class="submit-input qui-fx-f1">
+          <input class="input" v-model="dataForm.parenttelphone" type="text" placeholder="请输入家长手机号" />
+        </div>
         </div>
         <div class="submit-area qui-fx-ver">
           <div class="tip">学生人脸照片</div>
           <div class="upload-list qui-fx-f1">
             <upload-file v-model="dataForm.fileList"></upload-file>
           </div>
-        </div>
-      </div>
-      <div class="submit-bottom">
-        <div class="submit-btn" @click="submitForm">提交</div>
       </div>
     </div>
+    <div class="submit-bottom">
+      <div class="submit-btn" @click="submitForm">提交</div>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -69,14 +72,14 @@ import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
 import SelectData from '@c/common/SelectData'
-import { RadioGroup, Radio } from 'vant'
+import { RadioGroup, Radio} from 'vant'
 const yzForm = {
-  name: '请输入姓名',
-  sex: '1',
-  className: '请选择学生班级',
-  birthday: '请选择出生日期',
-  parentname: '请输入家长姓名',
-  parenttelphone: '请输入家长手机号'
+        name: '请输入姓名',
+        sex: '1',
+        className: '请选择学生班级',
+        birthday: '请选择出生日期',
+        parentname: '请输入家长姓名',
+        parenttelphone: '请输入家长手机号',
 }
 export default {
   name: 'RegisterParent',
@@ -92,9 +95,9 @@ export default {
   data() {
     return {
       timeTag: false,
-      classTag: false,
+            classTag: false,
 
-      classList: [
+           classList:[
         {
           id: 1,
           text: '高一（1）班'
@@ -123,13 +126,13 @@ export default {
   methods: {
     submitForm() {
       validateForm(yzForm, this.dataForm, () => {})
-    },
-    //班级
+    }, 
+         //班级
     chooseClass(item) {
       this.dataForm.className = item.text
     },
     // 展示日期框
-    showDate(type) {
+     showDate(type) {
       this.timeTag = true
       this.timeType = type
     },
@@ -185,8 +188,8 @@ export default {
     padding: 20px 0;
   }
 }
-.home {
-  .upload-list {
+.home{
+    .upload-list {
     padding: 20px 0;
   }
   .submit-bottom {
