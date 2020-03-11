@@ -28,11 +28,11 @@
         </div>
         <div class="title qui-fx-jsb" v-if="role === '1'">
           <span>今日上报</span>
-          <span @click="nowReport(0)">立即上报</span>
+          <span @click="nowReport(1)">立即上报</span>
         </div>
         <div  v-else class="title qui-fx-jsb">
           <span>今日上报情况<span class="num">（学生共{{ total }}人）</span></span>
-          <span @click="nowReport(1)">立即上报</span>
+          <span @click="nowReport(2)">立即上报</span>
         </div>
         <div class="list" v-if="role === '1'">
           <ul v-if="personList.length > 0">
@@ -74,10 +74,10 @@
           </div>
           <div class="student-list">
             <ul v-if="collectLIst.length>0">
-              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i">
+              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item.userCode)">
                 <div class="student qui-fx-ac">
-                  <img :src="item.photoPic" alt="" :onerror="errorImg" />
-                  <span>{{ item.name }}</span>
+                  <img :src="item.photoImg" alt="" :onerror="errorImg" />
+                  <span>{{ item.userName }}</span>
                 </div>
                 <span>{{ item.type === 0 ? '未上报' : item.type === 1 ? '异常' : '发热'}}</span>
               </li>
@@ -203,18 +203,9 @@ export default {
     goPersonal() {
       this.$router.push('/personal')
     },
-    nowReport(type) {
-      this.$router.push({path:'/addReport',query:{type}})
+    nowReport(reportType) {
+      this.$router.push({path:'/addReport',query:{reportType}})
     },
-    /*nowReport() {
-      // this.$router.push('/addReport')
-      this.$router.push({
-        query: {
-          id: this.role
-        },
-        path: '/addReport'
-      })
-    }, */
     reportDetail(userCode) {
       const query = {
         userCode,
