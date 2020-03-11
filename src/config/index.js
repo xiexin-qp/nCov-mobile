@@ -9,9 +9,9 @@ let hostEnv = ''
 if (ConfigEnv === 'test') {
   hostEnv = 'http://yapi.demo.qunar.com/mock/85606'
 } else if (ConfigEnv === 'prod') {
-  hostEnv = 'http://yapi.demo.qunar.com/mock/85606'
+  hostEnv = ''
 } else {
-  hostEnv = 'http://yapi.demo.qunar.com/mock/85606'
+  hostEnv = ''
 }
 
 export default hostEnv

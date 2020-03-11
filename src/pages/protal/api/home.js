@@ -7,6 +7,7 @@
 import hostEnv from '@config'
 
 let homeApi = {
+  login: 'http://39.97.164.4:8090/login#post', // 登录
   getIndex: 'http://yapi.demo.qunar.com/mock/5691/getDemoList#get', // 获取列表
   getDetail: 'http://yapi.demo.qunar.com/mock/5691/getDemoInfo#get', // 获取详情
   getReportDetail: '/report/detail#get', // 获取详情

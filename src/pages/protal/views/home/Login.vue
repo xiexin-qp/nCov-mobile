@@ -2,7 +2,7 @@
   <div class="login qui-page qui-fx-ver">
     <div class="logo">
       <div class="welcome">疫情防控系统</div>
-      <img :src="logo" alt="" />
+      <img :src="logo" alt />
     </div>
     <div class="login-input qui-bd-b qui-fx-ac">
       <input class="qui-fx-f1" v-model="loginForm.phone" type="tel" placeholder="请输入手机号" />
@@ -11,13 +11,12 @@
     <div class="login-input qui-bd-b">
       <input type="tel" v-model="loginForm.code" placeholder="请输入验证码" />
     </div>
-    <div class="login-btn" @click="login">
-      登录
-    </div>
+    <div class="login-btn" @click="login">登录</div>
   </div>
 </template>
 
 <script>
+import { setStore, actions } from '../../store/index.js'
 import logo from '@a/img/logo.png'
 import $ajax from '@u/ajax-serve'
 export default {
@@ -25,16 +24,9 @@ export default {
   components: {},
   computed: {},
   data() {
-    return { logo, tip: '获取验证码', loginForm: { phone: '18702707106', code: '666666' } }
+    return { logo, tip: '获取验证码', loginForm: { phone: '', code: '666666' } }
   },
-  async mounted() {
-    $ajax.postQuery({
-      url: 'http://localhost:8090/addOrder',
-      params: {
-        title: '555'
-      }
-    })
-  },
+  async mounted() {},
   methods: {
     getYzm() {
       if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.loginForm.phone) || this.loginForm.phone === '') {
@@ -54,7 +46,22 @@ export default {
         }
       }, 1000)
     },
-    login() {
+    async login() {
+      if (this.loginForm.phone === '' || this.loginForm.code === '') {
+        this.$notify('请输入手机号或验证码')
+        return
+      }
+      const res = await actions.login({
+        ...this.loginForm
+      })
+      if (res.length === 0) {
+        this.$notify('你手机号尚未绑定注册')
+        return
+      }
+      setStore({
+        key: 'userInfo',
+        data: res.data[0]
+      })
       this.$router.push('/home')
     }
   }

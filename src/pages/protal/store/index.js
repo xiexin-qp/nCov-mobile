@@ -18,7 +18,7 @@ const getState = (state, val) => {
   return JSON.parse(localData)[state] || val
 }
 const store = Vue.observable({
-  count: getState('count', 1)
+  userInfo: getState('userInfo', {})
 })
 
 // 修改数据
