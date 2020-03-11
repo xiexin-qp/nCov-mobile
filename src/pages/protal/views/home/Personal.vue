@@ -7,8 +7,8 @@
       <div class="info qui-fx-ac">
         <img src="" alt="" :onerror="errorImg">
         <div class="qui-fx-ver">
-          <span class="name">朱旭</span>
-          <span class="role">班主任</span>
+          <span class="name">{{ userInfo.userName }}</span>
+          <span class="role">{{ userInfo.roleType === '1'? '家长' : userInfo.roleType === '2'? '班主任' : userInfo.roleType === '3' ? '教职工' : '校医' }}</span>
         </div>
       </div>
       <div class="school">武汉市第四十九中</div>
@@ -16,12 +16,12 @@
     <div class="submit-form qui-fx-f1">
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">身份类型</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="roleTag = true">{{ dataForm.role }}</div>
+        <div class="submit-input qui-tx-r qui-fx-f1" @click="roleTag = true">{{ dataForm.roleType }}</div>
         <div class="rit-icon"></div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">我的班级</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="goClass()">{{ dataForm.classNum }}人</div>
+        <div class="submit-input qui-tx-r qui-fx-f1" @click="goClass()">{{ dataForm.studentTotal }}人</div>
         <div class="rit-icon"></div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
@@ -40,7 +40,7 @@
 <script>
 import SelectData from '@c/common/SelectData'
 import HeaderCom from '@com/HeaderCom'
-/* import { store, actions } from '../../store' */
+import { store } from '../../store'
 export default {
   name: 'Personal',
   components: {
@@ -48,7 +48,7 @@ export default {
     SelectData
   },
   computed: {
-    count: () => store.count
+    userInfo: () => store.userInfo
   },
   data() {
     return { 
@@ -58,26 +58,26 @@ export default {
       classTag: false,
       roleList: [
         {
-          id: 1,
+          id: '1',
           text: '家长'
         },
         {
-          id: 2,
+          id: '2',
           text: '班主任'
         },
         {
-          id: 3,
+          id: '3',
           text: '教职工'
         },
         {
-          id: 4,
+          id: '4',
           text: '校医'
         }
       ],
       dataForm: {
-        role: '班主任',
-        className: '高一（1）班',
-        classNum: '36'
+        roleType: '',
+        className: '',
+        studentTotal: ''
       },
       classList:[
         {
@@ -95,20 +95,23 @@ export default {
       ]
     }
   },
+  created() {
+    this.dataForm.roleType = this.userInfo.roleType === '1'? '家长' : this.userInfo.roleType === '2'? '班主任' : this.userInfo.roleType === '3' ? '教职工' : '校医'
+    this.dataForm.className = this.userInfo.gradeName + this.userInfo.className
+    this.dataForm.studentTotal = this.userInfo.studentTotals
+  },
   async mounted() {
-/*     const res = await actions.getDetail()
-    this.detail = res.data */
   },
   methods: {
     // 切换角色
     chooseRole(item) {
-      this.dataForm.role = item.text
-      console.log(this.dataForm.role)
+      this.dataForm.roleType = item.text
+      console.log(this.dataForm.roleType)
     },
     // 换绑班级
     chooseClass(item) {
       this.dataForm.className = item.text
-      console.log(this.dataForm.role)
+      console.log(this.dataForm.className)
     },
     //我的班级
     goClass(){
