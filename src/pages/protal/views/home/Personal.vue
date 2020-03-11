@@ -2,7 +2,6 @@
   <div class="personal qui-page qui-flex-ver">
     <header-com title="个人中心" isBack></header-com>
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
-    <select-data title="换绑班级" :select-list="classList" v-model="classTag" @confirm="chooseClass"></select-data>
     <div class="top qui-fx-jsb">
       <div class="info qui-fx-ac">
         <img src="" alt="" :onerror="errorImg">
@@ -11,7 +10,7 @@
           <span class="role">{{ userInfo.roleType === '1'? '家长' : userInfo.roleType === '2'? '班主任' : userInfo.roleType === '3' ? '教职工' : '校医' }}</span>
         </div>
       </div>
-      <div class="school">武汉市第四十九中</div>
+      <div class="school">{{ userInfo.schoolName }}</div>
     </div>
     <div class="submit-form qui-fx-f1">
       <div class="submit-item qui-fx-ac qui-bd-b">
@@ -26,7 +25,9 @@
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">换绑班级</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="classTag = true">{{ dataForm.className }}</div>
+        <div @click="isShow = true" class="qui-fx-f1 qui-tx-r" style="color:#666;margin-right:10px">
+          <multi-menu title="请假类型" :select-list="selectList" v-model="selectValue"></multi-menu>
+        </div>
         <div class="rit-icon"></div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
@@ -40,12 +41,14 @@
 <script>
 import SelectData from '@c/common/SelectData'
 import HeaderCom from '@com/HeaderCom'
+import MultiMenu from '@c/common/MultiMenu'
 import { store } from '../../store'
 export default {
   name: 'Personal',
   components: {
     HeaderCom,
-    SelectData
+    SelectData,
+    MultiMenu
   },
   computed: {
     userInfo: () => store.userInfo
@@ -55,7 +58,7 @@ export default {
       errorImg: 'this.src="' + require('@a/img/photo.png') + '"',
       detail: {},
       roleTag: false,
-      classTag: false,
+      isShow: false,
       roleList: [
         {
           id: '1',
@@ -79,18 +82,62 @@ export default {
         className: '',
         studentTotal: ''
       },
-      classList:[
+            type: '请选择',
+      selectValue: [],
+      selectList: [
         {
           id: 1,
-          text: '高一（1）班'
+          title: '高一',
+          children: [
+            {
+              id: 1.1,
+              title: '一班',
+            },
+            {
+              id: 1.2,
+              title: '二班',
+            },
+            {
+              id: 1.3,
+              title: '三班',
+            }
+          ]
         },
         {
-          id: 2,
-          text: '高一（2）班'
+          id: 1,
+          title: '高二',
+          children: [
+            {
+              id: 1.1,
+              title: '一班',
+            },
+            {
+              id: 1.2,
+              title: '二班',
+            },
+            {
+              id: 1.3,
+              title: '三班',
+            }
+          ]
         },
         {
-          id: 3,
-          text: '高一（3）班'
+          id: 1,
+          title: '高三',
+          children: [
+            {
+              id: 1.1,
+              title: '一班',
+            },
+            {
+              id: 1.2,
+              title: '二班',
+            },
+            {
+              id: 1.3,
+              title: '三班',
+            }
+          ]
         }
       ]
     }
@@ -98,7 +145,7 @@ export default {
   created() {
     this.dataForm.roleType = this.userInfo.roleType === '1'? '家长' : this.userInfo.roleType === '2'? '班主任' : this.userInfo.roleType === '3' ? '教职工' : '校医'
     this.dataForm.className = this.userInfo.gradeName + this.userInfo.className
-    this.dataForm.studentTotal = this.userInfo.studentTotals
+    this.dataForm.studentTotal = this.userInfo.studentTotal
   },
   async mounted() {
   },
@@ -109,9 +156,8 @@ export default {
       console.log(this.dataForm.roleType)
     },
     // 换绑班级
-    chooseClass(item) {
-      this.dataForm.className = item.text
-      console.log(this.dataForm.className)
+    select(item) {
+      this.type = item.name
     },
     //我的班级
     goClass(){

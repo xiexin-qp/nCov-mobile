@@ -40,7 +40,7 @@
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
                   <span>测温：{{ item.body }} {{ item.tiwen }}</span>
-                  <span>症状：{{otherSymptom }}</span>
+                  <span>症状：{{ item.otherSymptom }}</span>
                 </div>
                 <span class="detail" @click="reportDetail(item.userCode)">查看详情</span>
               </div>
@@ -160,9 +160,6 @@ export default {
           return
         }
         this.personList = res.data
-        res.data.otherSymptom.forEach(ele=>{
-          this.otherSymptom += ele.name
-        })
         this.$refs.scroll.init(this.personList)
       }
     },
@@ -171,7 +168,7 @@ export default {
         userCode : this.userInfo.userCode,
         reportType : '2'
       }
-      const res = await actions.getReportList(req)
+      const res = await actions.getClassReportList(req)
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {
@@ -218,8 +215,12 @@ export default {
         path: '/addReport'
       })
     }, */
-    reportDetail(id) {
-      this.$router.push({path:'/reportDetail',query:{id}})
+    reportDetail(userCode) {
+      const query = {
+        userCode,
+        reportType: this.role
+      }
+      this.$router.push({path:'/reportDetail',query})
     }
   }
 }

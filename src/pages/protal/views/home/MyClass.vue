@@ -4,15 +4,15 @@
     <div class="info qui-fx-jsa">
       <div class="data qui-fx-ver">
         <span>班级</span>
-        <span>{{ className }}</span>
+        <span>{{ userInfo.gradeName }}{{ userInfo.className }}</span>
       </div>
       <div class="data qui-fx-ver">
         <span>人数</span>
-        <span>{{ total }}</span>
+        <span>{{ userInfo.studentTotal }}</span>
       </div>
       <div class="data qui-fx-ver">
         <span>已加入</span>
-        <span>{{ inNum }}</span>
+        <span>{{ userInfo.inNum }}</span>
       </div>
     </div>
     <scroll-list ref="scroll" pullUpLoad  @loadMore="showList(true)">
@@ -42,7 +42,7 @@ export default {
     ScrollList
   },
   computed: {
-    count: () => store.count
+    userInfo: () => store.userInfo
   },
   data() {
     return {
