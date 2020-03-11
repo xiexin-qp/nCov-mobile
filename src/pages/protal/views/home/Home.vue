@@ -2,14 +2,14 @@
   <div class="home qui-page qui-fx-ver">
     <div class="top qui-fx-jsb qui-fx-ac">
       <div class="table">
-        <van-tabs v-if="true" type="card" v-model="role" color="rgb(59,84,241)">
-          <van-tab title="我的" name="me"> </van-tab>
-          <van-tab :title="title" name="other"> </van-tab>
+        <van-tabs v-if="userInfo.roleType !== '1'" type="card" v-model="role" color="rgb(59,84,241)">
+          <van-tab title="我的" name="1"> </van-tab>
+          <van-tab :title="userInfo.roleType === '2' ? '班级' : '学校'" name="2"> </van-tab>
         </van-tabs>
       </div>
       <div class="set qui-fx-ac" @click="goPersonal">
-        <img src="" alt="" :onerror="errorImg" />
-        <span>{{ userName }}</span>
+        <img :src="userInfo.photoImg" alt="" :onerror="errorImg" />
+        <span>{{ userInfo.userName }}</span>
       </div>
     </div>
     <div class="main qui-fx-ver">
@@ -26,29 +26,30 @@
             @get-date="getDate"
           ></calendar-show>
         </div>
-        <div v-if="role === 'me'" class="title qui-fx-jsb">
+        <div class="title qui-fx-jsb" v-if="role === '1'">
           <span>今日上报</span>
           <span @click="nowReport(0)">立即上报</span>
         </div>
-        <div v-else class="title qui-fx-jsb">
+        <div  v-else class="title qui-fx-jsb">
           <span>今日上报情况<span class="num">（学生共{{ total }}人）</span></span>
           <span @click="nowReport(1)">立即上报</span>
         </div>
-        <div class="list" v-if="role === 'me'">
-          <ul>
+        <div class="list" v-if="role === '1'">
+          <ul v-if="personList.length > 0">
             <li :class="item.status === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
-                  <span>测温：{{ item.part }} {{ item.heat }}</span>
-                  <span>症状：{{item.sym }}</span>
+                  <span>测温：{{ item.body }} {{ item.tiwen }}</span>
+                  <span>症状：{{otherSymptom }}</span>
                 </div>
-                <span class="detail" @click="reportDetail(item.id)">查看详情</span>
+                <span class="detail" @click="reportDetail(item.userCode)">查看详情</span>
               </div>
               <div class="date">
-                <span>{{ item.time }}</span>
+                <span>{{ item.creatTime }}</span>
               </div>
             </li>
           </ul>
+          <no-data v-else msg="没有数据~"></no-data>
         </div>
         <div class="report qui-fx-ver" v-else>
           <div class="gather qui-fx-jsa">
@@ -72,7 +73,7 @@
             </div>
           </div>
           <div class="student-list">
-            <ul>
+            <ul v-if="collectLIst.length>0">
               <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i">
                 <div class="student qui-fx-ac">
                   <img :src="item.photoPic" alt="" :onerror="errorImg" />
@@ -81,6 +82,7 @@
                 <span>{{ item.type === 0 ? '未上报' : item.type === 1 ? '异常' : '发热'}}</span>
               </li>
             </ul>
+            <no-data v-else msg="没有数据~"></no-data>
           </div>
         </div>
       </scroll-list>
@@ -93,15 +95,17 @@ import warnImg from '@a/img/warnImg.png'
 import normalImg from '@a/img/normalImg.png'
 import CalendarShow from '@com/CalendarShow'
 import ScrollList from '@com/ScrollList'
+import NoData from '@c/common/NoData'
 import { store, actions } from '../../store'
 export default {
   name: 'Home',
   components: {
     CalendarShow,
-    ScrollList
+    ScrollList,
+    NoData
   },
   computed: {
-    count: () => store.count
+    userInfo: () => store.userInfo
   },
   data() {
     return {
@@ -114,13 +118,12 @@ export default {
       unusualNum:0,
       feverNum:0,
       total:0,
-      title: '班级',
-      userName: '朱旭',
-      role: 'me',
+      role: '1',
       cutTag: true,
       exceptionList: [1, 2, 3, 4],
       zcList: [10, 12, 14],
-      studentInfoList: []
+      studentInfoList: [],
+      otherSymptom: ''
     }
   },
   watch: {
@@ -129,7 +132,7 @@ export default {
     }
   },
   created() {
-    this.title = '班级'
+    console.log(this.userInfo)
   },
   async mounted() {
     this.showList()
@@ -137,7 +140,11 @@ export default {
   },
   methods: {
     async showList(tag = false) {
-      const res = await actions.getPersonInfo()
+      const req = {
+        userCode : this.userInfo.userCode,
+        reportType : '1'
+      }
+      const res = await actions.getReportList(req)
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {
@@ -149,12 +156,22 @@ export default {
           this.$refs.scroll.refresh()
         })
       } else {
+        if (res.data.length === 0) {
+          return
+        }
         this.personList = res.data
+        res.data.otherSymptom.forEach(ele=>{
+          this.otherSymptom += ele.name
+        })
         this.$refs.scroll.init(this.personList)
       }
     },
     async classDaily(type = 0, tag = false) {
-      const res = await actions.getClassInfo()
+      const req = {
+        userCode : this.userInfo.userCode,
+        reportType : '2'
+      }
+      const res = await actions.getReportList(req)
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {
@@ -168,6 +185,9 @@ export default {
           this.$refs.scroll.refresh()
         })
       } else {
+        if (res.data.length === 0) {
+          return
+        }
         this.total = res.total
         this.unappearNum = res.unappearNum
         this.unusualNum = res.unusualNum

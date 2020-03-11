@@ -7,9 +7,8 @@
 import hostEnv from '@config'
 
 let dailyApi = {
-  getPersonInfo: '/daily/person#get', // 获取个人日报
-  getClassInfo: '/daily/class#get', // 获取班级日报
-  getMyClass: '/daily/myClass#get' // 我的班级
+  getReportList: 'http://39.97.164.4:8090/reportList/#get', // 获取个人日报
+  getMyClass: 'http://yapi.demo.qunar.com/mock/85606/daily/myClass#get' // 我的班级
 }
 
 for (let val in dailyApi) {
