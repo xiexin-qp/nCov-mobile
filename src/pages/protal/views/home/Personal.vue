@@ -40,7 +40,7 @@
 <script>
 import SelectData from '@c/common/SelectData'
 import HeaderCom from '@com/HeaderCom'
-import { store, actions } from '../../store'
+/* import { store, actions } from '../../store' */
 export default {
   name: 'Personal',
   components: {
@@ -96,8 +96,8 @@ export default {
     }
   },
   async mounted() {
-    const res = await actions.getDetail()
-    this.detail = res.data
+/*     const res = await actions.getDetail()
+    this.detail = res.data */
   },
   methods: {
     // 切换角色

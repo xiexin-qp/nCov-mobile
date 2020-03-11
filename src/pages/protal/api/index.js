@@ -3,9 +3,11 @@
  */
 
 import home from './home'
+import daily from './daily'
 
 let apiList = {
-  ...home
+  ...home,
+  ...daily
 }
 
 

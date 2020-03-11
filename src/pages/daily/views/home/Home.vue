@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     async showList(tag = false) {
-      const res = await actions.getIndex()
+      const res = await actions.getPersonInfo()
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {

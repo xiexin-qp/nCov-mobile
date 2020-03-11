@@ -4,26 +4,26 @@
     <div class="info qui-fx-jsa">
       <div class="data qui-fx-ver">
         <span>班级</span>
-        <span>高一（1）班</span>
+        <span>{{ className }}</span>
       </div>
       <div class="data qui-fx-ver">
         <span>人数</span>
-        <span>36</span>
+        <span>{{ total }}</span>
       </div>
       <div class="data qui-fx-ver">
         <span>已加入</span>
-        <span>30</span>
+        <span>{{ inNum }}</span>
       </div>
     </div>
-    <scroll-list ref="scroll" pullUpLoad>
+    <scroll-list ref="scroll" pullUpLoad  @loadMore="showList(true)">
       <div class="student-list qui-fx-ver">
         <ul>
-          <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in 10" :key="i">
+          <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in dataList" :key="i">
             <div class="student qui-fx-ac">
-              <img src="" alt="" :onerror="errorImg" />
-              <span>李斯特</span>
+              <img :src="item.photoPic" alt="" :onerror="errorImg" />
+              <span>{{ item.name }}</span>
             </div>
-            <span>2020-03-19 09:00:00</span>
+            <span>{{ item.startTime }}</span>
           </li>
         </ul>
       </div>
@@ -46,7 +46,10 @@ export default {
   },
   data() {
     return {
-      detail: {},
+      dataList: [],
+      className:'',
+      total:'',
+      inNum:'',
       errorImg: 'this.src="' + require('@a/img/photo.png') + '"'
     }
   },
@@ -55,7 +58,7 @@ export default {
   },
   methods: {
     async showList(tag = false) {
-      const res = await actions.getIndex()
+      const res = await actions.getMyClass()
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {
@@ -68,6 +71,9 @@ export default {
         })
       } else {
         this.dataList = res.data
+        this.className = res.className
+        this.total = res.total
+        this.inNum = res.inNum
         this.$refs.scroll.init(this.dataList)
       }
     }
