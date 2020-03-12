@@ -336,7 +336,7 @@ export default {
           .data {
             margin-left: 40%;
             span {
-              color: #831e83;
+              color: #666;
             }
           }
         }
