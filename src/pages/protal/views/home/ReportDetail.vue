@@ -3,11 +3,11 @@
     <header-com title="上报详情" isBack></header-com>
     <div class="qui-fx qui-fx-jsb set-info div-shadow" >
       <div class="set-img">
-        <img :src="detailInfo.photoPic" alt="">
+        <img :src="detailInfo.photoImg" alt="">
       </div>
       <div class="qui-fx-ver">
-        <div class="set-name">{{detailInfo.name}}</div>
-        <div class="set-class">{{detailInfo.class}}</div>
+        <div class="set-name">{{detailInfo.studentName}}</div>
+        <div class="set-class">{{detailInfo.className}}</div>
         <div class="set-class">ID: {{detailInfo.ID}}</div>
       </div>
       <div>
@@ -23,13 +23,13 @@
     </div>
     <div class="set-info div-shadow">
       <van-cell-group :border="false">
-        <van-cell title="体温" :value="`${detailInfo.temp}℃(${detailInfo.title})`" :value-class="detailInfo.title==='发热'?'set-heat':'set-normal'"/>
+        <van-cell title="体温" :value="`${detailInfo.tiwen}℃(${detailInfo.title})`" :value-class="detailInfo.title==='发热'?'set-heat':'set-normal'"/>
         <van-cell title="测量部位" :value="detailInfo.part" />
-        <van-cell title="是否接触疫情人员" :value="detailInfo.isState" />
+        <van-cell title="是否接触疫情人员" :value="detailInfo.isContact" />
         <van-cell title="附带症状" :value="detailInfo.symptom" />
-        <van-cell title="上报人" :value="detailInfo.admin" />
-        <van-cell title="上报时间" :value="detailInfo.time" />
-        <van-cell title="其他说明" :value="detailInfo.remark" />
+        <van-cell title="上报人" :value="detailInfo.reportName" />
+        <van-cell title="上报时间" :value="detailInfo.createTime" />
+        <van-cell title="其他说明" :value="detailInfo.remarks" />
       </van-cell-group>
     </div>
   </div>
@@ -56,31 +56,36 @@ export default {
       tempyc,
       tempzc,
       detailInfo:{
-        name: '',
-        class: '',
+        studentName: '',
+        className: '',
         ID: '',
-        temp: '37.6',
+        tiwen: '37.6',
         part: '口腔',
-        isState: '否',
-        symptom: '咳嗽',
-        admin: '刘家长',
-        time: '2020-03-07',
-        remark: '没有其他症状',
-        title: '发热'
-      }
+        isContact: '否',
+        otherSymptom: '咳嗽',
+        reportName: '刘家长',
+        createTime: '2020-03-07',
+        remarks: '没有其他症状',
+        title: '发热',
+        photoImg: img
+      },
+      id: '',
+      reportType: '',
+      symptom: ''
+
     }
   },
   computed: {
   },
-  mounted () {
-    this.detailGet()
+  async mounted () {
+    this.id = this.$route.query.userCode
+    this.reportType = this.$route.query.reportType
+    const res = await actions.reportDetail({ id : this.id, reportType : this.reportType})
+    this.detailInfo = res.data
+    this.symptom = this.detailInfo.otherSymptom.map(item => item.name).join(',')
   },
   methods: {
-    async detailGet(){
-      const res = await actions.getReportDetail()
-      console.log('===',res.data)
-      this.detailInfo=res.data
-    }
+
   }
 }
 </script>
