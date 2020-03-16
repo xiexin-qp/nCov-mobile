@@ -37,7 +37,8 @@ export default {
       },
       callback: function (indexArr, data) {
         console.log(data)
-        _self.$emit('input')
+        _self.$emit('input',data)
+        _self.$emit('select',data)
       }
     })
   }

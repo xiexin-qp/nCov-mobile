@@ -58,7 +58,11 @@ export default {
   },
   methods: {
     async showList(tag = false) {
-      const res = await actions.getMyClass()
+      const req = {
+        clazzCode : this.userInfo.classCode,
+        schoolCode : this.userInfo.schoolCode,
+      }
+      const res = await actions.getStudentsList(req)
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {

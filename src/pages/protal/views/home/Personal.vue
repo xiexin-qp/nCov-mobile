@@ -26,7 +26,7 @@
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">换绑班级</div>
         <div @click="isShow = true" class="qui-fx-f1 qui-tx-r" style="color:#666;margin-right:10px">
-          <multi-menu title="请假类型" :select-list="selectList" v-model="selectValue"></multi-menu>
+          <multi-menu title="换绑班级" :select-list="selectList" v-model="selectValue" @select="select"></multi-menu>
         </div>
         <div class="rit-icon"></div>
       </div>
@@ -42,7 +42,7 @@
 import SelectData from '@c/common/SelectData'
 import HeaderCom from '@com/HeaderCom'
 import MultiMenu from '@c/common/MultiMenu'
-import { store } from '../../store'
+import { store, actions } from '../../store'
 export default {
   name: 'Personal',
   components: {
@@ -59,24 +59,8 @@ export default {
       detail: {},
       roleTag: false,
       isShow: false,
-      roleList: [
-        {
-          id: '1',
-          text: '家长'
-        },
-        {
-          id: '2',
-          text: '班主任'
-        },
-        {
-          id: '3',
-          text: '教职工'
-        },
-        {
-          id: '4',
-          text: '校医'
-        }
-      ],
+      roleList: [],
+      classId: '',
       dataForm: {
         roleType: '',
         className: '',
@@ -148,16 +132,45 @@ export default {
     this.dataForm.studentTotal = this.userInfo.studentTotal
   },
   async mounted() {
+    this.getRoleList()
+    this.getClass()
   },
   methods: {
+    //查询可切换的角色
+    async getRoleList(){
+      const req = {
+        userCode : this.userInfo.userCode,
+        schoolCode : this.userInfo.schoolCode,
+      }
+      const res = await actions.getRoleInfo(req)
+      this.roleList = res.data
+    },
     // 切换角色
     chooseRole(item) {
       this.dataForm.roleType = item.text
       console.log(this.dataForm.roleType)
     },
+    //查询班主任绑定的班级
+    async getClass(){
+      const req = {
+        teacherCode : this.userInfo.teacherCode,
+        schoolCode : this.userInfo.schoolCode,
+      }
+      const res = await actions.getMyClass(req)
+      this.dataForm.className = res.data.className
+      this.classId = res.data.classId
+    },
     // 换绑班级
-    select(item) {
-      this.type = item.name
+    async select(item) {
+      console.log(item)
+      const req = {
+        teacherCode : this.userInfo.teacherCode,
+        schoolCode : this.userInfo.schoolCode,
+        id: this.classId,
+        classCode: item
+      }
+      const res = await actions.changeMyClass(req)
+      this.dataForm.className = res.data.className
     },
     //我的班级
     goClass(){

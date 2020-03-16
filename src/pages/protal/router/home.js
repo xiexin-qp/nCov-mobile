@@ -18,7 +18,7 @@ const Home = [
     module: 'home',
     path: 'Home',
     title: '疫情日报',
-    keepAlive: true
+    keepAlive: false
   },
   {
     module: 'home',
