@@ -43,7 +43,7 @@ const showToast = (tip = '') => {
 function responseRes(res) {
   Vue.prototype.$toast.clear()
   return new Promise((resolve, reject) => {
-    if (res.code === 200 || res.status === true) {
+    if (res.code === '1' || res.status === true) {
       resolve(res)
     } else {
       reject(res)
