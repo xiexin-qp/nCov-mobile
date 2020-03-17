@@ -42,7 +42,7 @@
                   <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
                   <span>症状：{{ item.symptomsName }}</span>
                 </div>
-                <span class="detail" @click="reportDetail(item.userCode)">查看详情</span>
+                <span class="detail" @click="reportDetail(item)">查看详情</span>
               </div>
               <div class="date">
                 <span>{{ gmtToDate(item.reportTime,'3') }}</span>
@@ -74,7 +74,7 @@
           </div>
           <div class="student-list">
             <ul v-if="collectLIst.length>0">
-              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item.userCode)">
+              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item)">
                 <div class="student qui-fx-ac">
                   <img :src="item.photoImg" alt="" :onerror="errorImg" />
                   <span>{{ item.userName }}</span>
@@ -290,9 +290,9 @@ export default {
     nowReport(reportType) {
       this.$router.push({path:'/addReport',query:{reportType}})
     },
-    reportDetail(userCode) {
+    reportDetail(record) {
       const query = {
-        userCode
+        id:record.id
       }
       this.$router.push({path:'/reportDetail',query})
     }

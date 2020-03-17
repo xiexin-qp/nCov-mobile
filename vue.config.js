@@ -73,7 +73,7 @@ module.exports = {
         }
       },
       '/zhuxu': {
-        target: 'http://b32err.natappfree.cc',
+        target: 'http://pugai.natapp1.cc',
         changeOrigin: true,
         ws: true,
         pathRewrite: {
