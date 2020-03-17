@@ -6,13 +6,13 @@
         <span>班级</span>
         <span>{{ userInfo.gradeName }}{{ userInfo.className }}</span>
       </div>
-      <div class="data qui-fx-ver">
+      <!-- <div class="data qui-fx-ver">
         <span>人数</span>
         <span>{{ total }}</span>
-      </div>
+      </div> -->
       <div class="data qui-fx-ver">
         <span>已加入</span>
-        <span>{{ dataList.length }}</span>
+        <span>{{ total }}人</span>
       </div>
     </div>
     <scroll-list ref="scroll" pullUpLoad  @loadMore="showList(true)">
@@ -21,9 +21,9 @@
           <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in dataList" :key="i">
             <div class="student qui-fx-ac">
               <img :src="item.photoPic" alt="" :onerror="errorImg" />
-              <span>{{ item.name }}</span>
+              <span>{{ item.userName }}</span>
             </div>
-            <span>{{ item.startTime }}</span>
+            <span>{{ item.riskTime }}</span>
           </li>
         </ul>
       </div>
@@ -50,7 +50,7 @@ export default {
       className:'',
       total:'',
       inNum:'',
-      errorImg: 'this.src="' + require('@a/img/photo.png') + '"'
+      errorImg: 'this.src="' + require('@a/img/photo.png') + '"',
     }
   },
   async mounted() {
@@ -61,7 +61,7 @@ export default {
       const req = {
         //clazzCode : this.userInfo.classCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT', 
+        schoolCode : 'QPZX', 
         teacherCode : 'ST14f6u8nudwtgb',  
         clazzCode: 'C14f0erz15ydb3',
         pageNum: 1,
@@ -99,7 +99,7 @@ export default {
     .data {
       margin: 30px 0;
       text-align: center;
-      width: 33%;
+      width: 50%;
       border-right: 2px solid #ccc;
       span:nth-child(1) {
         font-size: 38px;

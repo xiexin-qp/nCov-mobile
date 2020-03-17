@@ -5,7 +5,7 @@
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
     <div class="top qui-fx-jsb">
       <div class="info qui-fx-ac">
-        <img src="" alt="" :onerror="errorImg">
+        <img :src="userInfo.photoImg" alt="" :onerror="errorImg">
         <div class="qui-fx-ver">
           <span class="name">{{ userInfo.userName }}</span>
           <span class="role">{{ userInfo.roleType === '1'? '家长' : userInfo.roleType === '2'? '班主任' : userInfo.roleType === '3' ? '教职工' : '校医' }}</span>
@@ -26,7 +26,7 @@
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleType==='2'" @click="classTag = true">
         <div class="tip">换绑班级</div>
-        <div class="qui-fx-f1 qui-tx-r" style="color:#666;margin-right:10px">
+        <div class="qui-fx-f1 qui-tx-r" style="color:#666;margin-right:10px">{{ dataForm.className }}
         </div>
         <div class="rit-icon"></div>
       </div>
@@ -42,7 +42,7 @@
 import SelectData from '@c/common/SelectData'
 import HeaderCom from '@com/HeaderCom'
 import GradeClass from '@c/common/GradeClass'
-import { store, actions } from '../../store'
+import { store,setStore, actions } from '../../store'
 export default {
   name: 'Personal',
   components: {
@@ -66,64 +66,7 @@ export default {
         className: '',
         studentTotal: ''
       },
-      type: '请选择',
-      selectValue: [],
-      selectList: [
-        {
-          id: 1,
-          title: '高一',
-          children: [
-            {
-              id: 1.1,
-              title: '一班',
-            },
-            {
-              id: 1.2,
-              title: '二班',
-            },
-            {
-              id: 1.3,
-              title: '三班',
-            }
-          ]
-        },
-        {
-          id: 1,
-          title: '高二',
-          children: [
-            {
-              id: 1.1,
-              title: '一班',
-            },
-            {
-              id: 1.2,
-              title: '二班',
-            },
-            {
-              id: 1.3,
-              title: '三班',
-            }
-          ]
-        },
-        {
-          id: 1,
-          title: '高三',
-          children: [
-            {
-              id: 1.1,
-              title: '一班',
-            },
-            {
-              id: 1.2,
-              title: '二班',
-            },
-            {
-              id: 1.3,
-              title: '三班',
-            }
-          ]
-        }
-      ]
+      type: '请选择'
     }
   },
   created() {
@@ -143,8 +86,8 @@ export default {
       const req = {
         //userCode : this.userInfo.userCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT', 
-        userCode : 'ST14f6u8nudwtgb',  
+        schoolCode : 'QPZX', 
+        userCode : 'ST14f6u1b0wxwd7',  
       }
       const res = await actions.getRoleInfo(req)
       res.result.forEach(ele=>{
@@ -159,12 +102,40 @@ export default {
     chooseRole(item) {
       this.dataForm.roleType = item.text
       console.log(this.dataForm.roleType)
+      setStore({
+        key: 'userInfo',
+        data: {
+          ...this.userInfo,
+          roleType: item.text === '家长' ? '1' : item.text === '班主任' ? '2' : item.text === '教职工' ? '3' : '4'
+        }
+      })
     },
-     // 切换班级
-    chooseClass(item) {
+     // 换绑班级
+    async chooseClass(item) {
       console.log(item)
-      this.dataForm = Object.assign(this.dataForm, item)
-      console.log(this.dataForm)
+      this.dataForm.className = item.gradeName + item.clazzName
+      console.log(item)
+      const req = {
+        //teacherCode : this.userInfo.teacherCode,
+        //schoolCode : this.userInfo.schoolCode,
+        schoolCode : 'QPZX', 
+        teacherCode : 'ST14f6u1b0wxwd7',  
+        gradeCode: item.gradeCode,
+        classCode: item.clazzCode
+      }
+      const res = await actions.changeMyClass(req)
+      if(res.success){
+        setStore({
+          key: 'userInfo',
+          data: {
+            ...this.userInfo,
+            gradeId: item.gradeCode,
+            gradeName: item.gradeName,
+            className: item.clazzName,
+            code: item.clazzCode
+          }
+        })
+      }
     },
     //查询班主任绑定的班级
     async getClass(){
@@ -172,26 +143,11 @@ export default {
         //teacherCode : this.userInfo.teacherCode,
         //schoolCode : this.userInfo.schoolCode,
         //userCode : this.userInfo.userCode,
-        schoolCode : 'CANPOINT', 
-        teacherCode : 'ST14f6u8nudwtgb',  
+        schoolCode : 'QPZX', 
+        teacherCode : 'ST14f6u1b0wxwd7',  
       }
       const res = await actions.getMyClass(req)
-      this.selectValue = res.result.clazzName
-      this.classId = res.result.clazzCode
-    },
-    // 换绑班级
-    async select(item) {
-      console.log(item)
-      const req = {
-        //teacherCode : this.userInfo.teacherCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT', 
-        teacherCode : 'ST14f6u8nudwtgb',  
-        id: this.classId,
-        classCode: item
-      }
-      const res = await actions.changeMyClass(req)
-      this.dataForm.className = res.result.className
+      this.dataForm.className = res.result.clazzName
     },
     //我的班级
     goClass(){
