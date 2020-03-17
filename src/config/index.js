@@ -7,7 +7,7 @@ const ConfigEnv = process.env.VUE_APP_URL
 let hostEnv = ''
 
 if (ConfigEnv === 'test') {
-  hostEnv = 'http://yapi.demo.qunar.com/mock/85606'
+  hostEnv = ''
 } else if (ConfigEnv === 'prod') {
   hostEnv = ''
 } else {
