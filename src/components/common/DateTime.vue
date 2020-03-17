@@ -18,7 +18,7 @@ export default {
   name: 'DateTime',
   props: {
     minDate: {
-      type: String,
+      type: String || Object,
       default: ''
     },
     maxDate: {

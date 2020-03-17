@@ -6,10 +6,10 @@
     </div>
     <div class="login-input qui-bd-b qui-fx-ac">
       <input class="qui-fx-f1" v-model="loginForm.phone" type="tel" placeholder="请输入手机号" />
-      <span @click="getYzm" class="yzm-btn">{{ tip }}</span>
+      <span @click="getYzm" :class="['yzm-btn', {'act': total !== 60}]">{{ tip }}</span>
     </div>
     <div class="login-input qui-bd-b">
-      <input type="tel" v-model="loginForm.code" placeholder="请输入验证码" />
+      <input type="tel" v-model="loginForm.authCode" placeholder="请输入验证码" />
     </div>
     <div class="login-btn" @click="login">登录</div>
   </div>
@@ -18,13 +18,16 @@
 <script>
 import { setStore, actions } from '../../store/index.js'
 import logo from '@a/img/logo.png'
-import $ajax from '@u/ajax-serve'
 export default {
   name: 'Login',
   components: {},
   computed: {},
   data() {
-    return { logo, tip: '获取验证码', loginForm: { phone: '', code: '666666' } }
+    return { total: 60, logo, tip: '获取验证码', loginForm: { phone: '', authCode: '' } }
+  },
+  beforeRouteLeave(to, from, next) {
+    clearInterval(this.timer)
+    next()
   },
   async mounted() {},
   methods: {
@@ -34,35 +37,39 @@ export default {
         return false
       }
       if (this.timer) return
-      this.$notify('验证码已发送', 11111110)
-      let total = 60
-      this.timer = setInterval(() => {
-        total--
-        this.tip = `${total} s`
-        if (total === 0) {
-          this.tip = '获取验证码'
-          clearInterval(this.timer)
-          this.timer = null
-        }
-      }, 1000)
+      actions
+        .getYzm({
+          phone: this.loginForm.phone,
+          type: 2
+        })
+        .then(() => {
+          this.$notify('验证码已发送')
+          this.timer = setInterval(() => {
+            this.total--
+            this.tip = `${this.total} s`
+            if (this.total === 0) {
+              this.total = 60
+              this.tip = '获取验证码'
+              clearInterval(this.timer)
+              this.timer = null
+            }
+          }, 1000)
+        })
     },
     async login() {
-      if (this.loginForm.phone === '' || this.loginForm.code === '') {
+      if (this.loginForm.phone === '' || this.loginForm.authCode === '') {
         this.$notify('请输入手机号或验证码')
         return
       }
       const res = await actions.login({
-        ...this.loginForm
+        ...this.loginForm,
+        openid: '88888888'
       })
-      if (res.length === 0) {
-        this.$notify('你手机号尚未绑定注册')
-        return
-      }
-      setStore({
-        key: 'userInfo',
-        data: res.data[0]
-      })
-      this.$router.push('/home')
+      // setStore({
+      //   key: 'userInfo',
+      //   data: res.data[0]
+      // })
+      // this.$router.push('/home')
     }
   }
 }
@@ -71,7 +78,6 @@ export default {
 <style lang="less" scoped>
 .login {
   background-color: #fff;
-
   .logo {
     margin: 0px 80px;
     position: relative;
@@ -105,6 +111,9 @@ export default {
   }
   .yzm-btn {
     color: @main-color;
+    &.act {
+      color: #999;
+    }
   }
   .login-btn {
     height: 80px;

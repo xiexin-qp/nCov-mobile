@@ -91,13 +91,6 @@ export default {
           icon: app,
           url: 'registerParent',
           randomNum: 2
-        },
-        {
-          id: 1,
-          name: '教职工注册',
-          icon: app,
-          url: 'registerTeacher',
-          randomNum: 1
         }
       ]
     }

@@ -9,7 +9,13 @@
       </div>
     </popup-box>
     <select-data title="身份类型" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
-    <date-time type="date" v-model="timeTag" @get-date="getDate"></date-time>
+    <date-time
+      :min-date="new Date(1995, 1, 1)"
+      :max-date="new Date(2017, 1, 1)"
+      type="date"
+      v-model="timeTag"
+      @get-date="getDate"
+    ></date-time>
     <grade-class v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
     <div class="qui-fx-f1 qui-fx-ver">
       <div class="submit-form qui-fx-f1">
@@ -45,7 +51,7 @@
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div>工号</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.userNo" type="text" placeholder="请输入工号" />
+            <input class="input" v-model="dataForm.userNo" type="text" placeholder="请输入工号，可不填" />
           </div>
         </div>
         <div class="mar-t20">
@@ -156,6 +162,12 @@ export default {
   methods: {
     submitForm() {
       validateForm(yzForm, this.dataForm, () => {
+        if (this.dataForm.classChargeMark === 1) {
+          if (!this.dataForm.clazzCode || !this.dataForm.gradeCode) {
+            this.$toast('请选择年级班级')
+            return
+          }
+        }
         delete this.dataForm.classChargeMarkText
         actions.teaRegister({ ...this.dataForm, profilePhoto: this.profilePhoto[0] || '' }).then(() => {
           this.isOk = true

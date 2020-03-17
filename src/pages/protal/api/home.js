@@ -7,18 +7,11 @@
 import hostEnv from '@config'
 
 let homeApi = {
-  login: 'http://39.97.164.4:8090/login#post', // 登录
-  getIndex: 'http://yapi.demo.qunar.com/mock/5691/getDemoList#get', // 获取列表
-  getDetail: 'http://yapi.demo.qunar.com/mock/5691/getDemoInfo#get', // 获取详情
-  studentReport: 'http://39.97.164.4:8090/studentReport#post', // 学生上报
-  teacherReport: 'http://39.97.164.4:8090/teacherReport#post', // 教职工上报
-  getStudentList: 'http://39.97.164.4:8090/studentList#get', // 学生列表
-  // http://39.97.164.4:8090/studentList?gradeId=g1&classId=a1
-  getReportDetail: 'http://yapi.demo.qunar.com/mock/85606/report/detail#get', // 获取详情
-  getStudent: 'http://yapi.demo.qunar.com/mock/85606/daily/myClass#get', // 获取详情
+  getYzm: '/user/auth/code#get', // 获取验证码
+  login: '/user/login#get', // 登录
+  getUserInfo: '/user/info#getUrl', // 根据用户code查询详情
   addReport: '/report/info/submit#post', // 疫情上报
   reportDetail: '/report/info/one/#getWithPara' // 疫情记录详情
-
 }
 
 for (let val in homeApi) {

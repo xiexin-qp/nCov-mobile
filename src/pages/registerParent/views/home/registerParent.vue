@@ -8,7 +8,13 @@
         <p>您也可以在微信中搜索"全品平安校园"微信公众号关注进行操作。</p>
       </div>
     </popup-box>
-    <date-time type="date" v-model="timeTag" @get-date="getDate"></date-time>
+    <date-time
+      :min-date="new Date(1995, 1, 1)"
+      :max-date="new Date(2017, 1, 1)"
+      type="date"
+      v-model="timeTag"
+      @get-date="getDate"
+    ></date-time>
     <grade-class v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
     <div class="qui-fx-f1 qui-fx-ver">
       <div class="submit-form qui-fx-f1">
@@ -38,7 +44,7 @@
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div>学生学号</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.userNo" type="text" placeholder="请输入学号" />
+            <input class="input" v-model="dataForm.userNo" type="text" placeholder="请输入学号，可不填" />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">

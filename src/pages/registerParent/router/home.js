@@ -17,7 +17,6 @@ const Home = [
   {
     module: 'home',
     path: 'registerParent',
-    type: 'index',
     keepAlive: true,
     title: '家长注册'
   }
