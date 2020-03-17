@@ -36,16 +36,16 @@
         </div>
         <div class="list" v-if="role === '1'">
           <ul v-if="personList.length > 0">
-            <li :class="item.status === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
+            <li :class="item.feverMark === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
-                  <span>测温：{{ item.body }} {{ item.tiwen }}</span>
-                  <span>症状：{{ item.otherSymptom }}</span>
+                  <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
+                  <span>症状：{{ item.symptomsName }}</span>
                 </div>
                 <span class="detail" @click="reportDetail(item.userCode)">查看详情</span>
               </div>
               <div class="date">
-                <span>{{ item.creatTime }}</span>
+                <span>{{ gmtToDate(item.reportTime,'3') }}</span>
               </div>
             </li>
           </ul>
@@ -148,7 +148,7 @@ export default {
   },
   async mounted() {
     this.today = new Date();
-    this.showList(false, this.today.getTime())
+    this.showList(false, this.today.getTime()/1000)
   },
   methods: {
     // 时间转化
@@ -167,6 +167,12 @@ export default {
         d.getFullYear() +
         '-' +
         (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1))
+      }else if(type === '3') {
+         date =
+         d.getFullYear() + '-' + ((d.getMonth() + 1) > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) + '-' + (d.getDate() > 9 ? d.getDate() : '0' + d.getDate()) + ' ' +
+            (d.getHours() > 9 ? d.getHours() : '0' + d.getHours()) + ':' + (d.getMinutes() > 9 ? d.getMinutes() : '0' +
+              d.getMinutes()) +
+            ':' + (d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds())
       }
       return date
     },
@@ -192,9 +198,9 @@ export default {
       const req = {
         //userCode : this.userInfo.userCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT',
+        schoolCode : 'QPZX',
         //userCode : 'PR14f79wjmzihh9',  
-        userCode : 'ST14f6u8nudwtgb',  
+        userCode : 'ST14f6u1b0wxwd7',  
         queryDate
       }
       const res = await actions.getReportList(req)
@@ -209,6 +215,7 @@ export default {
           this.$refs.scroll.refresh()
         })
       } else {
+        this.personList = []
         if (res.result.length === 0) {
           return
         }
@@ -269,7 +276,7 @@ export default {
       this.today = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month)) + '-' + (date.day > 9 ? date.day : ('0' + date.day))
       let month = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month))
       if(this.role === '1'){
-        this.showList(false, new Date(this.today).getTime())
+        this.showList(false, new Date(this.today).getTime()/1000)
         // this.exceDate(1, month)
       }else{
         this.countDetail(0,false)

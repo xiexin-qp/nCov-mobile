@@ -21,7 +21,7 @@ let dailyApi = {
 }
 
 for (let val in dailyApi) {
-  dailyApi[val] = `${hostEnv}/api${dailyApi[val]}`
+  dailyApi[val] = `${hostEnv}${dailyApi[val]}`
 }
 
 export default dailyApi

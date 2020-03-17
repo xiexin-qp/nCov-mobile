@@ -37,7 +37,7 @@
           <div class="submit-input qui-fx-f1">
             <input
               class="input"
-              v-model="dataForm.tiwen"
+              v-model="dataForm.temperature"
               type="text"
               placeholder="请输入测量值，正常值为36.2～37.3"
             />
@@ -45,13 +45,13 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">测量部位</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.body }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.bodyParts }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">是否接触疫情人员</div>
           <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-switch v-model="dataForm.isContact" size="22px"/>
+            <van-switch v-model="dataForm.mark01" size="22px"/>
           </div>
         </div>
         <div class="submit-area qui-fx-ver">
@@ -71,7 +71,7 @@
           <div class="qui-fx-f1">
             <textarea
               class="text-area"
-              v-model="dataForm.remarks"
+              v-model="dataForm.symptomsRemarks"
               placeholder="1.其他不舒服症状，如呕吐、头晕等
   2.如有确诊、隔离、疑似症状，请详细说明情况"
             ></textarea>
@@ -93,8 +93,8 @@ import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup, Search } from 'vant
 import { store, actions } from '../../store'
 const yzForm = {
   name: '请选择学生',
-  tiwen: '请输入体温',
-  body: '请选择测量部位'
+  temperature: '请输入体温',
+  bodyParts: '请选择测量部位'
 }
 export default {
   name: 'AddReport',
@@ -132,16 +132,16 @@ export default {
       role: 0,
       dataForm: {
         name: '请选择学生',
-        tiwen: '',
+        temperature: '',
         symptom: [],
-        remarks: '',
-        body: '请选择测量部位'
+        symptomsRemarks: '',
+        bodyParts: '请选择测量部位'
       },
       studentList: [],
       studentTag: false,
       currentIndex: '',
       curVal: '',
-      body: '',
+      bodyParts: '',
       searchList:{
         // name: '',
         gradeId: '',
@@ -172,7 +172,21 @@ export default {
       this.studentList = res.data
       console.log('resres',res.data)
     },
-    submitForm() {
+    // addReport
+    // "bodyParts": "string", 
+  //  "classCode": "string", 
+  //  "gradeCode": "string", 
+  //  "reportPersonCode": "string", 
+  //  "reportPersonName": "string", 
+  //  "schoolCode": "string", 
+  //  "symptoms": "string", 
+  //  "symptomsRemarks": "string", 
+  //  "temperature": "string", 
+  //  "userCode": "string", 
+  //  "userName": "string", 
+  //  "userType": "string" 
+  //  "mark01": "string" 
+   submitForm() {
       validateForm(yzForm, this.dataForm, () => {
       // console.log('dataForm',this.dataForm.symptom)
         if(this.dataForm.symptom.length > 0) {
@@ -180,54 +194,77 @@ export default {
             return {id:item.split('-')[0],name:item.split('-')[1]}
           })
         }
-        if(
-          (this.role === 0 && store.userInfo.type === 1) || 
-          (this.role !== 0 && (store.userInfo.type === 2 || store.userInfo.type === 4))
-        ) {
-          this.dataForm.body = this.body
-          this.dataForm.reportName = store.userInfo.userName
-          this.dataForm.phone = store.userInfo.phone
+          this.dataForm.bodyParts = this.bodyParts
+          this.dataForm.reportPersonName = store.userInfo.userName
           this.dataForm.userCode = store.userInfo.code
-          this.dataForm.reportType = '1'
-          this.dataForm.isContact = this.dataForm.isContact ? '1' : '0'
-          this.dataForm.studentName = store.userInfo.studentName
-          this.dataForm.studentCode = store.userInfo.studentCode
-          this.dataForm.studentNo = store.userInfo.studentNo
-          this.dataForm.gradeId = store.userInfo.gradeId
-          this.dataForm.gradeName = store.userInfo.gradeName
-          this.dataForm.classId = store.userInfo.classId
-          this.dataForm.className = store.userInfo.className
-          this.dataForm.photoImg = store.userInfo.photoImg
+          this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '0'
+          this.dataForm.gradeCode = store.userInfo.gradeId
+          this.dataForm.classCode = store.userInfo.classId
           actions.studentReport(this.dataForm).then(() => {
             this.$toast.success({ message: '提交成功' })
             setTimeout(() => {
               this.$router.go(-1)
             }, 1000)
           })
-        } else if(this.role === 0 && store.userInfo.type !== 1 ){
-          this.dataForm.teacherName = store.userInfo.userName
-          this.dataForm.teacherCode = store.userInfo.code
-          this.dataForm.teacherNo = store.userInfo.teacherNo
-          this.dataForm.body = this.body
-          this.dataForm.isContact = this.dataForm.isContact ? '1' : '0'
-          this.dataForm.reportName = store.userInfo.userName
-          this.dataForm.phone = store.userInfo.phone
-          this.dataForm.userCode = store.userInfo.code
-          this.dataForm.reportType = '2'
-          this.dataForm.photoImg = store.userInfo.photoImg
-          actions.teacherReport(this.dataForm).then(() => {
-            this.$toast.success({ message: '提交成功' })
-            setTimeout(() => {
-              this.$router.go(-1)
-            }, 1000)
-          })
-        }
       })
       // addReport
     },
+    // submitForm() {
+    //   validateForm(yzForm, this.dataForm, () => {
+    //   // console.log('dataForm',this.dataForm.symptom)
+    //     if(this.dataForm.symptom.length > 0) {
+    //       this.dataForm.otherSymptom = this.dataForm.symptom.map(item => {
+    //         return {id:item.split('-')[0],name:item.split('-')[1]}
+    //       })
+    //     }
+    //     if(
+    //       (this.role === 0 && store.userInfo.type === 1) || 
+    //       (this.role !== 0 && (store.userInfo.type === 2 || store.userInfo.type === 4))
+    //     ) {
+    //       this.dataForm.bodyParts = this.bodyParts
+    //       this.dataForm.reportPersonName = store.userInfo.userName
+    //       this.dataForm.phone = store.userInfo.phone
+    //       this.dataForm.userCode = store.userInfo.code
+    //       this.dataForm.reportType = '1'
+    //       this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '0'
+    //       this.dataForm.studentName = store.userInfo.studentName
+    //       this.dataForm.studentCode = store.userInfo.studentCode
+    //       this.dataForm.studentNo = store.userInfo.studentNo
+    //       this.dataForm.gradeId = store.userInfo.gradeId
+    //       this.dataForm.gradeName = store.userInfo.gradeName
+    //       this.dataForm.classId = store.userInfo.classId
+    //       this.dataForm.className = store.userInfo.className
+    //       this.dataForm.photoImg = store.userInfo.photoImg
+    //       actions.studentReport(this.dataForm).then(() => {
+    //         this.$toast.success({ message: '提交成功' })
+    //         setTimeout(() => {
+    //           this.$router.go(-1)
+    //         }, 1000)
+    //       })
+    //     } else if(this.role === 0 && store.userInfo.type !== 1 ){
+    //       this.dataForm.teacherName = store.userInfo.userName
+    //       this.dataForm.teacherCode = store.userInfo.code
+    //       this.dataForm.teacherNo = store.userInfo.teacherNo
+    //       this.dataForm.bodyParts = this.bodyParts
+    //       this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '0'
+    //       this.dataForm.reportPersonName = store.userInfo.userName
+    //       this.dataForm.phone = store.userInfo.phone
+    //       this.dataForm.userCode = store.userInfo.code
+    //       this.dataForm.reportType = '2'
+    //       this.dataForm.photoImg = store.userInfo.photoImg
+    //       actions.teacherReport(this.dataForm).then(() => {
+    //         this.$toast.success({ message: '提交成功' })
+    //         setTimeout(() => {
+    //           this.$router.go(-1)
+    //         }, 1000)
+    //       })
+    //     }
+    //   })
+    //   // addReport
+    // },
     chooseType(item) {
-      this.body = item.id
-      this.dataForm.body = item.text
+      this.bodyParts = item.id
+      this.dataForm.bodyParts = item.text
     },
     chooseStudent(record, index){
       this.chooseItem = record

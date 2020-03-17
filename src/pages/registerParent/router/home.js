@@ -9,10 +9,17 @@
 const Home = [
   {
     module: 'home',
-    path: 'Home',
+    path: 'registerTeacher',
     type: 'index',
     keepAlive: true,
-    title: '首页'
+    title: '教职工注册'
+  },
+  {
+    module: 'home',
+    path: 'registerParent',
+    type: 'index',
+    keepAlive: true,
+    title: '家长注册'
   }
 ]
 
