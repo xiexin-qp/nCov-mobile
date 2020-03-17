@@ -6,13 +6,13 @@
         <span>班级</span>
         <span>{{ userInfo.gradeName }}{{ userInfo.className }}</span>
       </div>
-      <div class="data qui-fx-ver">
+      <!-- <div class="data qui-fx-ver">
         <span>人数</span>
         <span>{{ total }}</span>
-      </div>
+      </div> -->
       <div class="data qui-fx-ver">
         <span>已加入</span>
-        <span>{{ dataList.length }}</span>
+        <span>{{ total }}人</span>
       </div>
     </div>
     <scroll-list ref="scroll" pullUpLoad  @loadMore="showList(true)">
@@ -99,7 +99,7 @@ export default {
     .data {
       margin: 30px 0;
       text-align: center;
-      width: 33%;
+      width: 50%;
       border-right: 2px solid #ccc;
       span:nth-child(1) {
         font-size: 38px;

@@ -231,12 +231,16 @@ export default {
         //schoolCode : this.userInfo.schoolCode,
         schoolCode : 'QPZX',
         //clazzCode: 'C14f0erz15ydb3',
-        reportState : type===0?2 : '',
-        health :type===1? 2 : '',
-        feverMark : type===2 ? 1: '',
         pageNum: 1,
-        pageSize: 999,
+        pageSize: 9999,
         date : this.gmtToDate(this.today)
+      }
+      if( type === 0 ){
+        req.reportState = 2
+      } else if( type === 1 ){
+        req.health = 2
+      } else if( type === 2 ){
+        req.feverMark = 1
       }
       const res = await actions.getCountDetail(req)
       if (tag) {
