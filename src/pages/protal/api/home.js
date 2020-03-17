@@ -11,11 +11,15 @@ let homeApi = {
   login: '/user/login#get', // 登录
   getUserInfo: '/user/info#getUrl', // 根据用户code查询详情
   addReport: '/report/info/submit#post', // 疫情上报
-  reportDetail: '/report/info/one/#getWithPara' // 疫情记录详情
+  reportDetail: '/report/info/one/#getWithPara', // 疫情记录详情
+  getBody: '/operate/bodypartsinfo/list#get', // 测量部位
+  getSymptoms: '/operate/symptomsinfo/list#get', // 附带症状
+  teacherGetStudent: '/teacher/clazz/users#post', // 班级下的学生
+  getUser: '/school/userinfo/getUserInfoList#post' // 班级下的学生
 }
 
 for (let val in homeApi) {
-  homeApi[val] = `${hostEnv}${homeApi[val]}`
+  homeApi[val] = `/zhuxu${homeApi[val]}`
 }
 
 export default homeApi

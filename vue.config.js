@@ -72,6 +72,14 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
+      },
+      '/zhuxu': {
+        target: 'http://pugai.natapp1.cc',
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/zhuxu': ''
+        }
       }
     }
   }
