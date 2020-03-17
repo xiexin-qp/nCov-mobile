@@ -21,9 +21,9 @@
           <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in dataList" :key="i">
             <div class="student qui-fx-ac">
               <img :src="item.photoPic" alt="" :onerror="errorImg" />
-              <span>{{ item.name }}</span>
+              <span>{{ item.userName }}</span>
             </div>
-            <span>{{ item.startTime }}</span>
+            <span>{{ item.riskTime }}</span>
           </li>
         </ul>
       </div>
@@ -50,7 +50,7 @@ export default {
       className:'',
       total:'',
       inNum:'',
-      errorImg: 'this.src="' + require('@a/img/photo.png') + '"'
+      errorImg: 'this.src="' + require('@a/img/photo.png') + '"',
     }
   },
   async mounted() {
@@ -61,7 +61,7 @@ export default {
       const req = {
         //clazzCode : this.userInfo.classCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT', 
+        schoolCode : 'QPZX', 
         teacherCode : 'ST14f6u8nudwtgb',  
         clazzCode: 'C14f0erz15ydb3',
         pageNum: 1,

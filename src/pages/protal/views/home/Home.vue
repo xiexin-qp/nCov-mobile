@@ -135,7 +135,7 @@ export default {
       console.log(val)
       if(val === '1'){
         this.exceptionList = []
-        this.showList(false, this.today.getTime())
+        this.showList(false, this.today.getTime()/1000)
       }else{
         this.getStatistics()
         this.countDetail(0, false)
@@ -184,8 +184,8 @@ export default {
         //clazzCode : type === 2 ? this.userInfo.classCode : '',
         //clazzCode: type === 2 ? 'C14f0erz15ydb3' : null,
         //schoolCode : this.userInfo.schoolCode,
-        userCode : 'ST14f6u8nudwtgb',
-        schoolCode : 'CANPOINT',
+        userCode : 'ST14f6u1b0wxwd7',
+        schoolCode : 'QPZX',
         monthDate
       }
       const res = await actions.getExceDate(req)
@@ -229,7 +229,7 @@ export default {
       const req = {
         //clazzCode : this.userInfo.classCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT',
+        schoolCode : 'QPZX',
         //clazzCode: 'C14f0erz15ydb3',
         reportState : type===0?2 : '',
         health :type===1? 2 : '',
@@ -262,7 +262,7 @@ export default {
       const req = {
         clazzCode : this.userInfo.classCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'CANPOINT',
+        schoolCode : 'QPZX',
         date : this.today
       }
       const res = await actions.getClassStatistics(req)

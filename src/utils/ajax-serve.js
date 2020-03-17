@@ -120,7 +120,24 @@ const $ajax = {
     } catch (err) {
       return responseRes(err.response.data)
     }
-  }
+  },
+  async put(obj, tag = true) {
+    if (tag) showToast()
+    try {
+      let res = await axios({
+        url: obj.url,
+        method: 'put',
+        data: obj.params,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      res = res.data
+      return responseRes(res)
+    } catch (err) {
+      return responseRes(err.response.data)
+    }
+  },
 }
 
 export default $ajax
