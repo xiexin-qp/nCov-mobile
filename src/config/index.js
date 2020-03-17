@@ -11,7 +11,7 @@ if (ConfigEnv === 'test') {
 } else if (ConfigEnv === 'prod') {
   hostEnv = ''
 } else {
-  hostEnv = ''
+  hostEnv = '/api'
 }
 
 export default hostEnv

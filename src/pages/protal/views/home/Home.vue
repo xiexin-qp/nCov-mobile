@@ -2,7 +2,7 @@
   <div class="home qui-page qui-fx-ver">
     <div class="top qui-fx-jsb qui-fx-ac">
       <div class="table">
-        <van-tabs v-if="userInfo.roleType !== '1'" type="card" v-model="role" color="rgb(59,84,241)">
+        <van-tabs v-if="userInfo.roleType === '2' || userInfo.roleType === '4'" type="card" v-model="role" color="rgb(59,84,241)">
           <van-tab title="我的" name="1"> </van-tab>
           <van-tab :title="userInfo.roleType === '2' ? '班级' : '学校'" name="2"> </van-tab>
         </van-tabs>
@@ -36,16 +36,16 @@
         </div>
         <div class="list" v-if="role === '1'">
           <ul v-if="personList.length > 0">
-            <li :class="item.status === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
+            <li :class="item.feverMark === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
-                  <span>测温：{{ item.body }} {{ item.tiwen }}</span>
-                  <span>症状：{{ item.otherSymptom }}</span>
+                  <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
+                  <span>症状：{{ item.symptomsName }}</span>
                 </div>
                 <span class="detail" @click="reportDetail(item.userCode)">查看详情</span>
               </div>
               <div class="date">
-                <span>{{ item.creatTime }}</span>
+                <span>{{ gmtToDate(item.reportTime,'3') }}</span>
               </div>
             </li>
           </ul>
@@ -79,7 +79,9 @@
                   <img :src="item.photoImg" alt="" :onerror="errorImg" />
                   <span>{{ item.userName }}</span>
                 </div>
-                <span>{{ item.type === 0 ? '未上报' : item.type === 1 ? '异常' : '发热'}}</span>
+                <span>{{ item.reportState === 2 ? '未上报' : ''}}</span>
+                <span>{{ item.health === 2 ? '异常' : ''}}</span>
+                <span>{{ item.feverMark  === 1 ? '发热' : ''}}</span>
               </li>
             </ul>
             <no-data v-else msg="没有数据~"></no-data>
@@ -132,7 +134,8 @@ export default {
     role(val) {
       console.log(val)
       if(val === '1'){
-        this.showList(false, this.today)
+        this.exceptionList = []
+        this.showList(false, this.today.getTime())
       }else{
         this.getStatistics()
         this.countDetail(0, false)
@@ -144,9 +147,8 @@ export default {
     console.log(this.userInfo)
   },
   async mounted() {
-    this.today = this.gmtToDate(new Date());
-    this.showList(false, this.today)
-    this.exceDate(1, this.gmtToDate(new Date(),'2'))
+    this.today = new Date();
+    this.showList(false, this.today.getTime()/1000)
   },
   methods: {
     // 时间转化
@@ -165,31 +167,46 @@ export default {
         d.getFullYear() +
         '-' +
         (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1))
+      }else if(type === '3') {
+         date =
+         d.getFullYear() + '-' + ((d.getMonth() + 1) > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) + '-' + (d.getDate() > 9 ? d.getDate() : '0' + d.getDate()) + ' ' +
+            (d.getHours() > 9 ? d.getHours() : '0' + d.getHours()) + ':' + (d.getMinutes() > 9 ? d.getMinutes() : '0' +
+              d.getMinutes()) +
+            ':' + (d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds())
       }
       return date
     },
     //当月异常日期
     async exceDate(type, monthDate){
+      this.exceptionList = []
       const req = {
-        userCode : this.userInfo.userCode,
-        clazzCode : type === 2 ? this.userInfo.classCode : '',
-        schoolCode : this.userInfo.schoolCode,
+        //userCode : this.userInfo.userCode,
+        //clazzCode : type === 2 ? this.userInfo.classCode : '',
+        //clazzCode: type === 2 ? 'C14f0erz15ydb3' : null,
+        //schoolCode : this.userInfo.schoolCode,
+        userCode : 'ST14f6u8nudwtgb',
+        schoolCode : 'CANPOINT',
         monthDate
       }
       const res = await actions.getExceDate(req)
-      this.exceptionList = res.data
+       res.result.forEach(ele=>{
+        this.exceptionList.push(parseInt(ele.split('-')[2]))
+      })
     },
     //个人上报信息
     async showList(tag = false, queryDate) {
       const req = {
-        userCode : this.userInfo.userCode,
-        schoolCode : this.userInfo.schoolCode,
+        //userCode : this.userInfo.userCode,
+        //schoolCode : this.userInfo.schoolCode,
+        schoolCode : 'QPZX',
+        //userCode : 'PR14f79wjmzihh9',  
+        userCode : 'ST14f6u1b0wxwd7',  
         queryDate
       }
       const res = await actions.getReportList(req)
       if (tag) {
         // 加载下一页
-        if (res.data.length === 0) {
+        if (res.result.length === 0) {
           this.$notify('数据加载完毕')
           return
         }
@@ -198,39 +215,45 @@ export default {
           this.$refs.scroll.refresh()
         })
       } else {
-        if (res.data.length === 0) {
+        this.personList = []
+        if (res.result.length === 0) {
           return
         }
-        this.personList = res.data
+        this.personList = res.result
         this.$refs.scroll.init(this.personList)
       }
     },
     // 按日期查询上报统计详情
     async countDetail(type = 0, tag = false) {
+      this.collectLIst = []
       const req = {
-        clazzCode : this.userInfo.classCode,
-        schoolCode : this.userInfo.schoolCode,
-        reportState : type,
-        date : this.today 
+        //clazzCode : this.userInfo.classCode,
+        //schoolCode : this.userInfo.schoolCode,
+        schoolCode : 'CANPOINT',
+        //clazzCode: 'C14f0erz15ydb3',
+        reportState : type===0?2 : '',
+        health :type===1? 2 : '',
+        feverMark : type===2 ? 1: '',
+        pageNum: 1,
+        pageSize: 999,
+        date : this.gmtToDate(this.today)
       }
       const res = await actions.getCountDetail(req)
       if (tag) {
         // 加载下一页
-        if (res.data.length === 0) {
+        if (res.result.length === 0) {
           this.$notify('数据加载完毕')
           return
         }
-        this.collectLIst = this.collectLIst.concat(res.data.filter(ele=>{
-          return ele.type === type
-        }))
+        this.collectLIst = this.collectLIst.concat(res.result.list)
         this.$nextTick(() => {
           this.$refs.scroll.refresh()
         })
       } else {
-        if (res.data.length === 0) {
+        if (res.result.length === 0) {
           return
         }
-        this.collectLIst = res.data
+        this.collectLIst = res.result.list
         this.$refs.scroll.init(this.collectLIst)
       }
     },
@@ -238,25 +261,23 @@ export default {
     async getStatistics() {
       const req = {
         clazzCode : this.userInfo.classCode,
-        schoolCode : this.userInfo.schoolCode,
+        //schoolCode : this.userInfo.schoolCode,
+        schoolCode : 'CANPOINT',
         date : this.today
       }
       const res = await actions.getClassStatistics(req)
-      this.total = res.data.submitSum
-      this.unappearNum = res.data.noSubmitSum
-      this.unusualNum = res.data.excSum
-      this.feverNum = res.data.feverSum
-      this.collectLIst = res.data.filter(ele=>{
-        return ele.type === type
-      })
+      this.total = res.result.submitSum
+      this.unappearNum = res.result.noSubmitSum
+      this.unusualNum = res.result.excSum
+      this.feverNum = res.result.feverSum
     },
     getDate(date) {
       console.log(date)
       this.today = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month)) + '-' + (date.day > 9 ? date.day : ('0' + date.day))
       let month = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month))
       if(this.role === '1'){
-        this.showList(false, this.today)
-        this.exceDate(1, month)
+        this.showList(false, new Date(this.today).getTime()/1000)
+        // this.exceDate(1, month)
       }else{
         this.countDetail(0,false)
         this.getStatistics()
@@ -271,8 +292,7 @@ export default {
     },
     reportDetail(userCode) {
       const query = {
-        userCode,
-        reportType: this.role
+        userCode
       }
       this.$router.push({path:'/reportDetail',query})
     }

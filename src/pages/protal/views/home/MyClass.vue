@@ -8,11 +8,11 @@
       </div>
       <div class="data qui-fx-ver">
         <span>人数</span>
-        <span>{{ userInfo.studentTotal }}</span>
+        <span>{{ total }}</span>
       </div>
       <div class="data qui-fx-ver">
         <span>已加入</span>
-        <span>{{ userInfo.inNum }}</span>
+        <span>{{ dataList.length }}</span>
       </div>
     </div>
     <scroll-list ref="scroll" pullUpLoad  @loadMore="showList(true)">
@@ -59,8 +59,13 @@ export default {
   methods: {
     async showList(tag = false) {
       const req = {
-        clazzCode : this.userInfo.classCode,
-        schoolCode : this.userInfo.schoolCode,
+        //clazzCode : this.userInfo.classCode,
+        //schoolCode : this.userInfo.schoolCode,
+        schoolCode : 'CANPOINT', 
+        teacherCode : 'ST14f6u8nudwtgb',  
+        clazzCode: 'C14f0erz15ydb3',
+        pageNum: 1,
+        pageSize: 15
       }
       const res = await actions.getStudentsList(req)
       if (tag) {
@@ -69,15 +74,14 @@ export default {
           this.$notify('数据加载完毕')
           return
         }
-        this.dataList = this.dataList.concat(res.data)
+        req.pageNum++
+        this.dataList = this.dataList.concat(res.result.list)
         this.$nextTick(() => {
           this.$refs.scroll.refresh()
         })
       } else {
-        this.dataList = res.data
-        this.className = res.className
-        this.total = res.total
-        this.inNum = res.inNum
+        this.dataList = res.result.list
+        this.total = res.result.totalCount
         this.$refs.scroll.init(this.dataList)
       }
     }
