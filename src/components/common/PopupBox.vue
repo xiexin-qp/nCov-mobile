@@ -14,7 +14,11 @@
           class="qui-fx-f1 action-btn quit-btn"
           @click="cancelBtn"
         >{{cancelText}}</div>
-        <div class="qui-fx-f1 action-btn confirm-btn" @click="confirmBtn">{{confirmText}}</div>
+        <div
+          v-if="noBtn"
+          class="qui-fx-f1 action-btn confirm-btn"
+          @click="confirmBtn"
+        >{{confirmText}}</div>
       </div>
     </div>
   </div>
@@ -61,6 +65,11 @@ export default {
     value: {
       type: Boolean,
       default: false
+    },
+    // 是否显示确认按钮
+    noBtn: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

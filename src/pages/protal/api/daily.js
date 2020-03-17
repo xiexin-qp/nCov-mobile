@@ -7,10 +7,6 @@
 import hostEnv from '@config'
 
 let dailyApi = {
-  getPersonInfo: 'http://yapi.demo.qunar.com/mock/85606/daily/person#get', // 获取个人日报
-  getClassInfo: 'http://yapi.demo.qunar.com/mock/85606/daily/class#get', // 获取班级日报
-  //getReportList: 'http://39.97.164.4:8090/reportList/#get', // 获取个人日报
-  getClassReportList: 'http://yapi.demo.qunar.com/mock/85606/daily/class#get',
   getExceDate: '/report/info/month/date#get', // 获取月份中的异常信息
   getReportList: '/report/info/list#post', // 获取个人日报
   getClassStatistics: '/report/info/submit/count#get', //按日期查询上报统计数据
@@ -22,7 +18,7 @@ let dailyApi = {
 }
 
 for (let val in dailyApi) {
-  dailyApi[val] = `${hostEnv}/api${dailyApi[val]}`
+  dailyApi[val] = `${hostEnv}${dailyApi[val]}`
 }
 
 export default dailyApi
