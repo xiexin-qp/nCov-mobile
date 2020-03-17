@@ -9,6 +9,9 @@ import hostEnv from '@config'
 let dailyApi = {
   getPersonInfo: 'http://yapi.demo.qunar.com/mock/85606/daily/person#get', // 获取个人日报
   getClassInfo: 'http://yapi.demo.qunar.com/mock/85606/daily/class#get', // 获取班级日报
+  //getReportList: 'http://39.97.164.4:8090/reportList/#get', // 获取个人日报
+  getReportList: 'http://yapi.demo.qunar.com/mock/85606/daily/person#get',
+  getClassReportList: 'http://yapi.demo.qunar.com/mock/85606/daily/class#get',
   getMyClass: 'http://yapi.demo.qunar.com/mock/85606/daily/myClass#get' // 我的班级
 }
 
