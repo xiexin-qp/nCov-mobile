@@ -53,19 +53,19 @@
         </div>
         <div class="report qui-fx-ver" v-else>
           <div class="gather qui-fx-jsa">
-            <div class="unappear" @click="classDaily(0)">
+            <div class="unappear" @click="countDetail(0)">
               <div class="data qui-fx-ver">
                 <span>{{ unappearNum }}</span>
                 <span>未上报</span>
               </div>
             </div>
-            <div class="unusual" @click="classDaily(1)">
+            <div class="unusual" @click="countDetail(1)">
               <div class="data qui-fx-ver">
                 <span>{{ unusualNum }}</span>
                 <span>异常</span>
               </div>
             </div>
-            <div class="fever" @click="classDaily(2)">
+            <div class="fever" @click="countDetail(2)">
               <div class="data qui-fx-ver">
                 <span>{{ feverNum }}</span>
                 <span>发热</span>
@@ -119,30 +119,72 @@ export default {
       feverNum:0,
       total:0,
       role: '1',
+      userType: '1',
       cutTag: true,
-      exceptionList: [1, 2, 3, 4],
-      zcList: [10, 12, 14],
+      exceptionList: [],
+      zcList: [],
       studentInfoList: [],
-      otherSymptom: ''
+      otherSymptom: '',
+      today: ''
     }
   },
   watch: {
     role(val) {
       console.log(val)
+      if(val === '1'){
+        this.showList(false, this.today)
+      }else{
+        this.getStatistics()
+        this.countDetail(0, false)
+        this.exceDate(2, this.gmtToDate(new Date(),'2'))
+      }
     }
   },
   created() {
     console.log(this.userInfo)
   },
   async mounted() {
-    this.showList()
-    this.classDaily()
+    this.today = this.gmtToDate(new Date());
+    this.showList(false, this.today)
+    this.exceDate(1, this.gmtToDate(new Date(),'2'))
   },
   methods: {
-    async showList(tag = false) {
+    // 时间转化
+    gmtToDate(t,type='1') {
+      let d = new Date(t)
+      let date = ''
+      if(type === '1'){
+        date =
+        d.getFullYear() +
+        '-' +
+        (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) +
+        '-' +
+        (d.getDate() > 9 ? d.getDate() : '0' + d.getDate())
+      }else if(type === '2') {
+         date =
+        d.getFullYear() +
+        '-' +
+        (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1))
+      }
+      return date
+    },
+    //当月异常日期
+    async exceDate(type, monthDate){
       const req = {
         userCode : this.userInfo.userCode,
-        reportType : '1'
+        clazzCode : type === 2 ? this.userInfo.classCode : '',
+        schoolCode : this.userInfo.schoolCode,
+        monthDate
+      }
+      const res = await actions.getExceDate(req)
+      this.exceptionList = res.data
+    },
+    //个人上报信息
+    async showList(tag = false, queryDate) {
+      const req = {
+        userCode : this.userInfo.userCode,
+        schoolCode : this.userInfo.schoolCode,
+        queryDate
       }
       const res = await actions.getReportList(req)
       if (tag) {
@@ -163,12 +205,15 @@ export default {
         this.$refs.scroll.init(this.personList)
       }
     },
-    async classDaily(type = 0, tag = false) {
+    // 按日期查询上报统计详情
+    async countDetail(type = 0, tag = false) {
       const req = {
-        userCode : this.userInfo.userCode,
-        reportType : '2'
+        clazzCode : this.userInfo.classCode,
+        schoolCode : this.userInfo.schoolCode,
+        reportState : type,
+        date : this.today 
       }
-      const res = await actions.getClassReportList(req)
+      const res = await actions.getCountDetail(req)
       if (tag) {
         // 加载下一页
         if (res.data.length === 0) {
@@ -185,20 +230,38 @@ export default {
         if (res.data.length === 0) {
           return
         }
-        this.total = res.total
-        this.unappearNum = res.unappearNum
-        this.unusualNum = res.unusualNum
-        this.feverNum = res.feverNum
-        this.collectLIst = res.data.filter(ele=>{
-          return ele.type === type
-        })
+        this.collectLIst = res.data
         this.$refs.scroll.init(this.collectLIst)
       }
     },
-    getDate(date, type) {
-      console.log(date, type)
-      this.showList()
-      this.classDaily(0)
+    // 按日期查询上报统计数据
+    async getStatistics() {
+      const req = {
+        clazzCode : this.userInfo.classCode,
+        schoolCode : this.userInfo.schoolCode,
+        date : this.today
+      }
+      const res = await actions.getClassStatistics(req)
+      this.total = res.data.submitSum
+      this.unappearNum = res.data.noSubmitSum
+      this.unusualNum = res.data.excSum
+      this.feverNum = res.data.feverSum
+      this.collectLIst = res.data.filter(ele=>{
+        return ele.type === type
+      })
+    },
+    getDate(date) {
+      console.log(date)
+      this.today = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month)) + '-' + (date.day > 9 ? date.day : ('0' + date.day))
+      let month = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month))
+      if(this.role === '1'){
+        this.showList(false, this.today)
+        this.exceDate(1, month)
+      }else{
+        this.countDetail(0,false)
+        this.getStatistics()
+        this.exceDate(2, month)
+      }
     },
     goPersonal() {
       this.$router.push('/personal')
@@ -336,7 +399,7 @@ export default {
           .data {
             margin-left: 40%;
             span {
-              color: #831e83;
+              color: #666;
             }
           }
         }

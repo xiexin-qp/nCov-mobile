@@ -13,6 +13,7 @@ let homeApi = {
   studentReport: 'http://39.97.164.4:8090/studentReport#post', // 学生上报
   teacherReport: 'http://39.97.164.4:8090/teacherReport#post', // 教职工上报
   getStudentList: 'http://39.97.164.4:8090/studentList#get', // 学生列表
+  reportDetail: 'http://39.97.164.4:8090/reportDetail#get', // 上报的记录详情
   // http://39.97.164.4:8090/studentList?gradeId=g1&classId=a1
   getReportDetail: 'http://yapi.demo.qunar.com/mock/85606/report/detail#get', // 获取详情
   getStudent: 'http://yapi.demo.qunar.com/mock/85606/daily/myClass#get' // 获取详情

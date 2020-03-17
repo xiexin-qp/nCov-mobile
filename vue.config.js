@@ -65,7 +65,7 @@ module.exports = {
     hotOnly: false,
     proxy: {
       '/api': {
-        target: 'http://39.97.246.227:8090',
+        target: 'http://wxz-test-001.natapp1.cc',
         changeOrigin: true,
         ws: true,
         pathRewrite: {
