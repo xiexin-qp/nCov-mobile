@@ -25,11 +25,11 @@
       <div class="submit-form qui-fx-f1">
         <div class="submit-item qui-fx-ac qui-bd-b" v-if="role === 0">
           <div class="tip">姓名</div>
-           <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.name }}</div>
+           <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.userName }}</div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b" v-else>
           <div class="tip">姓名</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="isShow = true">{{ dataForm.name }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="isShow = true">{{ dataForm.userName }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -57,13 +57,16 @@
         <div class="submit-area qui-fx-ver">
           <div>附带症状</div>
           <div class="qui-fx-f1" style="padding: 10px 0 ">
-            <van-checkbox-group v-model="dataForm.symptom">
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="1-咳嗽">咳嗽</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="2-腹泻">腹泻</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="3-咽痛">咽痛</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="4-乏力">乏力</van-checkbox>
-              <van-checkbox style="margin-bottom: 10px" shape="square" name="5-鼻塞流涕">鼻塞流涕</van-checkbox>
-            </van-checkbox-group>
+            <van-radio-group v-model="dataForm.symptoms">
+              <van-radio 
+                style="margin-bottom: 10px" 
+                v-for="item in symptomsList"
+                :key="item.id"
+                :name="item.symptomsCode"
+              >
+               {{item.symptomsName}}
+              </van-radio>
+            </van-radio-group>
           </div>
         </div>
         <div class="submit-area qui-fx-ver">
@@ -92,7 +95,7 @@ import validateForm from '@u/validate'
 import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup, Search } from 'vant'
 import { store, actions } from '../../store'
 const yzForm = {
-  name: '请选择学生',
+  userName: '请选择学生',
   temperature: '请输入体温',
   bodyParts: '请选择测量部位'
 }
@@ -115,25 +118,12 @@ export default {
       isShow: false,
       detail: {},
       typeTag: false,
-      typeList: [
-        {
-          id: 1,
-          text: '腋下、颈部'
-        },
-        {
-          id: 2,
-          text: '口腔'
-        },
-        {
-          id: 3,
-          text: '额头、面部'
-        }
-      ],
+      typeList: [],
       role: 0,
       dataForm: {
-        name: '请选择学生',
+        userName: '请选择学生',
         temperature: '',
-        symptom: [],
+        symptoms: [],
         symptomsRemarks: '',
         bodyParts: '请选择测量部位'
       },
@@ -144,76 +134,93 @@ export default {
       bodyParts: '',
       searchList:{
         // name: '',
-        gradeId: '',
-        classId: '',
+        pageSize:'20',
+        pageNum:'1',
+        schoolCode: '',
+        clazzCode: '',
+      },
+      symptomsList:[],
+      searchUser:{
+        schoolCode: "QPZX",
+        userType:"",
+        page:1,
+        size:10,
+        userName:''
       }
     }
   },
   watch:{
     searchName (curVal) {
-      // this.searchList.name = curVal
-      this.studentGet()
+      this.searchUser.name = curVal
+      this.userGet()
     }
   },
-  async mounted() {
-    this.role = this.$route.query.type
+  mounted() {
+    this.bodyGet()
+    this.symptomsGet()
+    // this.role = this.$route.query.type
     console.log(store.userInfo)
     if (this.role === 0) {
-      this.dataForm.name = store.userInfo.type === 2 ? store.userInfo.userName : store.userInfo.studentName
+      this.dataForm.userName = store.userInfo.type === 2 ? store.userInfo.userName : store.userInfo.studentName
     } else  {
-      this.searchList.gradeId = store.userInfo.gradeId
-      this.searchList.classId = store.userInfo.classId
+      // this.searchList.schoolCode = store.userInfo.schoolCode
+      // this.searchList.clazzCode = store.userInfo.clazzCode
+      this.searchList.schoolCode = 'QPZX'
+      this.searchList.clazzCode = 'C14f0erz15ydb3'
       this.studentGet()
     }
   },
   methods: {
+    async bodyGet(){
+      const res = await actions.getBody()
+      this.typeList = res.result.map(item=>{
+        item.id = item.bodyPartsCode
+        item.text = item.bodyPartsName
+        return item
+      })
+      console.log('resres',this.typeList)
+    },
+    async symptomsGet(){
+      const res = await actions.getSymptoms()
+      this.symptomsList = res.result
+    },
     async studentGet(){
-      const res = await actions.getStudentList(this.searchList)
+      const res = await actions.teacherGetStudent(this.searchList)
       this.studentList = res.data
       console.log('resres',res.data)
     },
-    // addReport
-    // "bodyParts": "string", 
-  //  "classCode": "string", 
-  //  "gradeCode": "string", 
-  //  "reportPersonCode": "string", 
-  //  "reportPersonName": "string", 
-  //  "schoolCode": "string", 
-  //  "symptoms": "string", 
-  //  "symptomsRemarks": "string", 
-  //  "temperature": "string", 
-  //  "userCode": "string", 
-  //  "userName": "string", 
-  //  "userType": "string" 
-  //  "mark01": "string" 
+    async userGet(){
+      const res = await actions.getUser(this.searchUser)
+      this.studentList = res.data
+      console.log('resres',res.data)
+    },
    submitForm() {
       validateForm(yzForm, this.dataForm, () => {
-      // console.log('dataForm',this.dataForm.symptom)
-        if(this.dataForm.symptom.length > 0) {
-          this.dataForm.otherSymptom = this.dataForm.symptom.map(item => {
-            return {id:item.split('-')[0],name:item.split('-')[1]}
-          })
-        }
-          this.dataForm.bodyParts = this.bodyParts
-          this.dataForm.reportPersonName = store.userInfo.userName
-          this.dataForm.userCode = store.userInfo.code
-          this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '0'
-          this.dataForm.gradeCode = store.userInfo.gradeId
-          this.dataForm.classCode = store.userInfo.classId
-          actions.studentReport(this.dataForm).then(() => {
-            this.$toast.success({ message: '提交成功' })
+        this.dataForm.bodyParts = this.bodyParts
+        this.dataForm.reportPersonName = store.userInfo.userName
+        this.dataForm.reportPersonCode = 'PR14f79wjmzihh9'
+        // this.dataForm.reportPersonCode = store.userInfo.userCode
+        // this.dataForm.userCode = store.userInfo.code
+        this.dataForm.userCode = 'ST14f6u1b0wxwd7'
+        this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '2'
+        this.dataForm.gradeCode = store.userInfo.schoolCode
+        // this.dataForm.classCode = 'C14f0erz15ydb3'
+        this.dataForm.classCode = store.userInfo.clazzCode
+        // this.dataForm.schoolCode = 'CANPOINT'
+        console.log('this.dataForm',this.dataForm)
+        actions.addReport(this.dataForm).then(() => {
+          this.$toast.success({ message: '提交成功' })
             setTimeout(() => {
               this.$router.go(-1)
             }, 1000)
           })
       })
-      // addReport
     },
     // submitForm() {
     //   validateForm(yzForm, this.dataForm, () => {
-    //   // console.log('dataForm',this.dataForm.symptom)
-    //     if(this.dataForm.symptom.length > 0) {
-    //       this.dataForm.otherSymptom = this.dataForm.symptom.map(item => {
+    //   // console.log('dataForm',this.dataForm.symptoms)
+    //     if(this.dataForm.symptoms.length > 0) {
+    //       this.dataForm.otherSymptom = this.dataForm.symptoms.map(item => {
     //         return {id:item.split('-')[0],name:item.split('-')[1]}
     //       })
     //     }
@@ -230,9 +237,9 @@ export default {
     //       this.dataForm.studentName = store.userInfo.studentName
     //       this.dataForm.studentCode = store.userInfo.studentCode
     //       this.dataForm.studentNo = store.userInfo.studentNo
-    //       this.dataForm.gradeId = store.userInfo.gradeId
+    //       this.dataForm.schoolCode = store.userInfo.schoolCode
     //       this.dataForm.gradeName = store.userInfo.gradeName
-    //       this.dataForm.classId = store.userInfo.classId
+    //       this.dataForm.clazzCode = store.userInfo.clazzCode
     //       this.dataForm.className = store.userInfo.className
     //       this.dataForm.photoImg = store.userInfo.photoImg
     //       actions.studentReport(this.dataForm).then(() => {
@@ -263,6 +270,7 @@ export default {
     //   // addReport
     // },
     chooseType(item) {
+      console.log(item)
       this.bodyParts = item.id
       this.dataForm.bodyParts = item.text
     },
@@ -271,7 +279,7 @@ export default {
       this.currentIndex = index
     },
     choose(){
-      this.dataForm.name = this.chooseItem.studentName
+      this.dataForm.userName = this.chooseItem.studentName
       this.isShow = false
     }
   }

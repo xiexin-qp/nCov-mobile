@@ -70,7 +70,7 @@ export default {
         photoImg: img
       },
       id: '',
-      reportType: '',
+      // reportType: '',
       symptom: ''
 
     }
@@ -79,8 +79,8 @@ export default {
   },
   async mounted () {
     this.id = this.$route.query.userCode
-    this.reportType = this.$route.query.reportType
-    const res = await actions.reportDetail({ id : this.id, reportType : this.reportType})
+    // this.reportType = this.$route.query.reportType
+    const res = await actions.reportDetail(this.id)
     this.detailInfo = res.data
     this.symptom = this.detailInfo.otherSymptom.map(item => item.name).join(',')
   },

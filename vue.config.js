@@ -71,6 +71,14 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
+      },
+      '/zhuxu': {
+        target: 'http://b32err.natappfree.cc',
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/zhuxu': ''
+        }
       }
     }
   }
