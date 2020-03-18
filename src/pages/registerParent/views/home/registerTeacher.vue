@@ -4,7 +4,9 @@
       <div slot="title" class="ewm-title">注册成功</div>
       <div class="qui-fx-ver ewm-info">
         <img class="wx-img" :src="wxImg" alt />
-        <p>请长按二维码关注"全品平安校园"微信公众号，在"疫情日报"中对自己和班级学习的情况进行上报，登录的账号为您注册的手机号。</p>
+        <p>
+          请长按二维码关注"全品平安校园"微信公众号，在"疫情日报"中对自己的情况进行上报，登录的账号为您注册的手机号。
+        </p>
         <p>您也可以在微信中搜索"全品平安校园"微信公众号关注进行操作。</p>
       </div>
     </popup-box>
@@ -42,10 +44,7 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">出生日期</div>
-          <div
-            class="submit-input qui-tx-r qui-fx-f1"
-            @click="showDate('birthday')"
-          >{{ dataForm.birthday }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('birthday')">{{ dataForm.birthday }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -57,19 +56,17 @@
         <div class="mar-t20">
           <div class="submit-item qui-fx-ac qui-bd-b">
             <div class="tip">职位</div>
-            <div
-              class="submit-input qui-tx-r qui-fx-f1"
-              @click="typeTag = true"
-            >{{ dataForm.classChargeMarkText}}</div>
+            <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">
+              {{ dataForm.classChargeMarkText }}
+            </div>
             <div class="rit-icon"></div>
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b" v-if="classShow">
           <div class="tip">选择班级</div>
-          <div
-            class="submit-input qui-tx-r qui-fx-f1"
-            @click="classTag = true"
-          >{{ dataForm.gradeName}}{{ dataForm.clazzName }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="classTag = true">
+            {{ dataForm.gradeName }}{{ dataForm.clazzName }}
+          </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b" v-if="classShow">
           <div class="tip">班级人数</div>

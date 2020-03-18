@@ -4,11 +4,12 @@
 
 import home from './home'
 import daily from './daily'
+import login from './login'
 
 let apiList = {
   ...home,
-  ...daily
+  ...daily,
+  ...login
 }
-
 
 export default apiList

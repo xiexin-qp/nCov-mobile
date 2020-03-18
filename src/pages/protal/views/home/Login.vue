@@ -6,10 +6,13 @@
     </div>
     <div class="login-input qui-bd-b qui-fx-ac">
       <input class="qui-fx-f1" v-model="loginForm.phone" type="tel" placeholder="请输入手机号" />
-      <span @click="getYzm" :class="['yzm-btn', {'act': total !== 60}]">{{ tip }}</span>
+      <span @click="getYzm" :class="['yzm-btn', { act: total !== 60 }]">{{ tip }}</span>
     </div>
     <div class="login-input qui-bd-b">
       <input type="tel" v-model="loginForm.authCode" placeholder="请输入验证码" />
+    </div>
+    <div class="login-input qui-bd-b">
+      <input type="tel" v-model="loginForm.openid" placeholder="请输入openid" />
     </div>
     <div class="login-btn" @click="login">登录</div>
   </div>
@@ -23,9 +26,10 @@ export default {
   components: {},
   computed: {},
   data() {
-    return { total: 60, logo, tip: '获取验证码', loginForm: { phone: '', authCode: '' } }
+    return { total: 60, logo, tip: '获取验证码', loginForm: { phone: '', authCode: '', openid: '' } }
   },
   beforeRouteLeave(to, from, next) {
+    this.total = 60
     clearInterval(this.timer)
     next()
   },
@@ -57,19 +61,21 @@ export default {
         })
     },
     async login() {
-      if (this.loginForm.phone === '' || this.loginForm.authCode === '') {
-        this.$notify('请输入手机号或验证码')
-        return
+      // if (this.loginForm.phone === '' || this.loginForm.authCode === '' || this.loginForm.openid === '') {
+      //   this.$notify('请输入手机号或验证码')
+      //   return
+      // }
+      if (this.loginForm.openid && this.loginForm.phone && this.loginForm.authCode) {
+        await actions.login({
+          ...this.loginForm
+        })
       }
-      const res = await actions.login({
-        ...this.loginForm,
-        openid: '88888888'
+      const res = await actions.getUserInfo(this.loginForm.openid)
+      setStore({
+        key: 'userInfo',
+        data: res.result
       })
-      // setStore({
-      //   key: 'userInfo',
-      //   data: res.data[0]
-      // })
-      // this.$router.push('/home')
+      this.$router.push('/home')
     }
   }
 }

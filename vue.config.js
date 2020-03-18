@@ -65,8 +65,8 @@ module.exports = {
     hotOnly: false,
     proxy: {
       '/api': {
-        target: 'http://wxz-test-001.natapp1.cc', // 王选章
-        // target: 'http://b32err.natappfree.cc', // 朱旭
+        // target: 'http://wxz-test-001.natapp1.cc', // 王选章
+        target: 'http://inqw2i.natappfree.cc', // 朱旭
         changeOrigin: true,
         ws: true,
         pathRewrite: {
