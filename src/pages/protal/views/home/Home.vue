@@ -8,7 +8,7 @@
         </van-tabs>
       </div>
       <div class="set qui-fx-ac" @click="goPersonal">
-        <img :src="userInfo.photoImg" alt="" :onerror="errorImg" />
+        <img :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg" alt="" :onerror="errorImg" />
         <span>{{ userInfo.userName }}</span>
       </div>
     </div>
@@ -76,7 +76,7 @@
             <ul v-if="collectLIst.length>0">
               <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item)">
                 <div class="student qui-fx-ac">
-                  <img :src="item.photoImg" alt="" :onerror="errorImg" />
+                  <img :src="item.photoImg ? item.photoImg : errorImg" alt="" :onerror="errorImg" />
                   <span>{{ item.userName }}</span>
                 </div>
                 <span>{{ item.reportState === 2 ? '未上报' : ''}}</span>

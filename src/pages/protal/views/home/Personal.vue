@@ -5,7 +5,7 @@
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
     <div class="top qui-fx-jsb">
       <div class="info qui-fx-ac">
-        <img :src="userInfo.photoImg" alt="" :onerror="errorImg">
+        <img :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg" alt="" :onerror="errorImg">
         <div class="qui-fx-ver">
           <span class="name">{{ userInfo.userName }}</span>
           <span class="role">{{ userInfo.roleCode === 'JZ'? '家长' : userInfo.roleCode === 'BZR'? '班主任' : userInfo.roleCode === 'JZG' ? '教职工' : '校医' }}</span>
