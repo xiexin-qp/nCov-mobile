@@ -10,9 +10,7 @@ let homeApi = {
   addReport: '/report/info/submit#post', // 疫情上报
   reportDetail: '/report/info/one/#getWithPara', // 疫情记录详情
   getBody: '/operate/bodypartsinfo/list#get', // 测量部位
-  getSymptoms: '/operate/symptomsinfo/list#get', // 附带症状
-  teacherGetStudent: '/teacher/clazz/users#post', // 班级下的学生
-  getUser: '/school/userinfo/getUserInfoList#post' // 班级下的学生
+  getSymptoms: '/operate/symptomsinfo/list#get' // 附带症状
 }
 
 for (let val in homeApi) {
