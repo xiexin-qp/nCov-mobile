@@ -14,7 +14,7 @@ let homeApi = {
 }
 
 for (let val in homeApi) {
-  homeApi[val] = `/zhuxu${homeApi[val]}`
+  homeApi[val] = `${hostEnv}${homeApi[val]}`
 }
 
 export default homeApi

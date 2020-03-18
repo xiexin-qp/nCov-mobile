@@ -40,7 +40,7 @@
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
                   <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
-                  <span>症状：{{ item.symptomsName }}</span>
+                  <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无'}}</span>
                 </div>
                 <span class="detail" @click="reportDetail(item)">查看详情</span>
               </div>
