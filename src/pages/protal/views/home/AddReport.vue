@@ -1,6 +1,6 @@
 <template>
   <div class="qui-page qui-flex-ver">
-    <popup-box
+    <!-- <popup-box
       v-model="isShow"
       @confirm="choose"
       :cancel-text="'取消'"
@@ -19,19 +19,19 @@
           @click="chooseStudent(item,index)"
         >{{ item.studentName }}</div>
       </div>
-    </popup-box>
+    </popup-box> -->
     <div class="qui-fx-f1 qui-fx-ver">
       <select-data title="测量部位" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
       <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b" v-if="role === 0">
+        <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">姓名</div>
            <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.userName }}</div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b" v-else>
+        <!-- <div class="submit-item qui-fx-ac qui-bd-b" v-else>
           <div class="tip">姓名</div>
           <div class="submit-input qui-tx-r qui-fx-f1" @click="isShow = true">{{ dataForm.userName }}</div>
           <div class="rit-icon"></div>
-        </div>
+        </div> -->
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">体温</div>
           <div class="submit-input qui-fx-f1">
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import PopupBox from '@com/PopupBox'
+// import PopupBox from '@com/PopupBox'
 import SelectData from '@c/common/SelectData'
 import validateForm from '@u/validate'
 import { RadioGroup, Radio, Switch, Checkbox, CheckboxGroup, Search } from 'vant'
@@ -109,21 +109,21 @@ export default {
     [Radio.name]: Radio,
     [Switch.name]: Switch,
     SelectData,
-    PopupBox
+    // PopupBox
   },
   computed: {},
   data() {
     return {
-      searchName: '',
-      isShow: false,
+      // searchName: '',
+      // isShow: false,
       detail: {},
       typeTag: false,
       typeList: [],
       role: 0,
       dataForm: {
-        userName: '请选择学生',
+        userName: '',
         temperature: '',
-        symptoms: [],
+        symptoms: '',
         symptomsRemarks: '',
         bodyParts: '请选择测量部位'
       },
@@ -139,36 +139,24 @@ export default {
         schoolCode: '',
         clazzCode: '',
       },
-      symptomsList:[],
-      searchUser:{
-        schoolCode: "QPZX",
-        userType:"",
-        page:1,
-        size:10,
-        userName:''
-      }
+      symptomsList:[]
     }
   },
-  watch:{
-    searchName (curVal) {
-      this.searchUser.name = curVal
-      this.userGet()
-    }
-  },
+  // watch:{
+  //   searchName (curVal) {
+  //     this.searchUser.name = curVal
+  //     this.userGet()
+  //   }
+  // },
   mounted() {
+    if (store.userInfo.roleCode === 'JZ') {
+      this.dataForm.userName = store.userInfo.studentName
+    } else {
+      this.dataForm.userName = store.userInfo.userName
+    }
     this.bodyGet()
     this.symptomsGet()
-    // this.role = this.$route.query.type
-    console.log(store.userInfo)
-    if (this.role === 0) {
-      this.dataForm.userName = store.userInfo.type === 2 ? store.userInfo.userName : store.userInfo.studentName
-    } else  {
-      // this.searchList.schoolCode = store.userInfo.schoolCode
-      // this.searchList.clazzCode = store.userInfo.clazzCode
-      this.searchList.schoolCode = 'QPZX'
-      this.searchList.clazzCode = 'C14f0erz15ydb3'
-      this.studentGet()
-    }
+    console.log('store.userInfo',store.userInfo)
   },
   methods: {
     async bodyGet(){
@@ -178,35 +166,27 @@ export default {
         item.text = item.bodyPartsName
         return item
       })
-      console.log('resres',this.typeList)
     },
     async symptomsGet(){
       const res = await actions.getSymptoms()
       this.symptomsList = res.result
     },
-    async studentGet(){
-      const res = await actions.teacherGetStudent(this.searchList)
-      this.studentList = res.data
-      console.log('resres',res.data)
-    },
-    async userGet(){
-      const res = await actions.getUser(this.searchUser)
-      this.studentList = res.data
-      console.log('resres',res.data)
-    },
    submitForm() {
       validateForm(yzForm, this.dataForm, () => {
         this.dataForm.bodyParts = this.bodyParts
         this.dataForm.reportPersonName = store.userInfo.userName
-        this.dataForm.reportPersonCode = 'PR14f79wjmzihh9'
-        // this.dataForm.reportPersonCode = store.userInfo.userCode
-        // this.dataForm.userCode = store.userInfo.code
-        this.dataForm.userCode = 'ST14f6u1b0wxwd7'
+        this.dataForm.reportPersonCode = store.userInfo.userCode
         this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '2'
-        this.dataForm.gradeCode = store.userInfo.schoolCode
-        // this.dataForm.classCode = 'C14f0erz15ydb3'
-        this.dataForm.classCode = store.userInfo.clazzCode
-        // this.dataForm.schoolCode = 'CANPOINT'
+        this.dataForm.gradeCode = store.userInfo.gradeCode
+        // this.dataForm.classCode = store.userInfo.clazzCode
+        this.dataForm.classCode = 'C14f0erz15ydb3'
+        
+        this.dataForm.schoolCode = store.userInfo.schoolCode
+        if (store.userInfo.roleCode === 'JZ') {
+          this.dataForm.userCode = store.userInfo.studentCode
+        } else {
+          this.dataForm.userCode = store.userInfo.userCode
+        }
         console.log('this.dataForm',this.dataForm)
         actions.addReport(this.dataForm).then(() => {
           this.$toast.success({ message: '提交成功' })
@@ -216,72 +196,19 @@ export default {
           })
       })
     },
-    // submitForm() {
-    //   validateForm(yzForm, this.dataForm, () => {
-    //   // console.log('dataForm',this.dataForm.symptoms)
-    //     if(this.dataForm.symptoms.length > 0) {
-    //       this.dataForm.otherSymptom = this.dataForm.symptoms.map(item => {
-    //         return {id:item.split('-')[0],name:item.split('-')[1]}
-    //       })
-    //     }
-    //     if(
-    //       (this.role === 0 && store.userInfo.type === 1) || 
-    //       (this.role !== 0 && (store.userInfo.type === 2 || store.userInfo.type === 4))
-    //     ) {
-    //       this.dataForm.bodyParts = this.bodyParts
-    //       this.dataForm.reportPersonName = store.userInfo.userName
-    //       this.dataForm.phone = store.userInfo.phone
-    //       this.dataForm.userCode = store.userInfo.code
-    //       this.dataForm.reportType = '1'
-    //       this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '0'
-    //       this.dataForm.studentName = store.userInfo.studentName
-    //       this.dataForm.studentCode = store.userInfo.studentCode
-    //       this.dataForm.studentNo = store.userInfo.studentNo
-    //       this.dataForm.schoolCode = store.userInfo.schoolCode
-    //       this.dataForm.gradeName = store.userInfo.gradeName
-    //       this.dataForm.clazzCode = store.userInfo.clazzCode
-    //       this.dataForm.className = store.userInfo.className
-    //       this.dataForm.photoImg = store.userInfo.photoImg
-    //       actions.studentReport(this.dataForm).then(() => {
-    //         this.$toast.success({ message: '提交成功' })
-    //         setTimeout(() => {
-    //           this.$router.go(-1)
-    //         }, 1000)
-    //       })
-    //     } else if(this.role === 0 && store.userInfo.type !== 1 ){
-    //       this.dataForm.teacherName = store.userInfo.userName
-    //       this.dataForm.teacherCode = store.userInfo.code
-    //       this.dataForm.teacherNo = store.userInfo.teacherNo
-    //       this.dataForm.bodyParts = this.bodyParts
-    //       this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '0'
-    //       this.dataForm.reportPersonName = store.userInfo.userName
-    //       this.dataForm.phone = store.userInfo.phone
-    //       this.dataForm.userCode = store.userInfo.code
-    //       this.dataForm.reportType = '2'
-    //       this.dataForm.photoImg = store.userInfo.photoImg
-    //       actions.teacherReport(this.dataForm).then(() => {
-    //         this.$toast.success({ message: '提交成功' })
-    //         setTimeout(() => {
-    //           this.$router.go(-1)
-    //         }, 1000)
-    //       })
-    //     }
-    //   })
-    //   // addReport
-    // },
     chooseType(item) {
       console.log(item)
       this.bodyParts = item.id
       this.dataForm.bodyParts = item.text
     },
-    chooseStudent(record, index){
-      this.chooseItem = record
-      this.currentIndex = index
-    },
-    choose(){
-      this.dataForm.userName = this.chooseItem.studentName
-      this.isShow = false
-    }
+    // chooseStudent(record, index){
+    //   this.chooseItem = record
+    //   this.currentIndex = index
+    // },
+    // choose(){
+    //   this.dataForm.userName = this.chooseItem.studentName
+    //   this.isShow = false
+    // }
   }
 }
 </script>

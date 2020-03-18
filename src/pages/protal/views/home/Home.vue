@@ -288,8 +288,8 @@ export default {
     goPersonal() {
       this.$router.push('/personal')
     },
-    nowReport(reportType) {
-      this.$router.push({path:'/addReport',query:{reportType}})
+    nowReport() {
+      this.$router.push('/addReport')
     },
     reportDetail(record) {
       const query = {
