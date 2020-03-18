@@ -45,7 +45,7 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">测量部位</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.bodyParts }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ bodyParts }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -131,7 +131,7 @@ export default {
       studentTag: false,
       currentIndex: '',
       curVal: '',
-      bodyParts: '',
+      bodyParts: '请选择测量部位',
       searchList:{
         // name: '',
         pageSize:'20',
@@ -173,14 +173,12 @@ export default {
     },
    submitForm() {
       validateForm(yzForm, this.dataForm, () => {
-        this.dataForm.bodyParts = this.bodyParts
         this.dataForm.reportPersonName = store.userInfo.userName
         this.dataForm.reportPersonCode = store.userInfo.userCode
         this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '2'
         this.dataForm.gradeCode = store.userInfo.gradeCode
-        // this.dataForm.classCode = store.userInfo.clazzCode
-        this.dataForm.classCode = 'C14f0erz15ydb3'
-        
+        this.dataForm.classCode = store.userInfo.clazzCode
+        // this.dataForm.classCode = 'C14f0erz15ydb3'
         this.dataForm.schoolCode = store.userInfo.schoolCode
         if (store.userInfo.roleCode === 'JZ') {
           this.dataForm.userCode = store.userInfo.studentCode
@@ -197,9 +195,8 @@ export default {
       })
     },
     chooseType(item) {
-      console.log(item)
-      this.bodyParts = item.id
-      this.dataForm.bodyParts = item.text
+      this.bodyParts = item.text
+      this.dataForm.bodyParts = item.id
     },
     // chooseStudent(record, index){
     //   this.chooseItem = record
