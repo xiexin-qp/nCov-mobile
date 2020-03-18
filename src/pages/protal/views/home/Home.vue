@@ -2,9 +2,9 @@
   <div class="home qui-page qui-fx-ver">
     <div class="top qui-fx-jsb qui-fx-ac">
       <div class="table">
-        <van-tabs v-if="userInfo.roleType === '2' || userInfo.roleType === '4'" type="card" v-model="role" color="rgb(59,84,241)">
+        <van-tabs v-if="userInfo.roleCode === 'BZR' || userInfo.roleCode === 'XY'" type="card" v-model="role" color="rgb(59,84,241)">
           <van-tab title="我的" name="1"> </van-tab>
-          <van-tab :title="userInfo.roleType === '2' ? '班级' : '学校'" name="2"> </van-tab>
+          <van-tab :title="userInfo.roleCode === 'BZR' ? '班级' : '学校'" name="2"> </van-tab>
         </van-tabs>
       </div>
       <div class="set qui-fx-ac" @click="goPersonal">
@@ -180,13 +180,13 @@ export default {
     async exceDate(type, monthDate){
       this.exceptionList = []
       const req = {
-        //userCode : this.userInfo.userCode,
-        //clazzCode : type === 2 ? this.userInfo.classCode : '',
-        //clazzCode: type === 2 ? 'C14f0erz15ydb3' : null,
+        userCode : this.userInfo.userCode,
         //schoolCode : this.userInfo.schoolCode,
-        userCode : 'ST14f6u1b0wxwd7',
         schoolCode : 'QPZX',
         monthDate
+      }
+      if(type === 2){
+        req.clazzCode = this.userInfo.clazzCode
       }
       const res = await actions.getExceDate(req)
        res.result.forEach(ele=>{
@@ -196,11 +196,9 @@ export default {
     //个人上报信息
     async showList(tag = false, queryDate) {
       const req = {
-        //userCode : this.userInfo.userCode,
+        userCode : this.userInfo.userCode,
         //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
-        //userCode : 'PR14f79wjmzihh9',  
-        userCode : 'ST14f6u1b0wxwd7',  
+        schoolCode : 'QPZX', 
         queryDate
       }
       const res = await actions.getReportList(req)
@@ -227,10 +225,9 @@ export default {
     async countDetail(type = 0, tag = false) {
       this.collectLIst = []
       const req = {
-        //clazzCode : this.userInfo.classCode,
+        clazzCode : this.userInfo.clazzCode,
         //schoolCode : this.userInfo.schoolCode,
         schoolCode : 'QPZX',
-        //clazzCode: 'C14f0erz15ydb3',
         pageNum: 1,
         pageSize: 9999,
         date : this.gmtToDate(this.today)
@@ -264,7 +261,7 @@ export default {
     // 按日期查询上报统计数据
     async getStatistics() {
       const req = {
-        clazzCode : this.userInfo.classCode,
+        clazzCode : this.userInfo.clazzCode,
         //schoolCode : this.userInfo.schoolCode,
         schoolCode : 'QPZX',
         date : this.today
