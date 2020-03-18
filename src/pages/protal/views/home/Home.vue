@@ -196,10 +196,14 @@ export default {
     //个人上报信息
     async showList(tag = false, queryDate) {
       const req = {
-        userCode : this.userInfo.userCode,
         //schoolCode : this.userInfo.schoolCode,
         schoolCode : 'QPZX', 
         queryDate
+      }
+      if(this.userInfo.roleCode === 'JZ'){
+        req.userCode = this.userInfo.studentCode
+      }else{
+        req.userCode = this.userInfo.userCode
       }
       const res = await actions.getReportList(req)
       if (tag) {
