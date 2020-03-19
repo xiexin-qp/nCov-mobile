@@ -4,7 +4,7 @@
     <div class="info qui-fx-jsa">
       <div class="data qui-fx-ver">
         <span>班级</span>
-        <span>{{ userInfo.gradeName }}{{ userInfo.className }}</span>
+        <span>{{ userInfo.gradeName }}{{ userInfo.clazzName }}</span>
       </div>
       <!-- <div class="data qui-fx-ver">
         <span>人数</span>

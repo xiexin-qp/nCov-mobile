@@ -31,12 +31,13 @@
           <span @click="nowReport(1)">立即上报</span>
         </div>
         <div  v-else class="title qui-fx-jsb">
-          <span>今日上报情况<span class="num">（学生共{{ total }}人）</span></span>
-          <span @click="nowReport(2)">立即上报</span>
+          <span>今日上报情况</span>
+          <!-- <span @click="nowReport(2)">立即上报</span> -->
+          <span class="num">学生共{{ total ? total : 0 }}人</span>
         </div>
         <div class="list" v-if="role === '1'">
           <ul v-if="personList.length > 0">
-            <li :class="item.feverMark === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
+            <li :class="item.mark02 === '1' ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
                   <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
@@ -55,19 +56,19 @@
           <div class="gather qui-fx-jsa">
             <div class="unappear" @click="countDetail(0)">
               <div class="data qui-fx-ver">
-                <span>{{ unappearNum }}</span>
+                <span>{{ unappearNum ? unappearNum : 0 }}</span>
                 <span>未上报</span>
               </div>
             </div>
             <div class="unusual" @click="countDetail(1)">
               <div class="data qui-fx-ver">
-                <span>{{ unusualNum }}</span>
+                <span>{{ unusualNum ? unusualNum : 0 }}</span>
                 <span>异常</span>
               </div>
             </div>
             <div class="fever" @click="countDetail(2)">
               <div class="data qui-fx-ver">
-                <span>{{ feverNum }}</span>
+                <span>{{ feverNum ? feverNum : 0 }}</span>
                 <span>发热</span>
               </div>
             </div>
@@ -132,12 +133,13 @@ export default {
   },
   watch: {
     role(val) {
-      console.log(val)
+      console.log(this.today)
       if(val === '1'){
         this.exceptionList = []
-        this.showList(false, this.today.getTime()/1000)
+        this.today = this.today.split('-')[0] + '/' + this.today.split('-')[1] + '/' + this.today.split('-')[2]
+        this.showList(false, new Date(this.today).getTime()/1000)
       }else{
-        this.getStatistics()
+        this.getStatistics(this.gmtToDate(this.today))
         this.countDetail(0, false)
         this.exceDate(2, this.gmtToDate(new Date(),'2'))
       }
@@ -147,7 +149,7 @@ export default {
     console.log(this.userInfo)
   },
   async mounted() {
-    this.today = new Date();
+    this.today = new Date()
     this.showList(false, this.today.getTime()/1000)
   },
   methods: {
@@ -181,8 +183,7 @@ export default {
       this.exceptionList = []
       const req = {
         userCode : this.userInfo.userCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
+        schoolCode : this.userInfo.schoolCode,
         monthDate
       }
       if(type === 2){
@@ -196,8 +197,7 @@ export default {
     //个人上报信息
     async showList(tag = false, queryDate) {
       const req = {
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX', 
+        schoolCode : this.userInfo.schoolCode,
         queryDate
       }
       if(this.userInfo.roleCode === 'JZ'){
@@ -229,12 +229,13 @@ export default {
     async countDetail(type = 0, tag = false) {
       this.collectLIst = []
       const req = {
-        clazzCode : this.userInfo.clazzCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
+        schoolCode : this.userInfo.schoolCode,
         pageNum: 1,
         pageSize: 9999,
         date : this.gmtToDate(this.today)
+      }
+      if(this.userInfo.roleCode === 'BZR'){
+        req.clazzCode = this.userInfo.clazzCode
       }
       if( type === 0 ){
         req.reportState = 2
@@ -263,12 +264,11 @@ export default {
       }
     },
     // 按日期查询上报统计数据
-    async getStatistics() {
+    async getStatistics(date) {
       const req = {
         clazzCode : this.userInfo.clazzCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
-        date : this.today
+        schoolCode : this.userInfo.schoolCode,
+        date
       }
       const res = await actions.getClassStatistics(req)
       this.total = res.result.submitSum
@@ -278,14 +278,18 @@ export default {
     },
     getDate(date) {
       console.log(date)
-      this.today = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month)) + '-' + (date.day > 9 ? date.day : ('0' + date.day))
+      if(this.role === '2'){
+        this.today = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month)) + '-' + (date.day > 9 ? date.day : ('0' + date.day))
+      }else{
+        this.today = new Date(date.year + '/' + (date.month > 9 ? date.month : ('0' + date.month)) + '/' + (date.day > 9 ? date.day : ('0' + date.day)) )
+      }
       let month = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month))
       if(this.role === '1'){
         this.showList(false, new Date(this.today).getTime()/1000)
         // this.exceDate(1, month)
       }else{
         this.countDetail(0,false)
-        this.getStatistics()
+        this.getStatistics(this.today)
         this.exceDate(2, month)
       }
     },
@@ -296,6 +300,7 @@ export default {
       this.$router.push('/addReport')
     },
     reportDetail(record) {
+      console.log(record.id)
       const query = {
         id:record.id
       }

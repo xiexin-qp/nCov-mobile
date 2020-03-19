@@ -30,10 +30,10 @@
         </div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'">
+      <!-- <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'">
         <div class="tip">邀请学生</div>
         <div class="submit-input qui-tx-r qui-fx-f1" @click="invite()">点击分享链接</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -71,9 +71,9 @@ export default {
   },
   created() {
     this.dataForm.roleType = this.userInfo.roleCode === 'JZ'? '家长' : this.userInfo.roleCode === 'BZR'? '班主任' : this.userInfo.roleCode === 'JZG' ? '教职工' : '校医'
-    this.dataForm.className = this.userInfo.gradeName + this.userInfo.className
+    this.dataForm.className = this.userInfo.gradeName + this.userInfo.clazzName
     this.dataForm.studentTotal = this.userInfo.studentTotal
-    console.log(this.userInfo.roleCode)
+    console.log(this.dataForm.className)
   },
   async mounted() {
     this.getRoleList()
@@ -85,8 +85,7 @@ export default {
       this.roleList = []
       const req = {
         userCode : this.userInfo.userCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX' 
+        schoolCode : this.userInfo.schoolCode,
       }
       const res = await actions.getRoleInfo(req)
       res.result.forEach(ele=>{
@@ -112,8 +111,7 @@ export default {
       this.dataForm.className = item.gradeName + item.clazzName
       const req = {
         teacherCode : this.userInfo.userCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX', 
+        schoolCode : this.userInfo.schoolCode,
         gradeCode: item.gradeCode,
         classCode: item.clazzCode
       }
@@ -125,7 +123,7 @@ export default {
             ...this.userInfo,
             gradeId: item.gradeCode,
             gradeName: item.gradeName,
-            className: item.clazzName,
+            clazzName: item.clazzName,
             code: item.clazzCode
           }
         })
@@ -138,11 +136,10 @@ export default {
       }
       const req = {
         teacherCode : this.userInfo.userCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX' 
+        schoolCode : this.userInfo.schoolCode,
       }
       const res = await actions.getMyClass(req)
-      this.dataForm.className = res.result.clazzName
+      this.dataForm.className = res.result.gradeName + res.result.clazzName
     },
     //我的班级
     goClass(){

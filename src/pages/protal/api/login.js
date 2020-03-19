@@ -13,7 +13,7 @@ let loginApi = {
 }
 
 for (let val in loginApi) {
-  loginApi[val] = `/api${loginApi[val]}`
+  loginApi[val] = `${hostEnv}${loginApi[val]}`
 }
 
 export default loginApi
