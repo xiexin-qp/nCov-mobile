@@ -136,7 +136,9 @@ export default {
       console.log(this.today)
       if(val === '1'){
         this.exceptionList = []
-        this.today = this.today.split('-')[0] + '/' + this.today.split('-')[1] + '/' + this.today.split('-')[2]
+        if(typeof(this.today)==='string'){
+          this.today = this.today.split('-')[0] + '/' + this.today.split('-')[1] + '/' + this.today.split('-')[2]
+        }
         this.showList(false, new Date(this.today).getTime()/1000)
       }else{
         this.getStatistics(this.gmtToDate(this.today))
