@@ -5,10 +5,10 @@
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
     <div class="top qui-fx-jsb">
       <div class="info qui-fx-ac">
-        <img :src="userInfo.photoImg" alt="" :onerror="errorImg">
+        <img :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg" alt="" :onerror="errorImg">
         <div class="qui-fx-ver">
           <span class="name">{{ userInfo.userName }}</span>
-          <span class="role">{{ userInfo.roleType === '1'? '家长' : userInfo.roleType === '2'? '班主任' : userInfo.roleType === '3' ? '教职工' : '校医' }}</span>
+          <span class="role">{{ userInfo.roleCode === 'JZ'? '家长' : userInfo.roleCode === 'BZR'? '班主任' : userInfo.roleCode === 'JZG' ? '教职工' : '校医' }}</span>
         </div>
       </div>
       <div class="school">{{ userInfo.schoolName }}</div>
@@ -19,21 +19,21 @@
         <div class="submit-input qui-tx-r qui-fx-f1" @click="roleTag = true">{{ dataForm.roleType }}</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleType==='2'">
+      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'">
         <div class="tip">我的班级</div>
         <div class="submit-input qui-tx-r qui-fx-f1" @click="goClass()">{{ dataForm.studentTotal }}人</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleType==='2'" @click="classTag = true">
+      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'" @click="classTag = true">
         <div class="tip">换绑班级</div>
         <div class="qui-fx-f1 qui-tx-r" style="color:#666;margin-right:10px">{{ dataForm.className }}
         </div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleType==='2'">
+      <!-- <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'">
         <div class="tip">邀请学生</div>
         <div class="submit-input qui-tx-r qui-fx-f1" @click="invite()">点击分享链接</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -70,10 +70,10 @@ export default {
     }
   },
   created() {
-    this.dataForm.roleType = this.userInfo.roleType === '1'? '家长' : this.userInfo.roleType === '2'? '班主任' : this.userInfo.roleType === '3' ? '教职工' : '校医'
-    this.dataForm.className = this.userInfo.gradeName + this.userInfo.className
+    this.dataForm.roleType = this.userInfo.roleCode === 'JZ'? '家长' : this.userInfo.roleCode === 'BZR'? '班主任' : this.userInfo.roleCode === 'JZG' ? '教职工' : '校医'
+    this.dataForm.className = this.userInfo.gradeName + this.userInfo.clazzName
     this.dataForm.studentTotal = this.userInfo.studentTotal
-    console.log(this.userInfo.roleType)
+    console.log(this.dataForm.className)
   },
   async mounted() {
     this.getRoleList()
@@ -84,10 +84,8 @@ export default {
     async getRoleList(){
       this.roleList = []
       const req = {
-        //userCode : this.userInfo.userCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX', 
-        userCode : 'ST14f6u1b0wxwd7',  
+        userCode : this.userInfo.userCode,
+        schoolCode : this.userInfo.schoolCode,
       }
       const res = await actions.getRoleInfo(req)
       res.result.forEach(ele=>{
@@ -96,30 +94,24 @@ export default {
           text:ele.roleName
         })
       })
-      console.log(this.roleList)
     },
     // 切换角色
     chooseRole(item) {
       this.dataForm.roleType = item.text
-      console.log(this.dataForm.roleType)
       setStore({
         key: 'userInfo',
         data: {
           ...this.userInfo,
-          roleType: item.text === '家长' ? '1' : item.text === '班主任' ? '2' : item.text === '教职工' ? '3' : '4'
+          roleCode: item.text === '家长' ? 'JZ' : item.text === '班主任' ? 'BZR' : item.text === '教职工' ? 'JZG' : 'XY'
         }
       })
     },
      // 换绑班级
     async chooseClass(item) {
-      console.log(item)
       this.dataForm.className = item.gradeName + item.clazzName
-      console.log(item)
       const req = {
-        //teacherCode : this.userInfo.teacherCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX', 
-        teacherCode : 'ST14f6u1b0wxwd7',  
+        teacherCode : this.userInfo.userCode,
+        schoolCode : this.userInfo.schoolCode,
         gradeCode: item.gradeCode,
         classCode: item.clazzCode
       }
@@ -131,7 +123,7 @@ export default {
             ...this.userInfo,
             gradeId: item.gradeCode,
             gradeName: item.gradeName,
-            className: item.clazzName,
+            clazzName: item.clazzName,
             code: item.clazzCode
           }
         })
@@ -139,15 +131,15 @@ export default {
     },
     //查询班主任绑定的班级
     async getClass(){
+      if(this.userInfo.roleCode !== 'BZR'){
+        return
+      }
       const req = {
-        //teacherCode : this.userInfo.teacherCode,
-        //schoolCode : this.userInfo.schoolCode,
-        //userCode : this.userInfo.userCode,
-        schoolCode : 'QPZX', 
-        teacherCode : 'ST14f6u1b0wxwd7',  
+        teacherCode : this.userInfo.userCode,
+        schoolCode : this.userInfo.schoolCode,
       }
       const res = await actions.getMyClass(req)
-      this.dataForm.className = res.result.clazzName
+      this.dataForm.className = res.result.gradeName + res.result.clazzName
     },
     //我的班级
     goClass(){

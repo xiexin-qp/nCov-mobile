@@ -75,7 +75,7 @@ export default {
         key: 'userInfo',
         data: res.result
       })
-      this.$router.push('/home')
+      this.$router.replace('/home')
     }
   }
 }

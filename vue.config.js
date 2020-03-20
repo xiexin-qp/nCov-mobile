@@ -64,17 +64,16 @@ module.exports = {
     https: false,
     hotOnly: false,
     proxy: {
-      '/api': {
-        //target: 'http://wxz-test-001.natapp1.cc', // 王选章
-        target: 'http://ihbkbi.natappfree.cc', // 朱旭
+      '/wangxuanzhang': {
+        target: 'http://wxz-test-001.natapp1.cc', // 王选章
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          '^/api': ''
+          '^/wangxuanzhang': ''
         }
       },
       '/zhuxu': {
-        target: 'http://3rsxj2.natappfree.cc',
+        target: 'http://7msbf4.natappfree.cc', // 朱旭
         changeOrigin: true,
         ws: true,
         pathRewrite: {

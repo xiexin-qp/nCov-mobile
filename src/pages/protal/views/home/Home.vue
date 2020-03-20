@@ -2,13 +2,22 @@
   <div class="home qui-page qui-fx-ver">
     <div class="top qui-fx-jsb qui-fx-ac">
       <div class="table">
-        <van-tabs v-if="userInfo.roleType === '2' || userInfo.roleType === '4'" type="card" v-model="role" color="rgb(59,84,241)">
-          <van-tab title="我的" name="1"> </van-tab>
-          <van-tab :title="userInfo.roleType === '2' ? '班级' : '学校'" name="2"> </van-tab>
+        <van-tabs
+          v-if="userInfo.roleCode === 'BZR' || userInfo.roleCode === 'XY'"
+          type="card"
+          v-model="role"
+          color="rgb(59,84,241)"
+        >
+          <van-tab title="我的" name="1"></van-tab>
+          <van-tab :title="userInfo.roleCode === 'BZR' ? '班级' : '学校'" name="2"></van-tab>
         </van-tabs>
       </div>
       <div class="set qui-fx-ac" @click="goPersonal">
-        <img :src="userInfo.photoImg" alt="" :onerror="errorImg" />
+        <img
+          :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg"
+          alt
+          :onerror="errorImg"
+        />
         <span>{{ userInfo.userName }}</span>
       </div>
     </div>
@@ -30,17 +39,22 @@
           <span>今日上报</span>
           <span @click="nowReport(1)">立即上报</span>
         </div>
-        <div  v-else class="title qui-fx-jsb">
-          <span>今日上报情况<span class="num">（学生共{{ total }}人）</span></span>
-          <span @click="nowReport(2)">立即上报</span>
+        <div v-else class="title qui-fx-jsb">
+          <span>今日上报情况</span>
+          <!-- <span @click="nowReport(2)">立即上报</span> -->
+          <span class="num">学生共{{ total ? total : 0 }}人</span>
         </div>
         <div class="list" v-if="role === '1'">
           <ul v-if="personList.length > 0">
-            <li :class="item.feverMark === 1 ? 'warn' : 'normal'" v-for="(item,i) in personList" :key="i">
+            <li
+              :class="item.mark02 === '1' ? 'warn' : 'normal'"
+              v-for="(item,i) in personList"
+              :key="i"
+            >
               <div class="info qui-fx-jsb">
                 <div class="qui-fx-ver">
                   <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
-                  <span>症状：{{ item.symptomsName }}</span>
+                  <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无'}}</span>
                 </div>
                 <span class="detail" @click="reportDetail(item)">查看详情</span>
               </div>
@@ -55,33 +69,38 @@
           <div class="gather qui-fx-jsa">
             <div class="unappear" @click="countDetail(0)">
               <div class="data qui-fx-ver">
-                <span>{{ unappearNum }}</span>
+                <span>{{ unappearNum ? unappearNum : 0 }}</span>
                 <span>未上报</span>
               </div>
             </div>
             <div class="unusual" @click="countDetail(1)">
               <div class="data qui-fx-ver">
-                <span>{{ unusualNum }}</span>
+                <span>{{ unusualNum ? unusualNum : 0 }}</span>
                 <span>异常</span>
               </div>
             </div>
             <div class="fever" @click="countDetail(2)">
               <div class="data qui-fx-ver">
-                <span>{{ feverNum }}</span>
+                <span>{{ feverNum ? feverNum : 0 }}</span>
                 <span>发热</span>
               </div>
             </div>
           </div>
           <div class="student-list">
             <ul v-if="collectLIst.length>0">
-              <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item)">
+              <li
+                class="qui-fx-jsb qui-fx-ac"
+                v-for="(item, i) in collectLIst"
+                :key="i"
+                @click="reportDetail(item)"
+              >
                 <div class="student qui-fx-ac">
-                  <img :src="item.photoImg" alt="" :onerror="errorImg" />
+                  <img :src="item.photoImg ? item.photoImg : errorImg" alt :onerror="errorImg" />
                   <span>{{ item.userName }}</span>
                 </div>
                 <span>{{ item.reportState === 2 ? '未上报' : ''}}</span>
                 <span>{{ item.health === 2 ? '异常' : ''}}</span>
-                <span>{{ item.feverMark  === 1 ? '发热' : ''}}</span>
+                <span>{{ item.feverMark === 1 ? '发热' : ''}}</span>
               </li>
             </ul>
             <no-data v-else msg="没有数据~"></no-data>
@@ -98,7 +117,7 @@ import normalImg from '@a/img/normalImg.png'
 import CalendarShow from '@com/CalendarShow'
 import ScrollList from '@com/ScrollList'
 import NoData from '@c/common/NoData'
-import { store, actions } from '../../store'
+import { store, actions, setStore } from '../../store'
 export default {
   name: 'Home',
   components: {
@@ -116,10 +135,10 @@ export default {
       warnImg,
       personList: [],
       collectLIst: [],
-      unappearNum:0,
-      unusualNum:0,
-      feverNum:0,
-      total:0,
+      unappearNum: 0,
+      unusualNum: 0,
+      feverNum: 0,
+      total: 0,
       role: '1',
       userType: '1',
       cutTag: true,
@@ -132,76 +151,94 @@ export default {
   },
   watch: {
     role(val) {
-      console.log(val)
-      if(val === '1'){
+      console.log(this.today)
+      if (val === '1') {
         this.exceptionList = []
-        this.showList(false, this.today.getTime()/1000)
-      }else{
-        this.getStatistics()
+        if (typeof this.today === 'string') {
+          this.today = this.today.split('-')[0] + '/' + this.today.split('-')[1] + '/' + this.today.split('-')[2]
+        }
+        this.showList(false, new Date(this.today).getTime() / 1000)
+      } else {
+        this.getStatistics(this.gmtToDate(this.today))
         this.countDetail(0, false)
-        this.exceDate(2, this.gmtToDate(new Date(),'2'))
+        this.exceDate(2, this.gmtToDate(new Date(), '2'))
       }
     }
   },
-  created() {
-    console.log(this.userInfo)
-  },
+  created() {},
   async mounted() {
-    this.today = new Date();
-    this.showList(false, this.today.getTime()/1000)
+    this.today = new Date()
+    this.showList(false, this.today.getTime() / 1000)
+    if (this.userInfo.roleCode === 'JZ') {
+      const res = await actions.getGradeInfo(this.userInfo.studentCode)
+      setStore({
+        key: 'userInfo',
+        data: {
+          ...this.userInfo,
+          gradeCode: res.result.gradeCode,
+          gradeName: res.result.gradeName,
+          clazzCode: res.result.classCode,
+          clazzName: res.result.className
+        }
+      })
+    }
   },
   methods: {
     // 时间转化
-    gmtToDate(t,type='1') {
+    gmtToDate(t, type = '1') {
       let d = new Date(t)
       let date = ''
-      if(type === '1'){
+      if (type === '1') {
         date =
-        d.getFullYear() +
-        '-' +
-        (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) +
-        '-' +
-        (d.getDate() > 9 ? d.getDate() : '0' + d.getDate())
-      }else if(type === '2') {
-         date =
-        d.getFullYear() +
-        '-' +
-        (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1))
-      }else if(type === '3') {
-         date =
-         d.getFullYear() + '-' + ((d.getMonth() + 1) > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) + '-' + (d.getDate() > 9 ? d.getDate() : '0' + d.getDate()) + ' ' +
-            (d.getHours() > 9 ? d.getHours() : '0' + d.getHours()) + ':' + (d.getMinutes() > 9 ? d.getMinutes() : '0' +
-              d.getMinutes()) +
-            ':' + (d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds())
+          d.getFullYear() +
+          '-' +
+          (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) +
+          '-' +
+          (d.getDate() > 9 ? d.getDate() : '0' + d.getDate())
+      } else if (type === '2') {
+        date = d.getFullYear() + '-' + (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1))
+      } else if (type === '3') {
+        date =
+          d.getFullYear() +
+          '-' +
+          (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) +
+          '-' +
+          (d.getDate() > 9 ? d.getDate() : '0' + d.getDate()) +
+          ' ' +
+          (d.getHours() > 9 ? d.getHours() : '0' + d.getHours()) +
+          ':' +
+          (d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes()) +
+          ':' +
+          (d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds())
       }
       return date
     },
     //当月异常日期
-    async exceDate(type, monthDate){
+    async exceDate(type, monthDate) {
       this.exceptionList = []
       const req = {
-        //userCode : this.userInfo.userCode,
-        //clazzCode : type === 2 ? this.userInfo.classCode : '',
-        //clazzCode: type === 2 ? 'C14f0erz15ydb3' : null,
-        //schoolCode : this.userInfo.schoolCode,
-        userCode : 'ST14f6u1b0wxwd7',
-        schoolCode : 'QPZX',
+        userCode: this.userInfo.userCode,
+        schoolCode: this.userInfo.schoolCode,
         monthDate
       }
+      if (type === 2) {
+        req.clazzCode = this.userInfo.clazzCode
+      }
       const res = await actions.getExceDate(req)
-       res.result.forEach(ele=>{
+      res.result.forEach(ele => {
         this.exceptionList.push(parseInt(ele.split('-')[2]))
       })
     },
     //个人上报信息
     async showList(tag = false, queryDate) {
       const req = {
-        //userCode : this.userInfo.userCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
-        //userCode : 'PR14f79wjmzihh9',  
-        userCode : 'ST14f6u1b0wxwd7',  
+        schoolCode: this.userInfo.schoolCode,
         queryDate
+      }
+      if (this.userInfo.roleCode === 'JZ') {
+        req.userCode = this.userInfo.studentCode
+      } else {
+        req.userCode = this.userInfo.userCode
       }
       const res = await actions.getReportList(req)
       if (tag) {
@@ -227,19 +264,19 @@ export default {
     async countDetail(type = 0, tag = false) {
       this.collectLIst = []
       const req = {
-        //clazzCode : this.userInfo.classCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
-        //clazzCode: 'C14f0erz15ydb3',
+        schoolCode: this.userInfo.schoolCode,
         pageNum: 1,
         pageSize: 9999,
-        date : this.gmtToDate(this.today)
+        date: this.gmtToDate(this.today)
       }
-      if( type === 0 ){
+      if (this.userInfo.roleCode === 'BZR') {
+        req.clazzCode = this.userInfo.clazzCode
+      }
+      if (type === 0) {
         req.reportState = 2
-      } else if( type === 1 ){
+      } else if (type === 1) {
         req.health = 2
-      } else if( type === 2 ){
+      } else if (type === 2) {
         req.feverMark = 1
       }
       const res = await actions.getCountDetail(req)
@@ -262,12 +299,11 @@ export default {
       }
     },
     // 按日期查询上报统计数据
-    async getStatistics() {
+    async getStatistics(date) {
       const req = {
-        clazzCode : this.userInfo.classCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX',
-        date : this.today
+        clazzCode: this.userInfo.clazzCode,
+        schoolCode: this.userInfo.schoolCode,
+        date
       }
       const res = await actions.getClassStatistics(req)
       this.total = res.result.submitSum
@@ -277,28 +313,44 @@ export default {
     },
     getDate(date) {
       console.log(date)
-      this.today = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month)) + '-' + (date.day > 9 ? date.day : ('0' + date.day))
-      let month = date.year + '-' + (date.month > 9 ? date.month : ('0' + date.month))
-      if(this.role === '1'){
-        this.showList(false, new Date(this.today).getTime()/1000)
+      if (this.role === '2') {
+        this.today =
+          date.year +
+          '-' +
+          (date.month > 9 ? date.month : '0' + date.month) +
+          '-' +
+          (date.day > 9 ? date.day : '0' + date.day)
+      } else {
+        this.today = new Date(
+          date.year +
+            '/' +
+            (date.month > 9 ? date.month : '0' + date.month) +
+            '/' +
+            (date.day > 9 ? date.day : '0' + date.day)
+        )
+      }
+      let month = date.year + '-' + (date.month > 9 ? date.month : '0' + date.month)
+      if (this.role === '1') {
+        this.showList(false, new Date(this.today).getTime() / 1000)
         // this.exceDate(1, month)
-      }else{
-        this.countDetail(0,false)
-        this.getStatistics()
+      } else {
+        this.countDetail(0, false)
+        this.getStatistics(this.today)
         this.exceDate(2, month)
       }
     },
     goPersonal() {
       this.$router.push('/personal')
     },
-    nowReport(reportType) {
-      this.$router.push({path:'/addReport',query:{reportType}})
+    nowReport() {
+      this.$router.push('/addReport')
     },
     reportDetail(record) {
+      console.log(record.id)
       const query = {
-        id:record.id
+        id: record.id
       }
-      this.$router.push({path:'/reportDetail',query})
+      this.$router.push({ path: '/reportDetail', query })
     }
   }
 }

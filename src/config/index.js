@@ -4,14 +4,25 @@
  */
 
 const ConfigEnv = process.env.VUE_APP_URL
-let hostEnv = ''
+let wangxuanzhang = ''
+let zhangkukn = ''
+let zhuxu = ''
+let lvzhuo = ''
 
 if (ConfigEnv === 'test') {
   hostEnv = ''
 } else if (ConfigEnv === 'prod') {
   hostEnv = ''
 } else {
-  hostEnv = '/api'
+  wangxuanzhang = '/wangxuanzhang'
+  zhangkukn = '/zhangkukn'
+  zhuxu = '/zhuxu'
+  lvzhuo = '/lvzhuo'
 }
 
-export default hostEnv
+export default {
+  wangxuanzhang,
+  zhangkukn,
+  zhuxu,
+  lvzhuo
+}

@@ -30,8 +30,8 @@ export default {
         clazzName: ''
       },
       selectList: [],
-      gradeUrl: `${hostEnv}/operate/gradeinfo/getGradelist?schoolCode=QPZX`,
-      classUrl: `${hostEnv}/school/classInfo/getClassInfoByGradeCode?schoolCode=QPZX`
+      gradeUrl: `${hostEnv.wangxuanzhang}/operate/gradeinfo/getGradelist?schoolCode=QPZX`,
+      classUrl: `${hostEnv.wangxuanzhang}/school/classInfo/getClassInfoByGradeCode?schoolCode=QPZX`
     }
   },
   async mounted() {

@@ -9,11 +9,12 @@ import hostEnv from '@config'
 let loginApi = {
   getYzm: '/user/auth/code#get', // 获取验证码
   login: '/user/login#get', // 登录
-  getUserInfo: '/user/one#getUrl' // 根据用户code查询详情
+  getUserInfo: '/user/one#getUrl', // 根据用户code查询详情
+  getGradeInfo: '/user/info#getUrl#false' // 根据usercode查询用户信息
 }
 
 for (let val in loginApi) {
-  loginApi[val] = `/api${loginApi[val]}`
+  loginApi[val] = `${hostEnv.zhuxu}${loginApi[val]}`
 }
 
 export default loginApi
