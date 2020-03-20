@@ -73,7 +73,8 @@ module.exports = {
         }
       },
       '/zhuxu': {
-        target: 'http://7msbf4.natappfree.cc', // 朱旭
+        // target: 'http://pugai.natapp1.cc',
+        target: 'http://mjsvfh.natappfree.cc',
         changeOrigin: true,
         ws: true,
         pathRewrite: {
