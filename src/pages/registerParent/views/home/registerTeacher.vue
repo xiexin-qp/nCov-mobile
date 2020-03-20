@@ -160,7 +160,7 @@ export default {
     window.document.title = '教职工注册'
   },
   mounted() {
-    var url = location.search
+    var url = window.location.href
     if (url.indexOf('?') != -1) {
       let str = url.substr(1)
       let strs = str.split('=')
@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     submitForm() {
-      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url : ''
+      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
         if (this.dataForm.classChargeMark === 1) {
           if (!this.dataForm.clazzCode || !this.dataForm.gradeCode) {

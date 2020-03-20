@@ -18,6 +18,7 @@ const getState = (state, val) => {
   return JSON.parse(localData)[state] || val
 }
 const store = Vue.observable({
+  openid: getState('openid', ''),
   userInfo: getState('userInfo', {})
 })
 

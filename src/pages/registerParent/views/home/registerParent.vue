@@ -144,7 +144,7 @@ export default {
   },
   methods: {
     submitForm() {
-      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url : ''
+      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
         if (!/^1[3456789]\d{9}$/.test(this.dataForm.parphone)) {
           this.$toast('请输入正确手机号')

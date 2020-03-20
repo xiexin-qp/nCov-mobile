@@ -59,7 +59,9 @@ export default {
       img,
       tempyc,
       tempzc,
-      detailInfo: {},
+      detailInfo: {
+        temperature: ''
+      },
       id: ''
     }
   },

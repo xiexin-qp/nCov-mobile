@@ -11,9 +11,6 @@
     <div class="login-input qui-bd-b">
       <input type="tel" v-model="loginForm.authCode" placeholder="请输入验证码" />
     </div>
-    <div class="login-input qui-bd-b">
-      <input type="tel" v-model="loginForm.openid" placeholder="请输入openid" />
-    </div>
     <div class="login-btn" @click="login">登录</div>
   </div>
 </template>
@@ -26,14 +23,26 @@ export default {
   components: {},
   computed: {},
   data() {
-    return { total: 60, logo, tip: '获取验证码', loginForm: { phone: '', authCode: '', openid: '' } }
+    return { total: 60, logo, tip: '获取验证码', loginForm: { phone: '', authCode: '' } }
   },
   beforeRouteLeave(to, from, next) {
     this.total = 60
     clearInterval(this.timer)
     next()
   },
-  async mounted() {},
+  mounted() {
+    var url = window.location.href
+    if (url.indexOf('?') != -1) {
+      let str = url.substr(1)
+      let strs = str.split('&')
+      this.openid = strs[0].split('=')[1]
+      setStore({
+        key: 'openid',
+        data: this.openid
+      })
+      this.getInfoByOpenid()
+    }
+  },
   methods: {
     getYzm() {
       if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.loginForm.phone) || this.loginForm.phone === '') {
@@ -61,21 +70,27 @@ export default {
         })
     },
     async login() {
-      // if (this.loginForm.phone === '' || this.loginForm.authCode === '' || this.loginForm.openid === '') {
-      //   this.$notify('请输入手机号或验证码')
-      //   return
-      // }
-      if (this.loginForm.openid && this.loginForm.phone && this.loginForm.authCode) {
-        await actions.login({
-          ...this.loginForm
-        })
+      if (this.loginForm.phone === '' || this.loginForm.authCode) {
+        this.$notify('请输入手机号或验证码')
+        return
       }
-      const res = await actions.getUserInfo(this.loginForm.openid)
-      setStore({
-        key: 'userInfo',
-        data: res.result
-      })
-      this.$router.replace('/home')
+      if (this.loginForm.phone && this.loginForm.authCode) {
+        await actions.login({
+          ...this.loginForm,
+          openid: this.openid
+        })
+        this.getInfoByOpenid()
+      }
+    },
+    async getInfoByOpenid() {
+      const res = await actions.getUserInfo(this.openid)
+      if (res.result && res.result.userCode) {
+        setStore({
+          key: 'userInfo',
+          data: res.result
+        })
+        this.$router.replace('/home')
+      }
     }
   }
 }

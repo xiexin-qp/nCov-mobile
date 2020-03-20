@@ -21,93 +21,91 @@
         <span>{{ userInfo.userName }}</span>
       </div>
     </div>
-    <div class="main qui-fx-ver">
-      <scroll-list ref="scroll" pullUpLoad>
-        <div class="calendar qui-fx-ver">
-          <div class="sub-title qui-fx-jsb">
-            <span>武汉加油！中国加油</span>
-            <span>全品与你共克时艰</span>
+    <scroll-list ref="scroll" pullUpLoad>
+      <div class="calendar qui-fx-ver">
+        <div class="sub-title qui-fx-jsb">
+          <span>武汉加油！中国加油</span>
+          <span>全品与你共克时艰</span>
+        </div>
+        <calendar-show
+          :exception-list="exceptionList"
+          :zc-list="zcList"
+          ref="calendar"
+          @get-date="getDate"
+        ></calendar-show>
+      </div>
+      <div class="title qui-fx-jsb" v-if="role === '1'">
+        <span>今日上报</span>
+        <span @click="nowReport(1)">立即上报</span>
+      </div>
+      <div v-else class="title qui-fx-jsb">
+        <span>今日上报情况</span>
+        <!-- <span @click="nowReport(2)">立即上报</span> -->
+        <span class="num">学生共{{ total ? total : 0 }}人</span>
+      </div>
+      <div class="list" v-if="role === '1'">
+        <ul v-if="personList.length > 0">
+          <li
+            :class="item.mark02 === '1' ? 'warn' : 'normal'"
+            v-for="(item,i) in personList"
+            :key="i"
+          >
+            <div class="info qui-fx-jsb">
+              <div class="qui-fx-ver">
+                <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
+                <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无'}}</span>
+              </div>
+              <span class="detail" @click="reportDetail(item)">查看详情</span>
+            </div>
+            <div class="date">
+              <span>{{ gmtToDate(item.reportTime,'3') }}</span>
+            </div>
+          </li>
+        </ul>
+        <no-data v-else msg="没有数据~"></no-data>
+      </div>
+      <div class="report qui-fx-ver" v-else>
+        <div class="gather qui-fx-jsa">
+          <div class="unappear" @click="countDetail(0)">
+            <div class="data qui-fx-ver">
+              <span>{{ unappearNum ? unappearNum : 0 }}</span>
+              <span>未上报</span>
+            </div>
           </div>
-          <calendar-show
-            :exception-list="exceptionList"
-            :zc-list="zcList"
-            ref="calendar"
-            @get-date="getDate"
-          ></calendar-show>
+          <div class="unusual" @click="countDetail(1)">
+            <div class="data qui-fx-ver">
+              <span>{{ unusualNum ? unusualNum : 0 }}</span>
+              <span>异常</span>
+            </div>
+          </div>
+          <div class="fever" @click="countDetail(2)">
+            <div class="data qui-fx-ver">
+              <span>{{ feverNum ? feverNum : 0 }}</span>
+              <span>发热</span>
+            </div>
+          </div>
         </div>
-        <div class="title qui-fx-jsb" v-if="role === '1'">
-          <span>今日上报</span>
-          <span @click="nowReport(1)">立即上报</span>
-        </div>
-        <div v-else class="title qui-fx-jsb">
-          <span>今日上报情况</span>
-          <!-- <span @click="nowReport(2)">立即上报</span> -->
-          <span class="num">学生共{{ total ? total : 0 }}人</span>
-        </div>
-        <div class="list" v-if="role === '1'">
-          <ul v-if="personList.length > 0">
+        <div class="student-list">
+          <ul v-if="collectLIst.length>0">
             <li
-              :class="item.mark02 === '1' ? 'warn' : 'normal'"
-              v-for="(item,i) in personList"
+              class="qui-fx-jsb qui-fx-ac"
+              v-for="(item, i) in collectLIst"
               :key="i"
+              @click="reportDetail(item)"
             >
-              <div class="info qui-fx-jsb">
-                <div class="qui-fx-ver">
-                  <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
-                  <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无'}}</span>
-                </div>
-                <span class="detail" @click="reportDetail(item)">查看详情</span>
+              <div class="student qui-fx-ac">
+                <img :src="item.photoImg ? item.photoImg : errorImg" alt :onerror="errorImg" />
+                <span>{{ item.userName }}</span>
               </div>
-              <div class="date">
-                <span>{{ gmtToDate(item.reportTime,'3') }}</span>
-              </div>
+              <span>{{ item.reportState === 2 ? '未上报' : ''}}</span>
+              <span>{{ item.health === 2 ? '异常' : ''}}</span>
+              <span>{{ item.feverMark === 1 ? '发热' : ''}}</span>
             </li>
           </ul>
           <no-data v-else msg="没有数据~"></no-data>
         </div>
-        <div class="report qui-fx-ver" v-else>
-          <div class="gather qui-fx-jsa">
-            <div class="unappear" @click="countDetail(0)">
-              <div class="data qui-fx-ver">
-                <span>{{ unappearNum ? unappearNum : 0 }}</span>
-                <span>未上报</span>
-              </div>
-            </div>
-            <div class="unusual" @click="countDetail(1)">
-              <div class="data qui-fx-ver">
-                <span>{{ unusualNum ? unusualNum : 0 }}</span>
-                <span>异常</span>
-              </div>
-            </div>
-            <div class="fever" @click="countDetail(2)">
-              <div class="data qui-fx-ver">
-                <span>{{ feverNum ? feverNum : 0 }}</span>
-                <span>发热</span>
-              </div>
-            </div>
-          </div>
-          <div class="student-list">
-            <ul v-if="collectLIst.length>0">
-              <li
-                class="qui-fx-jsb qui-fx-ac"
-                v-for="(item, i) in collectLIst"
-                :key="i"
-                @click="reportDetail(item)"
-              >
-                <div class="student qui-fx-ac">
-                  <img :src="item.photoImg ? item.photoImg : errorImg" alt :onerror="errorImg" />
-                  <span>{{ item.userName }}</span>
-                </div>
-                <span>{{ item.reportState === 2 ? '未上报' : ''}}</span>
-                <span>{{ item.health === 2 ? '异常' : ''}}</span>
-                <span>{{ item.feverMark === 1 ? '发热' : ''}}</span>
-              </li>
-            </ul>
-            <no-data v-else msg="没有数据~"></no-data>
-          </div>
-        </div>
-      </scroll-list>
-    </div>
+      </div>
+    </scroll-list>
   </div>
 </template>
 
@@ -381,138 +379,136 @@ export default {
       }
     }
   }
-  .main {
-    .calendar {
-      padding: 20px;
-      margin: 0 20px;
-      background: #e5ecff;
-      border-radius: 20px;
-      .sub-title {
-        color: #aeb9f9;
-        margin: 0 20px 20px 20px;
-        span {
-          font-size: 28px;
-        }
+  .calendar {
+    padding: 20px;
+    margin: 0 20px;
+    background: #e5ecff;
+    border-radius: 20px;
+    .sub-title {
+      color: #aeb9f9;
+      margin: 0 20px 20px 20px;
+      span {
+        font-size: 28px;
       }
     }
-    .title {
-      margin: 30px 20px 20px 20px;
-      font-weight: bold;
-      span:nth-child(1) {
-        font-size: 34px;
-        .num {
-          color: rgb(59, 84, 241);
-          font-weight: 100;
-          font-size: 28px;
+  }
+  .title {
+    margin: 30px 20px 20px 20px;
+    font-weight: bold;
+    span:nth-child(1) {
+      font-size: 34px;
+      .num {
+        color: rgb(59, 84, 241);
+        font-weight: 100;
+        font-size: 28px;
+      }
+    }
+    span:nth-child(2) {
+      font-size: 28px;
+      color: rgb(59, 84, 241);
+    }
+  }
+  .list {
+    li {
+      width: calc(100% - 20px);
+      height: 246px;
+      margin: 20px 10px;
+      .info {
+        padding: 40px 40px 0 28%;
+        div {
+          span {
+            margin-bottom: 10px;
+          }
         }
       }
-      span:nth-child(2) {
-        font-size: 28px;
+      .date {
+        margin: 20px 40px 0 28%;
+        padding-top: 20px;
+        border-top: 1px solid #ccc;
+      }
+    }
+    li.warn {
+      background: url('../../assets/img/warnImg.png') no-repeat;
+      background-size: 100% 246px;
+      span.detail {
+        color: rgb(247, 79, 95);
+      }
+    }
+    li.normal {
+      background: url('../../assets/img/normalImg.png') no-repeat;
+      background-size: 100% 246px;
+      span.detail {
         color: rgb(59, 84, 241);
       }
     }
-    .list {
-      li {
-        width: calc(100% - 20px);
-        height: 246px;
-        margin: 20px 10px;
-        .info {
-          padding: 40px 40px 0 28%;
-          div {
-            span {
-              margin-bottom: 10px;
-            }
+  }
+  .report {
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 2px 2px 1px 1px #ddd;
+    .gather {
+      margin: 30px 20px 0 20px;
+      .unappear,
+      .unusual,
+      .fever {
+        width: 218px;
+        height: 146px;
+        .data {
+          margin: 30px 20px 0 50%;
+          text-align: center;
+          font-weight: bold;
+          span:nth-child(1) {
+            font-size: 34px;
+          }
+          span:nth-child(2) {
+            font-size: 28px;
           }
         }
-        .date {
-          margin: 20px 40px 0 28%;
-          padding-top: 20px;
-          border-top: 1px solid #ccc;
+      }
+      .unappear {
+        background: url('../../assets/img/unappear.png') no-repeat;
+        background-size: 218px 146px;
+        .data {
+          margin-left: 40%;
+          span {
+            color: #666;
+          }
         }
       }
-      li.warn {
-        background: url('../../assets/img/warnImg.png') no-repeat;
-        background-size: 100% 246px;
-        span.detail {
-          color: rgb(247, 79, 95);
+      .unusual {
+        background: url('../../assets/img/unusual.png') no-repeat;
+        background-size: 218px 146px;
+        .data {
+          span {
+            color: #ffae00;
+          }
         }
       }
-      li.normal {
-        background: url('../../assets/img/normalImg.png') no-repeat;
-        background-size: 100% 246px;
-        span.detail {
-          color: rgb(59, 84, 241);
+      .fever {
+        background: url('../../assets/img/fever.png') no-repeat;
+        background-size: 218px 146px;
+        .data {
+          span {
+            color: #f2283a;
+          }
         }
       }
     }
-    .report {
-      margin: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 2px 2px 1px 1px #ddd;
-      .gather {
-        margin: 30px 20px 0 20px;
-        .unappear,
-        .unusual,
-        .fever {
-          width: 218px;
-          height: 146px;
-          .data {
-            margin: 30px 20px 0 50%;
-            text-align: center;
-            font-weight: bold;
-            span:nth-child(1) {
-              font-size: 34px;
-            }
-            span:nth-child(2) {
-              font-size: 28px;
-            }
-          }
-        }
-        .unappear {
-          background: url('../../assets/img/unappear.png') no-repeat;
-          background-size: 218px 146px;
-          .data {
-            margin-left: 40%;
-            span {
-              color: #666;
-            }
-          }
-        }
-        .unusual {
-          background: url('../../assets/img/unusual.png') no-repeat;
-          background-size: 218px 146px;
-          .data {
-            span {
-              color: #ffae00;
-            }
-          }
-        }
-        .fever {
-          background: url('../../assets/img/fever.png') no-repeat;
-          background-size: 218px 146px;
-          .data {
-            span {
-              color: #f2283a;
-            }
-          }
+    .student-list {
+      margin: 0 30px;
+      li {
+        border-bottom: 1px solid #ddd;
+        padding: 30px 0;
+        img {
+          width: 88px;
+          height: 88px;
+          border-radius: 100%;
+          margin-right: 20px;
         }
       }
-      .student-list {
-        margin: 0 30px;
-        li {
-          border-bottom: 1px solid #ddd;
-          padding: 30px 0;
-          img {
-            width: 88px;
-            height: 88px;
-            border-radius: 100%;
-            margin-right: 20px;
-          }
-        }
-        li:last-child {
-          border-bottom: none;
-        }
+      li:last-child {
+        border-bottom: none;
       }
     }
   }
