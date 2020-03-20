@@ -75,7 +75,7 @@ module.exports = {
       },
       '/zhuxu': {
         // target: 'http://pugai.natapp1.cc',
-        target: 'http://gnxtw4.natappfree.cc',
+        target: 'http://mjsvfh.natappfree.cc',
         changeOrigin: true,
         ws: true,
         pathRewrite: {
