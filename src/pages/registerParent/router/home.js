@@ -9,7 +9,7 @@
 const Home = [
   {
     module: 'home',
-    path: 'registerTeacher',
+    path: 'registerParent',
     type: 'index',
     keepAlive: true,
     title: '注册'

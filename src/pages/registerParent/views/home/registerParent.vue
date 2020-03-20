@@ -4,9 +4,7 @@
       <div slot="title" class="ewm-title">注册成功</div>
       <div class="qui-fx-ver ewm-info">
         <img class="wx-img" :src="wxImg" alt />
-        <p>
-          请长按二维码关注"全品平安校园"微信公众号，在"疫情日报"中对孩子的情况进行上报，登录的账号为您注册的手机号。
-        </p>
+        <p>请长按二维码关注"全品平安校园"微信公众号，在"疫情日报"中对孩子的情况进行上报，登录的账号为您注册的手机号。</p>
         <p>您也可以在微信中搜索"全品平安校园"微信公众号关注进行操作。</p>
       </div>
     </popup-box>
@@ -37,9 +35,10 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">学生班级</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="classTag = true">
-            {{ dataForm.gradeName }}{{ dataForm.clazzName }}
-          </div>
+          <div
+            class="submit-input qui-tx-r qui-fx-f1"
+            @click="classTag = true"
+          >{{ dataForm.gradeName }}{{ dataForm.clazzName }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -50,7 +49,10 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">出生日期</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('birthday')">{{ dataForm.birthday }}</div>
+          <div
+            class="submit-input qui-tx-r qui-fx-f1"
+            @click="showDate('birthday')"
+          >{{ dataForm.birthday }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -68,7 +70,7 @@
         <div class="submit-area qui-fx-ver">
           <div>学生人脸照片</div>
           <div class="upload-list qui-fx-f1">
-            <upload-file v-model="profilePhoto"></upload-file>
+            <upload-file :max-num="1" v-model="profilePhoto"></upload-file>
           </div>
         </div>
       </div>
@@ -132,19 +134,30 @@ export default {
       profilePhoto: []
     }
   },
+  mounted() {
+    var url = location.search
+    if (url.indexOf('?') != -1) {
+      let str = url.substr(1)
+      let strs = str.split('=')
+      this.dataForm.schoolCode = strs[1]
+    }
+  },
   methods: {
     submitForm() {
+      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url : ''
       validateForm(yzForm, this.dataForm, () => {
-        actions.parRegister({ ...this.dataForm, profilePhoto: this.profilePhoto[0] || '' }).then(() => {
+        if (!/^1[3456789]\d{9}$/.test(this.dataForm.parphone)) {
+          this.$toast('请输入正确手机号')
+          return
+        }
+        actions.parRegister({ ...this.dataForm, profilePhoto: base64 }).then(() => {
           this.isOk = true
         })
       })
     },
     // 班级
     chooseClass(item) {
-      console.log(item)
       this.dataForm = Object.assign(this.dataForm, item)
-      console.log(this.dataForm)
     },
     // 展示日期框
     showDate(type) {
