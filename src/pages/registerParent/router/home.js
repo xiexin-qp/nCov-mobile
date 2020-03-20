@@ -12,13 +12,13 @@ const Home = [
     path: 'registerTeacher',
     type: 'index',
     keepAlive: true,
-    title: '教职工注册'
+    title: '注册'
   },
   {
     module: 'home',
-    path: 'registerParent',
+    path: 'registerTeacher',
     keepAlive: true,
-    title: '家长注册'
+    title: '注册'
   }
 ]
 
