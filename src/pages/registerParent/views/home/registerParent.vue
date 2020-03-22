@@ -135,7 +135,7 @@ export default {
     }
   },
   mounted() {
-    var url = location.search
+    var url = window.location.href
     if (url.indexOf('?') != -1) {
       let str = url.substr(1)
       let strs = str.split('=')

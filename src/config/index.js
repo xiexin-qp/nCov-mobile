@@ -10,9 +10,15 @@ let zhuxu = ''
 let lvzhuo = ''
 
 if (ConfigEnv === 'test') {
-  hostEnv = ''
+  wangxuanzhang = '/wangxuanzhang'
+  zhangkukn = '/zhangkukn'
+  zhuxu = '/zhuxu'
+  lvzhuo = '/lvzhuo'
 } else if (ConfigEnv === 'prod') {
-  hostEnv = ''
+  wangxuanzhang = '/pc-yq'
+  zhangkukn = '/zhangkukn'
+  zhuxu = '/mobile-yq'
+  lvzhuo = '/lvzhuo'
 } else {
   wangxuanzhang = '/wangxuanzhang'
   zhangkukn = '/zhangkukn'

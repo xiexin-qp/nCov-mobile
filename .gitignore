@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/register-yq
+/register-yq.zip
 .history
 # local env files
 .env.local
