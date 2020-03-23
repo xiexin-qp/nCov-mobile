@@ -73,13 +73,15 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b" v-if="classShow">
           <div class="tip">班级人数</div>
-          <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.clazzUserSum }}</div>
+          <div class="submit-input qui-fx-f1">
+            <input class="input" v-model="dataForm.clazzUserSum" type="text" placeholder="请输入班级人数" />
+          </div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-area qui-fx-ver">
           <div>人脸照片</div>
           <div class="upload-list qui-fx-f1">
-            <upload-file v-model="dataForm.profilePhoto"></upload-file>
+            <upload-file :max-num="1" v-model="profilePhoto"></upload-file>
           </div>
         </div>
       </div>
@@ -178,11 +180,11 @@ export default {
           }
         }
         delete this.dataForm.classChargeMarkText
+        if (!/^1[3456789]\d{9}$/.test(this.dataForm.phone)) {
+          this.$toast('请输入正确手机号')
+          return
+        }
         actions.teaRegister({ ...this.dataForm, profilePhoto: base64 }).then(() => {
-          if (!/^1[3456789]\d{9}$/.test(this.dataForm.phone)) {
-            this.$toast('请输入正确手机号')
-            return
-          }
           this.isOk = true
         })
       })

@@ -70,8 +70,11 @@ export default {
         })
     },
     async login() {
-      if (this.loginForm.phone === '' || this.loginForm.authCode) {
-        this.$notify('请输入手机号或验证码')
+      if (this.loginForm.phone === '') {
+        this.$notify('请输入手机号')
+        return
+      } else if (this.loginForm.authCode === '') {
+        this.$notify('请输入验证码')
         return
       }
       if (this.loginForm.phone && this.loginForm.authCode) {
