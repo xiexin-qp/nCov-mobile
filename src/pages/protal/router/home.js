@@ -29,7 +29,17 @@ const Home = [
     module: 'home',
     path: 'MyClass',
     title: '我的班级'
-  }
+  },
+  {
+    module: 'home',
+    path: 'BackSchool',
+    title: '返校计划'
+  },
+  {
+    module: 'home',
+    path: 'SubmitBack',
+    title: '提交返校计划'
+  },
 ]
 
 export default Home

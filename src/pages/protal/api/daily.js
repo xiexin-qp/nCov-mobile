@@ -12,6 +12,7 @@ let dailyApi = {
   getClassStatistics: '/report/info/submit/count#get', //按日期查询上报统计数据
   getCountDetail: '/report/info/count/detail#post', // 获取统计详细数据
   getRoleInfo: '/user/info/role/list#get', // 查询用户可切换的角色
+  changeRole: '/user/info/bind/one#get', // 切换角色
   getMyClass: '/teacher/clazz/info#post', // 查询班主任绑定的班级
   changeMyClass: '/teacher/clazz/update#put', // 换绑班级
   getStudentsList: '/teacher/clazz/users#post' // 查询班级学生

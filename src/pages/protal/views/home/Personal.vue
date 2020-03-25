@@ -30,6 +30,11 @@
         </div>
         <div class="rit-icon"></div>
       </div>
+      <div class="submit-item qui-fx-ac qui-bd-b" @click="backSchool">
+        <div class="tip">返校计划</div>
+        <div class="qui-fx-f1 qui-tx-r" style="color:#666;margin-right:10px"></div>
+        <div class="rit-icon"></div>
+      </div>
       <!-- <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'">
         <div class="tip">邀请学生</div>
         <div class="submit-input qui-tx-r qui-fx-f1" @click="invite()">点击分享链接</div>
@@ -96,13 +101,20 @@ export default {
       })
     },
     // 切换角色
-    chooseRole(item) {
+    async chooseRole(item) {
       this.dataForm.roleType = item.text
-      setStore({
+      const req = {
+        userCode : this.userInfo.userCode,
+        schoolCode : this.userInfo.schoolCode,
+        userType: item.id
+      }
+      const res = await actions.changeRole(req)
+      console.log(res)
+        setStore({
         key: 'userInfo',
         data: {
           ...this.userInfo,
-          roleCode: item.text === '家长' ? 'JZ' : item.text === '班主任' ? 'BZR' : item.text === '教职工' ? 'JZG' : 'XY'
+          ...res.result
         }
       })
     },
@@ -124,7 +136,7 @@ export default {
             gradeId: item.gradeCode,
             gradeName: item.gradeName,
             clazzName: item.clazzName,
-            code: item.clazzCode
+            clazzCode: item.clazzCode
           }
         })
       }
@@ -144,6 +156,9 @@ export default {
     //我的班级
     goClass(){
       this.$router.push('/myClass')
+    },
+    backSchool(){
+      this.$router.push('/backSchool')
     },
     //邀请学生
     invite(){
