@@ -5,6 +5,7 @@
 
 import Vue from 'vue'
 import {
+  Button,
   Dialog,
   Toast,
   Tabs,
@@ -20,6 +21,7 @@ import {
   CollapseItem
 } from 'vant'
 
+Vue.use(Button)
 Vue.use(Dialog)
 Vue.use(Toast)
 Vue.use(Tabs)

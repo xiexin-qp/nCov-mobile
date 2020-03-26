@@ -57,7 +57,19 @@
         <div class="submit-area qui-fx-ver">
           <div>附带症状</div>
           <div class="qui-fx-f1" style="padding: 10px 0 ">
-            <van-radio-group v-model="dataForm.symptoms">
+            <van-checkbox-group v-model="dataForm.symptom" :max="1">
+              <van-checkbox 
+                style="margin-bottom: 10px" 
+                v-for="item in symptomsList"
+                :key="item.id"
+                :name="item.symptomsCode"
+              > 
+                {{item.symptomsName}}
+              </van-checkbox>
+              <!-- <van-checkbox name="b">复选框 b</van-checkbox>
+              <van-checkbox name="c">复选框 c</van-checkbox> -->
+            </van-checkbox-group>
+            <!-- <van-radio-group v-model="dataForm.symptoms">
               <van-radio 
                 style="margin-bottom: 10px" 
                 v-for="item in symptomsList"
@@ -66,7 +78,7 @@
               >
                {{item.symptomsName}}
               </van-radio>
-            </van-radio-group>
+            </van-radio-group> -->
           </div>
         </div>
         <div class="submit-area qui-fx-ver">
@@ -123,7 +135,7 @@ export default {
       dataForm: {
         userName: '',
         temperature: '',
-        symptoms: '',
+        symptom:  [],
         symptomsRemarks: '',
         bodyParts: '请选择测量部位'
       },
@@ -132,13 +144,6 @@ export default {
       currentIndex: '',
       curVal: '',
       bodyParts: '请选择测量部位',
-      searchList:{
-        // name: '',
-        pageSize:'20',
-        pageNum:'1',
-        schoolCode: '',
-        clazzCode: '',
-      },
       symptomsList:[]
     }
   },
@@ -156,7 +161,6 @@ export default {
     }
     this.bodyGet()
     this.symptomsGet()
-    console.log('store.userInfo',store.userInfo)
   },
   methods: {
     async bodyGet(){
@@ -176,16 +180,15 @@ export default {
         this.dataForm.reportPersonName = store.userInfo.userName
         this.dataForm.reportPersonCode = store.userInfo.userCode
         this.dataForm.mark01 = this.dataForm.mark01 ? '1' : '2'
-        this.dataForm.gradeCode = store.userInfo.gradeCode
-        this.dataForm.classCode = store.userInfo.clazzCode
-        // this.dataForm.classCode = 'C14f0erz15ydb3'
+        // this.dataForm.gradeCode = store.userInfo.gradeCode
+        // this.dataForm.classCode = store.userInfo.clazzCode
         this.dataForm.schoolCode = store.userInfo.schoolCode
+        this.dataForm.symptoms = this.dataForm.symptom.length > 0 ? this.dataForm.symptom[0] : ''
         if (store.userInfo.roleCode === 'JZ') {
           this.dataForm.userCode = store.userInfo.studentCode
         } else {
           this.dataForm.userCode = store.userInfo.userCode
         }
-        console.log('this.dataForm',this.dataForm)
         actions.addReport(this.dataForm).then(() => {
           this.$toast.success({ message: '提交成功' })
             setTimeout(() => {

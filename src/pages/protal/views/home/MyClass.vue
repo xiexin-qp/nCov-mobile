@@ -59,11 +59,9 @@ export default {
   methods: {
     async showList(tag = false) {
       const req = {
-        //clazzCode : this.userInfo.classCode,
-        //schoolCode : this.userInfo.schoolCode,
-        schoolCode : 'QPZX', 
-        teacherCode : 'ST14f6u8nudwtgb',  
-        clazzCode: 'C14f0erz15ydb3',
+        schoolCode : this.userInfo.schoolCode,
+        teacherCode : this.userInfo.userCode,  
+        clazzCode: this.userInfo.classCode,
         pageNum: 1,
         pageSize: 15
       }
