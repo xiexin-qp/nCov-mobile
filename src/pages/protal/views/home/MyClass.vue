@@ -60,7 +60,6 @@ export default {
     async showList(tag = false) {
       const req = {
         schoolCode : this.userInfo.schoolCode,
-        teacherCode : this.userInfo.userCode,  
         clazzCode: this.userInfo.classCode,
         pageNum: 1,
         pageSize: 15
