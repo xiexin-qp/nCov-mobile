@@ -151,7 +151,7 @@ export default {
     role(val) {
       console.log(this.today)
       if (val === '1') {
-        this.exceptionList = []
+        this.exceDate(1, this.gmtToDate(new Date(), '2'))
         if (typeof this.today === 'string') {
           this.today = this.today.split('-')[0] + '/' + this.today.split('-')[1] + '/' + this.today.split('-')[2]
         }
@@ -167,6 +167,7 @@ export default {
   async mounted() {
     this.today = new Date()
     this.showList(false, this.today.getTime() / 1000)
+    this.exceDate(1, this.gmtToDate(new Date(), '2'))
     if (this.userInfo.roleCode === 'JZ') {
       const res = await actions.getGradeInfo(this.userInfo.studentCode)
       setStore({
@@ -215,12 +216,13 @@ export default {
     async exceDate(type, monthDate) {
       this.exceptionList = []
       const req = {
-        userCode: this.userInfo.userCode,
         schoolCode: this.userInfo.schoolCode,
         monthDate
       }
       if (type === 2) {
         req.clazzCode = this.userInfo.clazzCode
+      } else {
+        req.userCode = this.userInfo.userCode
       }
       const res = await actions.getExceDate(req)
       res.result.forEach(ele => {
