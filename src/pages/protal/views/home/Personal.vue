@@ -21,7 +21,7 @@
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'">
         <div class="tip">我的班级</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="goClass()">{{ dataForm.studentTotal }}人</div>
+        <div class="submit-input qui-tx-r qui-fx-f1" @click="goClass()"><!-- {{ dataForm.studentTotal }}人 --></div>
         <div class="rit-icon"></div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode==='BZR'" @click="classTag = true">
@@ -134,6 +134,7 @@ export default {
           data: {
             ...this.userInfo,
             gradeId: item.gradeCode,
+            gradeCode: item.gradeCode,
             gradeName: item.gradeName,
             clazzName: item.clazzName,
             clazzCode: item.clazzCode

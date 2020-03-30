@@ -20,7 +20,7 @@
         <ul>
           <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in dataList" :key="i">
             <div class="student qui-fx-ac">
-              <img :src="item.photoPic" alt="" :onerror="errorImg" />
+              <img :src="item.photoPic ? item.photoPic : errorImg" alt="" :onerror="errorImg" />
               <span>{{ item.userName }}</span>
             </div>
             <span>{{ item.riskTime }}</span>
@@ -60,7 +60,7 @@ export default {
     async showList(tag = false) {
       const req = {
         schoolCode : this.userInfo.schoolCode,
-        clazzCode: this.userInfo.classCode,
+        clazzCode: this.userInfo.clazzCode,
         pageNum: 1,
         pageSize: 15
       }
