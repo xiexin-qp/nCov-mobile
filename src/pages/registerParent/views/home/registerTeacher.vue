@@ -173,6 +173,10 @@ export default {
     submitForm() {
       const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
+        if (!/^1[3456789]\d{9}$/.test(this.dataForm.phone)) {
+          this.$toast('请输入正确手机号')
+          return
+        }
         if (this.dataForm.classChargeMark === 1) {
           if (!this.dataForm.clazzCode || !this.dataForm.gradeCode) {
             this.$toast('请选择年级班级')
@@ -180,10 +184,6 @@ export default {
           }
         }
         delete this.dataForm.classChargeMarkText
-        if (!/^1[3456789]\d{9}$/.test(this.dataForm.phone)) {
-          this.$toast('请输入正确手机号')
-          return
-        }
         actions.teaRegister({ ...this.dataForm, profilePhoto: base64 }).then(() => {
           this.isOk = true
         })
