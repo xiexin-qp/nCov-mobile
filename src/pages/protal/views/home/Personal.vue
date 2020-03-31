@@ -14,7 +14,7 @@
       <div class="school">{{ userInfo.schoolName }}</div>
     </div>
     <div class="submit-form qui-fx-f1">
-      <div class="submit-item qui-fx-ac qui-bd-b">
+      <div class="submit-item qui-fx-ac qui-bd-b" v-if="canChangeRole">
         <div class="tip">身份类型</div>
         <div class="submit-input qui-tx-r qui-fx-f1" @click="roleTag = true">{{ dataForm.roleType }}</div>
         <div class="rit-icon"></div>
@@ -64,6 +64,7 @@ export default {
       detail: {},
       roleTag: false,
       classTag: false,
+      canChangeRole: false,
       roleList: [],
       classId: '',
       dataForm: {
@@ -93,12 +94,22 @@ export default {
         schoolCode : this.userInfo.schoolCode,
       }
       const res = await actions.getRoleInfo(req)
-      res.result.forEach(ele=>{
-        this.roleList.push({
-          id:ele.roleCode,
-          text:ele.roleName
-        })
-      })
+      if(res.result.length <= 1){
+        this.canChangeRole = false
+        return
+      }
+      this.canChangeRole = true
+        if(this.userInfo.roleCode==='JZ'){
+          this.roleList.push({
+            id:'JZG',
+            text:'教职工'
+          })
+        }else{
+          this.roleList.push({
+            id:'JZ',
+            text:'家长'
+          })
+        }
     },
     // 切换角色
     async chooseRole(item) {
@@ -117,6 +128,7 @@ export default {
           ...res.result
         }
       })
+      this.getRoleList()
     },
      // 换绑班级
     async chooseClass(item) {
