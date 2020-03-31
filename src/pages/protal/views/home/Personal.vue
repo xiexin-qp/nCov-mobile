@@ -120,8 +120,7 @@ export default {
         userType: item.id
       }
       const res = await actions.changeRole(req)
-      console.log(res)
-      
+      console.log(res)     
       setStore({
         key: 'userInfo',
         data: {
