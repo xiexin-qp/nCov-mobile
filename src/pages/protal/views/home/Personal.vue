@@ -169,8 +169,8 @@ export default {
         teacherCode : this.userInfo.userCode,
         schoolCode : this.userInfo.schoolCode,
       }
-      const res = await actions.getMyClass(req)
-      this.dataForm.className = res.result.gradeName + res.result.clazzName
+      await actions.getMyClass(req)
+      // this.dataForm.className = res.result.gradeName + res.result.clazzName
     },
     //我的班级
     goClass(){
