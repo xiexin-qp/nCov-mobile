@@ -120,14 +120,18 @@ export default {
         userType: item.id
       }
       const res = await actions.changeRole(req)
-      console.log(res)     
+      console.log(res)
+      const result = {}
+      for(let item in res.result){
+        if(res.result[item] !== null){
+          result[item] = res.result[item]
+        }
+      }
       setStore({
         key: 'userInfo',
         data: {
           ...this.userInfo,
-          ...res.result.filter(ele=>{
-              return ele!==null
-            })
+          ...result
         }
       })
       this.getRoleList()
@@ -165,8 +169,8 @@ export default {
         teacherCode : this.userInfo.userCode,
         schoolCode : this.userInfo.schoolCode,
       }
-      const res = await actions.getMyClass(req)
-      this.dataForm.className = res.result.gradeName + res.result.clazzName
+      await actions.getMyClass(req)
+      // this.dataForm.className = res.result.gradeName + res.result.clazzName
     },
     //我的班级
     goClass(){
