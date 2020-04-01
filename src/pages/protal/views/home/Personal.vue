@@ -120,14 +120,18 @@ export default {
         userType: item.id
       }
       const res = await actions.changeRole(req)
-      console.log(res)     
+      console.log(res)
+      const result = {}
+      for(let item in res.result){
+        if(res.result[item] !== null){
+          result[item] = res.result[item]
+        }
+      }
       setStore({
         key: 'userInfo',
         data: {
           ...this.userInfo,
-          ...res.result.filter(ele=>{
-              return ele!==null
-            })
+          ...result
         }
       })
       this.getRoleList()

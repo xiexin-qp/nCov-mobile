@@ -75,7 +75,7 @@ module.exports = {
       },
       '/zhuxu': {
         target: 'http://39.97.164.4:9001/', // 外网
-        // target: 'http://s44kfw.natappfree.cc', // 朱旭
+        // target: 'http://wxz-test-001.natapp1.cc', // 朱旭
         changeOrigin: true,
         ws: true,
         pathRewrite: {
