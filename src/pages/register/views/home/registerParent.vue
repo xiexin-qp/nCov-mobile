@@ -31,7 +31,7 @@
           <div class="submit-input qui-fx-f1 qui-fx-je">
             <van-radio-group class="qui-fx-ac" v-model="dataForm.gender">
               <van-radio name="1">男</van-radio>
-              <van-radio name="2" style="margin-left: 15px">女</van-radio>
+              <van-radio name="2" style="margin-left: 15px;">女</van-radio>
             </van-radio-group>
           </div>
         </div>
@@ -74,12 +74,14 @@
       </div>
       <div class="submit-bottom">
         <div class="submit-btn" @click="submitForm">提交</div>
+        <div class="submit-btn" @click="submitShare">分享</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import wx from 'weixin-js-sdk'
 import wxImg from '@a/img/wx_ewm.jpg'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
@@ -95,7 +97,7 @@ const yzForm = {
   clazzCode: '请选择班级',
   birthday: '请选择出生日期',
   parName: '请输入家长姓名',
-  parphone: '请输入家长手机号'
+  parphone: '请输入家长手机号',
 }
 export default {
   name: 'RegisterParent',
@@ -104,7 +106,7 @@ export default {
     UploadFile,
     DateTime,
     GradeClass,
-    PopupBox
+    PopupBox,
   },
   computed: {},
   beforeCreate() {
@@ -127,9 +129,9 @@ export default {
         birthday: '请选择',
         parName: '',
         parphone: '',
-        schoolCode: 'QPZX'
+        schoolCode: 'QPZX',
       },
-      profilePhoto: []
+      profilePhoto: [],
     }
   },
   mounted() {
@@ -141,6 +143,17 @@ export default {
     }
   },
   methods: {
+    submitShare() {
+      wx.updateAppMessageShareData({
+        title: '疫情注册', // 分享标题
+        desc: '疫情防控系统人员注册', // 分享描述
+        link: 'http://ai2.canpoint.net/nCov-register/#/registerTeacher', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: 'http://ai2.canpoint.net/nCov.png', // 分享图标
+        success: function () {
+          alert('ok')
+        },
+      })
+    },
     submitForm() {
       const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
@@ -166,8 +179,8 @@ export default {
     getDate(time) {
       this.timeTag = false
       this.dataForm[this.timeType] = time
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="less" scoped>

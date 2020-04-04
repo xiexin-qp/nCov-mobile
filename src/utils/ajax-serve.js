@@ -108,19 +108,6 @@ const $ajax = {
       return responseRes(err.response.data)
     }
   },
-  async getWithPara(obj, tag = true) {
-    if (tag) showToast()
-    try {
-      let res = await axios({
-        url: obj.url + obj.params,
-        method: 'get'
-      })
-      res = res.data
-      return responseRes(res)
-    } catch (err) {
-      return responseRes(err.response.data)
-    }
-  },
   async put(obj, tag = true) {
     if (tag) showToast()
     try {
@@ -137,7 +124,7 @@ const $ajax = {
     } catch (err) {
       return responseRes(err.response.data)
     }
-  },
+  }
 }
 
 export default $ajax
