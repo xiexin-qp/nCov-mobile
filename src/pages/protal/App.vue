@@ -36,23 +36,23 @@ export default {
             timestamp: res.timestamp, // 必填，生成签名的时间戳
             nonceStr: res.nonceStr, // 必填，生成签名的随机串
             signature: res.signature, // 必填，签名
-            jsApiList: ['updateAppMessageShareData', 'chooseImage', 'uploadImage', 'downloadImage'], // 必填，需要使用的JS接口列表
+            jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData'], // 必填，需要使用的JS接口列表
           })
           wx.error(function (res) {
             console.log('wxerr', res)
           })
           wx.ready(function () {
             wx.updateAppMessageShareData({
-              title: '疫情注册', // 分享标题
-              desc: '疫情防控系统人员注册', // 分享描述
-              link: 'http://ai2.canpoint.net/nCov-register/#/registerTeacher', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'http://ai2.canpoint.net/nCov.png', // 分享图标
+              title: '家长注册', // 分享标题
+              desc: '疫情防控家长注册', // 分享描述
+              link: 'http://ai2.canpoint.net/nCov/register/#/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: 'http://ai2.canpoint.net/nCov/ncov.png', // 分享图标
               success: function () {},
             })
             wx.updateTimelineShareData({
-              title: '疫情注册', // 分享标题
-              link: 'http://ai2.canpoint.net/nCov-register/#/registerTeacher', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'http://ai2.canpoint.net/nCov.png', // 分享图标
+              title: '家长注册', // 分享标题
+              link: 'http://ai2.canpoint.net/nCov/register/#/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: 'http://ai2.canpoint.net/nCov/ncov.png', // 分享图标
               success: function () {},
             })
           })

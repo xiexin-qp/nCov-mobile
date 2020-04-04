@@ -74,7 +74,6 @@
       </div>
       <div class="submit-bottom">
         <div class="submit-btn" @click="submitForm">提交</div>
-        <div class="submit-btn" @click="submitShare">分享</div>
       </div>
     </div>
   </div>
@@ -143,17 +142,6 @@ export default {
     }
   },
   methods: {
-    submitShare() {
-      wx.updateAppMessageShareData({
-        title: '疫情注册', // 分享标题
-        desc: '疫情防控系统人员注册', // 分享描述
-        link: 'http://ai2.canpoint.net/nCov-register/#/registerTeacher', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: 'http://ai2.canpoint.net/nCov.png', // 分享图标
-        success: function () {
-          alert('ok')
-        },
-      })
-    },
     submitForm() {
       const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
