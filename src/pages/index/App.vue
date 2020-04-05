@@ -9,12 +9,7 @@
     </div>
     <div class="fx-f1">
       <div :class="['qui-fx-wp qui-list qui-bd-b', { 'qui-list--toogle': toogle }]">
-        <div
-          @click="goApp(app.url)"
-          class="app-list qui-fx-ac-jc"
-          v-for="(app, index) in appList"
-          :key="index"
-        >
+        <div @click="goApp(app.url)" class="app-list qui-fx-ac-jc" v-for="(app, index) in appList" :key="index">
           <div class="app-img" :style="{ backgroundColor: bgCol[app.randomNum] }">
             <img :src="app.icon" alt />
           </div>
@@ -60,22 +55,22 @@ export default {
           name: 'Qui文档',
           icon: docs,
           randomNum: 0,
-          url: 'http://39.97.164.4:8090/'
+          url: 'http://39.97.164.4:8090/',
         },
         {
           id: 2,
           name: 'Qui组件',
           icon: demo,
           randomNum: 1,
-          url: 'qui'
+          url: 'qui',
         },
         {
           id: 3,
           name: '项目模块',
           icon: app,
           url: 'protal',
-          randomNum: 2
-        }
+          randomNum: 2,
+        },
       ],
       moduleList: [
         {
@@ -83,16 +78,23 @@ export default {
           name: '疫情日报',
           icon: app,
           url: 'protal',
-          randomNum: 3
+          randomNum: 3,
         },
         {
-          id: 1,
+          id: 2,
           name: '注册',
           icon: app,
-          url: 'registerParent',
-          randomNum: 2
-        }
-      ]
+          url: 'register',
+          randomNum: 2,
+        },
+        {
+          id: 3,
+          name: '分享教职工',
+          icon: app,
+          url: 'shareTeacher',
+          randomNum: 3,
+        },
+      ],
     }
   },
   methods: {
@@ -106,9 +108,9 @@ export default {
       } else {
         window.location.href = `./${path}.html`
       }
-    }
+    },
   },
-  mounted() {}
+  mounted() {},
 }
 </script>
 

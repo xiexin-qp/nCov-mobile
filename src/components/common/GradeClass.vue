@@ -1,12 +1,6 @@
 <template>
   <van-popup position="bottom" v-model="selectTag">
-    <van-picker
-      show-toolbar
-      :title="title"
-      :columns="selectList"
-      @cancel="selectTag = false"
-      @confirm="onConfirm"
-    />
+    <van-picker show-toolbar :title="title" :columns="selectList" @cancel="selectTag = false" @confirm="onConfirm" />
   </van-popup>
 </template>
 <script>
@@ -17,8 +11,12 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    shcoolCode: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -27,21 +25,21 @@ export default {
         gradeCode: '',
         gradeName: '',
         clazzCode: '',
-        clazzName: ''
+        clazzName: '',
       },
       selectList: [],
-      gradeUrl: `${hostEnv.wangxuanzhang}/operate/gradeinfo/getGradelist?schoolCode=QPZX`,
-      classUrl: `${hostEnv.wangxuanzhang}/school/classInfo/getClassInfoByGradeCode?schoolCode=QPZX`
+      gradeUrl: `${hostEnv.wangxuanzhang}/operate/gradeinfo/getGradelist?schoolCode=${this.shcoolCode}`,
+      classUrl: `${hostEnv.wangxuanzhang}/school/classInfo/getClassInfoByGradeCode?schoolCode=${this.shcoolCode}`,
     }
   },
   async mounted() {
     const res = await $ajax.get({
-      url: this.gradeUrl
+      url: this.gradeUrl,
     })
-    this.selectList = res.result.map(item => {
+    this.selectList = res.result.map((item) => {
       return {
         id: item.gradeCode,
-        text: item.gradeName
+        text: item.gradeName,
       }
     })
   },
@@ -52,18 +50,18 @@ export default {
       },
       set() {
         this.$emit('input', false)
-      }
-    }
+      },
+    },
   },
   methods: {
     async showClass(id) {
       const res = await $ajax.post({
-        url: this.classUrl + '&gradeCode=' + id
+        url: this.classUrl + '&gradeCode=' + id,
       })
-      this.selectList = res.result.map(item => {
+      this.selectList = res.result.map((item) => {
         return {
           id: item.classCode,
-          text: item.className
+          text: item.className,
         }
       })
     },
@@ -84,9 +82,8 @@ export default {
         this.$emit('input', false)
         this.$emit('confirm', this.gradeInfo)
       }
-    }
-  }
+    },
+  },
 }
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

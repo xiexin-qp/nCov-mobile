@@ -15,9 +15,9 @@ if (ConfigEnv === 'test') {
   zhuxu = '/zhuxu'
   lvzhuo = '/lvzhuo'
 } else if (ConfigEnv === 'prod') {
-  wangxuanzhang = '/pc-yq'
-  zhangkukn = '/zhangkukn'
+  wangxuanzhang = '/mobile-yq'
   zhuxu = '/mobile-yq'
+  zhangkukn = '/zhangkukn'
   lvzhuo = '/lvzhuo'
 } else {
   wangxuanzhang = '/zhuxu'
@@ -30,5 +30,5 @@ export default {
   wangxuanzhang,
   zhangkukn,
   zhuxu,
-  lvzhuo
+  lvzhuo,
 }

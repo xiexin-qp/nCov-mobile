@@ -17,7 +17,12 @@
       v-model="timeTag"
       @get-date="getDate"
     ></date-time>
-    <grade-class v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
+    <grade-class
+      :shcool-code="dataForm.schoolCode"
+      v-if="classTag"
+      v-model="classTag"
+      @confirm="chooseClass"
+    ></grade-class>
     <div class="qui-fx-f1 qui-fx-ver">
       <div class="submit-form qui-fx-f1">
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -80,7 +85,6 @@
 </template>
 
 <script>
-import wx from 'weixin-js-sdk'
 import wxImg from '@a/img/wx_ewm.jpg'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
@@ -128,18 +132,20 @@ export default {
         birthday: '请选择',
         parName: '',
         parphone: '',
-        schoolCode: 'QPZX',
+        schoolCode: '',
       },
       profilePhoto: [],
     }
   },
   mounted() {
     var url = window.location.href
-    if (url.indexOf('?') != -1) {
-      let str = url.substr(1)
-      let strs = str.split('=')
-      this.dataForm.schoolCode = strs[1]
-    }
+    const paramsArr = url.substring(url.indexOf('?') + 1, url.indexOf('#/')).split('&')
+    const paramsObj = {}
+    paramsArr.forEach((item) => {
+      let arr = item.split('=')
+      paramsObj[arr[0]] = arr[1]
+    })
+    this.dataForm.schoolCode = paramsObj.schoolCode
   },
   methods: {
     submitForm() {
@@ -156,6 +162,7 @@ export default {
     },
     // 班级
     chooseClass(item) {
+      if (item.gradeName === '') return
       this.dataForm = Object.assign(this.dataForm, item)
     },
     // 展示日期框
