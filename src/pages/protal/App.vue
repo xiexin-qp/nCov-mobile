@@ -41,21 +41,6 @@ export default {
           wx.error(function (res) {
             console.log('wxerr', res)
           })
-          wx.ready(function () {
-            wx.updateAppMessageShareData({
-              title: '家长注册', // 分享标题
-              desc: '疫情防控家长注册', // 分享描述
-              link: 'http://ai2.canpoint.net/nCov/register/#/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'http://ai2.canpoint.net/nCov/ncov.png', // 分享图标
-              success: function () {},
-            })
-            wx.updateTimelineShareData({
-              title: '家长注册', // 分享标题
-              link: 'http://ai2.canpoint.net/nCov/register/#/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'http://ai2.canpoint.net/nCov/ncov.png', // 分享图标
-              success: function () {},
-            })
-          })
         })
     },
   },
