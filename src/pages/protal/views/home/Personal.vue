@@ -1,7 +1,7 @@
 <template>
   <div class="personal qui-page qui-flex-ver">
     <header-com title="个人中心" isBack></header-com>
-    <grade-class v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
+    <grade-class v-if="classTag" v-model="classTag" :shcoolCode="userInfo.schoolCode" @confirm="chooseClass"></grade-class>
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
     <div class="top qui-fx-jsb">
       <div class="info qui-fx-ac">
