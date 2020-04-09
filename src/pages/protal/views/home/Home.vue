@@ -222,7 +222,11 @@ export default {
       if (type === 2) {
         req.clazzCode = this.userInfo.clazzCode
       } else {
-        req.userCode = this.userInfo.userCode
+        if(this.userInfo.roleCode === 'JZ'){
+          req.userCode = this.userInfo.studentCode
+        }else{
+          req.userCode = this.userInfo.userCode
+        } 
       }
       const res = await actions.getExceDate(req)
       res.result.forEach(ele => {
