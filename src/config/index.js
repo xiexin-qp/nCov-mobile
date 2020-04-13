@@ -10,9 +10,9 @@ let zhuxu = ''
 let lvzhuo = ''
 
 if (ConfigEnv === 'test') {
-  wangxuanzhang = '/wangxuanzhang'
+  wangxuanzhang = '/mobile-yq'
+  zhuxu = '/mobile-yq'
   zhangkukn = '/zhangkukn'
-  zhuxu = '/zhuxu'
   lvzhuo = '/lvzhuo'
 } else if (ConfigEnv === 'prod') {
   wangxuanzhang = '/mobile-yq'

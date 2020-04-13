@@ -44,7 +44,7 @@
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode === 'BZR'">
         <div class="tip">邀请学生</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="invite()">点击分享链接</div>
+        <div class="submit-input qui-tx-r qui-fx-f1" @click="shareParent()">点击分享链接</div>
       </div>
     </div>
   </div>
@@ -103,17 +103,22 @@ export default {
   methods: {
     // 邀请家长注册
     shareParent() {
+      Dialog.alert({
+        title: '温馨提示',
+        message: '请点击网页右上角按钮分享给家长'
+      }).then(() => {
+      });
       wx.updateAppMessageShareData({
         title: '家长注册', // 分享标题
         desc: '疫情防控家长注册', // 分享描述
-        link: `http://ai2.canpoint.net/nCov/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: 'http://ai2.canpoint.net/nCov/ncov.png', // 分享图标
+        link: `http://canpointtest.com/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
         success: function () {},
       })
       wx.updateTimelineShareData({
         title: '家长注册', // 分享标题
-        link: `http://ai2.canpoint.net/nCov/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: 'http://ai2.canpoint.net/nCov/ncov.png', // 分享图标
+        link: `http://canpointtest.com/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
         success: function () {},
       })
     },
@@ -210,8 +215,6 @@ export default {
     backSchool() {
       this.$router.push('/backSchool')
     },
-    //邀请学生
-    invite() {},
   },
 }
 </script>

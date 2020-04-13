@@ -58,7 +58,9 @@ const $ajax = {
       let res = await axios.get(obj.url, {
         params: obj.params || ''
       })
+      
       res = res.data
+      console.log(res)
       return responseRes(res)
     } catch (err) {
       return responseRes(err.response.data)

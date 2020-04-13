@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import wxImg from '@a/img/wx_ewm.jpg'
+import wxImg from '@a/img/wx_ewm_prod.jpg'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'

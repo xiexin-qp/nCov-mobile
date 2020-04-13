@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import wxImg from '@a/img/wx_ewm.jpg'
+import wxImg from '@a/img/wx_ewm_prod.jpg'
 import GradeClass from '@c/common/GradeClass'
 import { actions } from '../../store/index'
 import PopupBox from '@c/common/PopupBox'

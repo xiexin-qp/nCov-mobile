@@ -1,5 +1,5 @@
 <template>
-  <div class="login qui-page qui-fx-ver">
+  <div class="login qui-fx-ver">
     <div class="logo">
       <div class="welcome">疫情防控系统</div>
       <img :src="logo" alt />
@@ -17,6 +17,7 @@
 
 <script>
 import { setStore, actions } from '../../store/index.js'
+import axios from 'axios'
 import logo from '@a/img/logo.png'
 export default {
   name: 'Login',
@@ -31,17 +32,14 @@ export default {
     next()
   },
   mounted() {
-    var url = window.location.href
-    if (url.indexOf('?') != -1) {
-      let str = url.substr(1)
-      let strs = str.split('&')
-      this.openid = strs[0].split('=')[1]
-      setStore({
-        key: 'openid',
-        data: this.openid
-      })
-      this.getInfoByOpenid()
-    }
+    const url = window.location.href
+    const params = new URLSearchParams(url.substr(url.indexOf('?')))
+    this.openid = params.get('openid')
+    setStore({
+      key: 'openid',
+      data: this.openid
+    })
+    this.getInfoByOpenid()
   },
   methods: {
     getYzm() {

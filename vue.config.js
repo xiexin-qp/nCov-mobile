@@ -3,6 +3,7 @@ const path = require('path')
 const customTheme = require('./vant-custom-theme')
 const resolve = (dir) => path.join(__dirname, dir)
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const uploadZip = require('./build/upload-zip')
 const isProduction = process.env.NODE_ENV === 'production'
 const isCdn = process.env.VUE_APP_URL === 'prod'
 module.exports = {
@@ -26,7 +27,8 @@ module.exports = {
   },
   configureWebpack: (config) => {
     // 配置cdn模块
-    if (isProduction && isCdn) {
+    if (isProduction) {
+      config.plugins.push(new uploadZip())
       config.externals = {
         vue: 'Vue',
         'vue-router': 'VueRouter',
@@ -64,6 +66,14 @@ module.exports = {
     https: false,
     hotOnly: false,
     proxy: {
+      'getTicket': {
+        target: 'http://canpointtest.com/getTicket', // 外网
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/getTicket': '',
+        },
+      },
       '/wangxuanzhang': {
         target: 'http://39.97.164.4:9001/', // 外网
         // target: 'http://wxz-test-001.natapp1.cc', // 王选章
