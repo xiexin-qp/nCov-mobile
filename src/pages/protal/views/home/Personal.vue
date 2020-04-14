@@ -1,6 +1,6 @@
 <template>
   <div class="personal qui-page qui-flex-ver">
-    <header-com title="个人中心" isBack></header-com>
+    <header-com v-if="false" title="个人中心" isBack></header-com>
     <grade-class v-if="classTag" v-model="classTag" :shcoolCode="userInfo.schoolCode" @confirm="chooseClass"></grade-class>
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
     <div class="top qui-fx-jsb">
@@ -103,23 +103,25 @@ export default {
   methods: {
     // 邀请家长注册
     shareParent() {
-      Dialog.alert({
+      this.$dialog({
         title: '温馨提示',
         message: '请点击网页右上角按钮分享给家长'
       }).then(() => {
-      });
+      })
       wx.updateAppMessageShareData({
         title: '家长注册', // 分享标题
         desc: '疫情防控家长注册', // 分享描述
         link: `http://canpointtest.com/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
-        success: function () {},
+        success: function () {
+        },
       })
       wx.updateTimelineShareData({
         title: '家长注册', // 分享标题
         link: `http://canpointtest.com/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
-        success: function () {},
+        success: function () {
+        },
       })
     },
     //查询可切换的角色

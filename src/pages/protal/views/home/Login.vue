@@ -17,7 +17,6 @@
 
 <script>
 import { setStore, actions } from '../../store/index.js'
-import axios from 'axios'
 import logo from '@a/img/logo.png'
 export default {
   name: 'Login',

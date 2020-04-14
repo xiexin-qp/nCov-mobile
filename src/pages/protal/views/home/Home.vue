@@ -185,8 +185,10 @@ export default {
   methods: {
     // 时间转化
     gmtToDate(t, type = '1') {
-      const str = t + ''.replace(/-/g, '/').replace('T', ' ').replace('.000+0000', '')
-      let d = new Date(str)
+      if (t.indexOf('.000+0000') > -1) {
+        return t.replace('T', ' ').replace('.000+0000', '')
+      }
+      let d = new Date(t)
       let date = ''
       if (type === '1') {
         date =
