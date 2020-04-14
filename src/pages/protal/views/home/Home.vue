@@ -32,6 +32,7 @@
           :zc-list="zcList"
           ref="calendar"
           @get-date="getDate"
+          @toggle="toggle"
         ></calendar-show>
       </div>
       <div class="title qui-fx-jsb" v-if="role === '1'">
@@ -180,9 +181,37 @@ export default {
           clazzName: res.result.className
         }
       })
+    } else {
+      this.getClass()
     }
   },
   methods: {
+    //查询班主任绑定的班级
+    async getClass() {
+      if (this.userInfo.roleCode !== 'BZR') {
+        return
+      }
+      const req = {
+        teacherCode: this.userInfo.userCode,
+        schoolCode: this.userInfo.schoolCode,
+      }
+      const res = await actions.getMyClass(req)
+      setStore({
+        key: 'userInfo',
+        data: {
+          ...this.userInfo,
+          gradeCode: res.result.gradeCode,
+          gradeName: res.result.gradeName,
+          clazzCode: res.result.clazzCode,
+          clazzName: res.result.clazzName
+        }
+      })
+    },
+    toggle(){
+      setTimeout( () => {
+        this.$refs.scroll.refresh()
+      }, 1000)
+    },
     // 时间转化
     gmtToDate(t, type = '1') {
       const str = t + ''.replace(/-/g, '/').replace('T', ' ').replace('.000+0000', '')
