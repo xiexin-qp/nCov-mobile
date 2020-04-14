@@ -18,7 +18,7 @@
       v-model="timeTag"
       @get-date="getDate"
     ></date-time>
-    <grade-class v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
+    <grade-class :shcool-code="dataForm.schoolCode" v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
     <div class="qui-fx-f1 qui-fx-ver">
       <div class="submit-form qui-fx-f1">
         <div class="submit-item qui-fx-ac qui-bd-b">
