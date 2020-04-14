@@ -92,13 +92,13 @@ export default {
         : this.userInfo.roleCode === 'JZG'
         ? '教职工'
         : '校医'
-    this.dataForm.className = this.userInfo.gradeName + this.userInfo.clazzName
-    this.dataForm.studentTotal = this.userInfo.studentTotal
+    //this.dataForm.className = this.userInfo.gradeName + this.userInfo.clazzName
+    //this.dataForm.studentTotal = this.userInfo.studentTotal
     console.log(this.dataForm.className)
+    this.getClass()
   },
   async mounted() {
     this.getRoleList()
-    this.getClass()
   },
   methods: {
     // 邀请家长注册
@@ -207,8 +207,8 @@ export default {
         teacherCode: this.userInfo.userCode,
         schoolCode: this.userInfo.schoolCode,
       }
-      await actions.getMyClass(req)
-      // this.dataForm.className = res.result.gradeName + res.result.clazzName
+      const res = await actions.getMyClass(req)
+      this.dataForm.className = res.result.gradeName + res.result.clazzName
     },
     //我的班级
     goClass() {
