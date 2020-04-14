@@ -210,7 +210,7 @@ export default {
     toggle(){
       setTimeout( () => {
         this.$refs.scroll.refresh()
-      }, 1000)
+      }, 500)
     },
     // 时间转化
     gmtToDate(t, type = '1') {
