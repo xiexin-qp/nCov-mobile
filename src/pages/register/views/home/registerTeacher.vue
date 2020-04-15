@@ -1,5 +1,5 @@
 <template>
-  <div class="home qui-page qui-fx-ver">
+  <div class="home qui-fx-ver">
     <popup-box :no-btn="false" v-model="isOk" width="70" height="55">
       <div slot="title" class="ewm-title">注册成功</div>
       <div class="qui-fx-ver ewm-info">

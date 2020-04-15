@@ -45,7 +45,7 @@ class uploadZip {
           if (!error && response.statusCode === 200) {
             // 删除压缩包
             fs.unlink(path.resolve(__dirname, `../${buildModule}.zip`), function() {
-              logs('上传成功')
+              logs(`上传成功，${buildModule}模块已上传到${msg}`)
               process.exit()
             })
           }
