@@ -90,7 +90,8 @@
 </template>
 
 <script>
-import wxImg from '@a/img/wx_ewm_prod.jpg'
+import wxProd from '@a/img/wx_ewm_prod.jpg'
+import wxTest from '@a/img/wx_ewm_prod.jpg'
 import GradeClass from '@c/common/GradeClass'
 import { actions } from '../../store/index'
 import PopupBox from '@c/common/PopupBox'
@@ -99,6 +100,7 @@ import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
 import SelectData from '@c/common/SelectData'
 import { Radio } from 'vant'
+const ConfigEnv = process.env.VUE_APP_URL
 const yzForm = {
   userName: '请输入姓名',
   phone: '请输入手机号',
@@ -120,7 +122,7 @@ export default {
   computed: {},
   data() {
     return {
-      wxImg,
+      wxImg: ConfigEnv === 'prod' ? wxProd : wxTest,
       classTag: false,
       isOk: false,
       typeTag: false,

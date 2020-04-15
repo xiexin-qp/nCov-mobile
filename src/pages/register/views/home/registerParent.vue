@@ -85,7 +85,8 @@
 </template>
 
 <script>
-import wxImg from '@a/img/wx_ewm_prod.jpg'
+import wxTest from '@a/img/wx_ewm_prod.jpg'
+import wxProd from '@a/img/wx_ewm_prod.jpg'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
@@ -93,6 +94,7 @@ import GradeClass from '@c/common/GradeClass'
 import { actions } from '../../store/index'
 import PopupBox from '@c/common/PopupBox'
 import { Radio } from 'vant'
+const ConfigEnv = process.env.VUE_APP_URL
 const yzForm = {
   stuName: '请输入姓名',
   gender: '1',
@@ -117,7 +119,7 @@ export default {
   },
   data() {
     return {
-      wxImg,
+      wxImg: ConfigEnv === 'prod' ? wxProd : wxTest,
       isOk: false,
       timeTag: false,
       classTag: false,

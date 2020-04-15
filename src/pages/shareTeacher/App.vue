@@ -4,6 +4,7 @@
 
 <script>
 import wx from 'weixin-js-sdk'
+import config from '@config'
 import axios from 'axios'
 export default {
   name: 'app',
@@ -44,15 +45,15 @@ export default {
           wx.updateAppMessageShareData({
             title: '教职工注册', // 分享标题
             desc: '疫情防控教职工注册', // 分享描述
-            link: `http://canpointtest.com/mobile-protal/register?schoolCode=${code}#/registerTeacher`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
+            link: `${config.host}/mobile-protal/register?schoolCode=${code}#/registerTeacher`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: `${config.host}/mobile-protal/ncov.png`, // 分享图标
             success: function() {
             }
           })
           wx.updateTimelineShareData({
             title: '教职工注册', // 分享标题
-            link: `http://canpointtest.com/mobile-protal/register/schoolCode=${code}#/registerTeacher`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
+            link: `${config.host}/mobile-protal/register/schoolCode=${code}#/registerTeacher`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: `${config.host}/mobile-protal/ncov.png`, // 分享图标
             success: function() {
             }
           })

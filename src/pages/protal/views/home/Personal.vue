@@ -54,6 +54,7 @@
 import wx from 'weixin-js-sdk'
 import SelectData from '@c/common/SelectData'
 import HeaderCom from '@com/HeaderCom'
+import config from '@config'
 import GradeClass from '@c/common/GradeClass'
 import { store, setStore, actions } from '../../store'
 export default {
@@ -111,15 +112,15 @@ export default {
       wx.updateAppMessageShareData({
         title: '家长注册', // 分享标题
         desc: '疫情防控家长注册', // 分享描述
-        link: `http://canpointtest.com/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
+        link: `${config.host}/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: `${config.host}/mobile-protal/ncov.png`, // 分享图标
         success: function () {
         },
       })
       wx.updateTimelineShareData({
         title: '家长注册', // 分享标题
-        link: `http://canpointtest.com/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: 'http://canpointtest.com/ncov.png', // 分享图标
+        link: `${config.host}/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: `${config.host}/mobile-protal/ncov.png`, // 分享图标
         success: function () {
         },
       })

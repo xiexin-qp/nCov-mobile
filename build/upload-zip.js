@@ -19,7 +19,7 @@ const envHost = {
   },
   test: {
     url: 'http://112.125.89.37:8090/upload-zip',
-    uploadPath: '/usr/local/openresty/nginx/html/pc-protal/'
+    uploadPath: '/usr/local/openresty/nginx/html/mobile-protal/'
   }
 }
 
