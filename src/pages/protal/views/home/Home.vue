@@ -13,11 +13,7 @@
         </van-tabs>
       </div>
       <div class="set qui-fx-ac" @click="goPersonal">
-        <img
-          :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg"
-          alt
-          :onerror="errorImg"
-        />
+        <img :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg" alt :onerror="errorImg" />
         <span>{{ userInfo.userName }}</span>
       </div>
     </div>
@@ -46,20 +42,16 @@
       </div>
       <div class="list" v-if="role === '1'">
         <ul v-if="personList.length > 0">
-          <li
-            :class="item.mark02 === '1' ? 'warn' : 'normal'"
-            v-for="(item,i) in personList"
-            :key="i"
-          >
+          <li :class="item.mark02 === '1' ? 'warn' : 'normal'" v-for="(item, i) in personList" :key="i">
             <div class="info qui-fx-jsb">
               <div class="qui-fx-ver">
                 <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
-                <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无'}}</span>
+                <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无' }}</span>
               </div>
               <span class="detail" @click="reportDetail(item)">查看详情</span>
             </div>
             <div class="date">
-              <span>{{ gmtToDate(item.reportTime,'3') }}</span>
+              <span>{{ item.reportTime }}</span>
             </div>
           </li>
         </ul>
@@ -87,20 +79,15 @@
           </div>
         </div>
         <div class="student-list">
-          <ul v-if="collectLIst.length>0">
-            <li
-              class="qui-fx-jsb qui-fx-ac"
-              v-for="(item, i) in collectLIst"
-              :key="i"
-              @click="reportDetail(item)"
-            >
+          <ul v-if="collectLIst.length > 0">
+            <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item)">
               <div class="student qui-fx-ac">
                 <img :src="item.photoImg ? item.photoImg : errorImg" alt :onerror="errorImg" />
                 <span>{{ item.userName }}</span>
               </div>
-              <span>{{ item.reportState === 2 ? '未上报' : ''}}</span>
-              <span>{{ item.health === 2 ? '异常' : ''}}</span>
-              <span>{{ item.feverMark === 1 ? '发热' : ''}}</span>
+              <span>{{ item.reportState === 2 ? '未上报' : '' }}</span>
+              <span>{{ item.health === 2 ? '异常' : '' }}</span>
+              <span>{{ item.feverMark === 1 ? '发热' : '' }}</span>
             </li>
           </ul>
           <no-data v-else msg="没有数据~"></no-data>
@@ -193,7 +180,7 @@ export default {
       }
       const req = {
         teacherCode: this.userInfo.userCode,
-        schoolCode: this.userInfo.schoolCode,
+        schoolCode: this.userInfo.schoolCode
       }
       const res = await actions.getMyClass(req)
       setStore({
@@ -207,8 +194,8 @@ export default {
         }
       })
     },
-    toggle(){
-      setTimeout( () => {
+    toggle() {
+      setTimeout(() => {
         this.$refs.scroll.refresh()
       }, 500)
     },
@@ -256,11 +243,11 @@ export default {
       if (type === 2) {
         req.clazzCode = this.userInfo.clazzCode
       } else {
-        if(this.userInfo.roleCode === 'JZ'){
+        if (this.userInfo.roleCode === 'JZ') {
           req.userCode = this.userInfo.studentCode
-        }else{
+        } else {
           req.userCode = this.userInfo.userCode
-        } 
+        }
       }
       const res = await actions.getExceDate(req)
       res.result.forEach(ele => {

@@ -17,6 +17,7 @@
 
 <script>
 import { setStore, actions } from '../../store/index.js'
+import axios from 'axios'
 import logo from '@a/img/logo.png'
 export default {
   name: 'Login',
@@ -32,15 +33,37 @@ export default {
   },
   mounted() {
     const url = window.location.href
-    const params = new URLSearchParams(url.substr(url.indexOf('?')))
-    this.openid = params.get('openid')
-    setStore({
-      key: 'openid',
-      data: this.openid
-    })
-    this.getInfoByOpenid()
+    const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
+    if (params.get('openid')) {
+      this.setOpenid(params.get('openid'))
+      return
+    }
+    const code = params.get('code')
+    if (window.localStorage.getItem('openid')) {
+      this.setOpenid(window.localStorage.getItem('openid'))
+    } else {
+      axios
+        .get('http://canpointtest.com/getOpenid', {
+          params: {
+            code
+          }
+        })
+        .then(res => {
+          const openid = res.data.data.openid
+          window.localStorage.setItem('openid', openid)
+          this.setOpenid(openid)
+        })
+    }
   },
   methods: {
+    setOpenid(openid) {
+      this.openid = openid
+      setStore({
+        key: 'openid',
+        data: openid
+      })
+      this.getInfoByOpenid(openid)
+    },
     getYzm() {
       if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.loginForm.phone) || this.loginForm.phone === '') {
         this.$notify('请输入正确的手机号码')
@@ -79,11 +102,11 @@ export default {
           ...this.loginForm,
           openid: this.openid
         })
-        this.getInfoByOpenid()
+        this.getInfoByOpenid(this.openid)
       }
     },
-    async getInfoByOpenid() {
-      const res = await actions.getUserInfo(this.openid)
+    async getInfoByOpenid(openid) {
+      const res = await actions.getUserInfo(openid)
       if (res.result && res.result.userCode) {
         setStore({
           key: 'userInfo',

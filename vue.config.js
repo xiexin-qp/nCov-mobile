@@ -1,20 +1,20 @@
 const utils = require('./build/utils')
 const path = require('path')
 const customTheme = require('./vant-custom-theme')
-const resolve = (dir) => path.join(__dirname, dir)
+const resolve = dir => path.join(__dirname, dir)
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const uploadZip = require('./build/upload-zip')
 const isProduction = process.env.NODE_ENV === 'production'
 const isCdn = process.env.VUE_APP_URL === 'prod'
 module.exports = {
-  publicPath: isProduction ? './' : '/',
+  publicPath: isProduction ? './' : './',
   // 多页配置
   pages: {
-    ...utils.entries(),
+    ...utils.entries()
   },
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
-    types.forEach((type) => addStyleResource(config.module.rule('less').oneOf(type)))
+    types.forEach(type => addStyleResource(config.module.rule('less').oneOf(type)))
     // 添加别名
     config.resolve.alias
       .set('@s', resolve('src'))
@@ -25,7 +25,7 @@ module.exports = {
       .set('@config', resolve('src/config/'))
       .set('@u', resolve('src/utils'))
   },
-  configureWebpack: (config) => {
+  configureWebpack: config => {
     // 配置cdn模块
     if (isProduction) {
       config.plugins.push(new uploadZip())
@@ -33,7 +33,7 @@ module.exports = {
         vue: 'Vue',
         'vue-router': 'VueRouter',
         vuex: 'Vuex',
-        axios: 'axios',
+        axios: 'axios'
       }
       // 压缩代码
       config.optimization = {
@@ -41,11 +41,11 @@ module.exports = {
           new UglifyJsPlugin({
             uglifyOptions: {
               compress: {
-                drop_console: true,
-              },
-            },
-          }),
-        ],
+                drop_console: true
+              }
+            }
+          })
+        ]
       }
     }
   },
@@ -54,9 +54,9 @@ module.exports = {
     sourceMap: false,
     loaderOptions: {
       less: {
-        modifyVars: customTheme.theme,
-      },
-    },
+        modifyVars: customTheme.theme
+      }
+    }
   },
   // 本地访问代理
   devServer: {
@@ -66,13 +66,13 @@ module.exports = {
     https: false,
     hotOnly: false,
     proxy: {
-      'getTicket': {
+      getTicket: {
         target: 'http://canpointtest.com/getTicket', // 外网
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          '^/getTicket': '',
-        },
+          '^/getTicket': ''
+        }
       },
       '/wangxuanzhang': {
         target: 'http://39.97.164.4:9001/', // 外网
@@ -80,8 +80,8 @@ module.exports = {
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          '^/wangxuanzhang': '',
-        },
+          '^/wangxuanzhang': ''
+        }
       },
       '/zhuxu': {
         target: 'http://39.97.164.4:9001/', // 外网
@@ -89,17 +89,17 @@ module.exports = {
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          '^/zhuxu': '',
-        },
-      },
-    },
-  },
+          '^/zhuxu': ''
+        }
+      }
+    }
+  }
 }
 function addStyleResource(rule) {
   rule
     .use('style-resource')
     .loader('style-resources-loader')
     .options({
-      patterns: [path.resolve(__dirname, 'src/assets/css/variables.less')],
+      patterns: [path.resolve(__dirname, 'src/assets/css/variables.less')]
     })
 }
