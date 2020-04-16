@@ -214,8 +214,10 @@ export default {
     },
     // 时间转化
     gmtToDate(t, type = '1') {
-      if (t.indexOf('.000+0000') > -1) {
-        return t.replace('T', ' ').replace('.000+0000', '')
+      if (type === '3') {
+        if (t.indexOf('.000+0000') > -1) {
+          return t.replace('T', ' ').replace('.000+0000', '')
+        }
       }
       let d = new Date(t)
       let date = ''
