@@ -64,7 +64,7 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">预计到达时间</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('startTime')">{{ dataForm.startTime }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('startTime')">{{ dataForm.accessStartTime }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -83,8 +83,6 @@
 </template>
 
 <script>
-import wxTest from '@a/img/wx_ewm_prod.jpg'
-import wxProd from '@a/img/wx_ewm_prod.jpg'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
@@ -92,9 +90,8 @@ import GradeClass from '@c/common/GradeClass'
 import { actions } from '../../store/index'
 import PopupBox from '@c/common/PopupBox'
 import { Radio } from 'vant'
-const ConfigEnv = process.env.VUE_APP_URL
 const yzForm = {
-  stuName: '请输入姓名',
+  visitorName: '请输入姓名',
   gender: '1',
   gradeCode: '请选择年级',
   clazzCode: '请选择班级',
@@ -117,22 +114,18 @@ export default {
   },
   data() {
     return {
-      wxImg: ConfigEnv === 'prod' ? wxProd : wxTest,
       isOk: false,
-      timeTag: false,
-      classTag: false,
+      schoolTag: false,
+      causeTag: false,
       dataForm: {
-        stuName: '',
-        gender: '1',
-        gradeCode: '',
-        gradeName: '请选择',
-        clazzCode: '',
-        clazzName: '',
-        userNo: '',
-        birthday: '请选择',
-        parName: '',
-        parphone: '',
-        schoolCode: '',
+        school: '请选择',
+				visitorName: '',
+				visitorMobile: '',
+				cause: '请选择',
+				accessStartTime: '请选择',
+				togetherNum: 0,
+				respondentName: '',
+				resMobile: '',
       },
       profilePhoto: [],
     }
