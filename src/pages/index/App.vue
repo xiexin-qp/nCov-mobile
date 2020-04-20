@@ -94,6 +94,13 @@ export default {
           url: 'shareTeacher',
           randomNum: 3,
         },
+        {
+          id: 4,
+          name: '访客预约',
+          icon: app,
+          url: 'visitor',
+          randomNum: 1,
+        },
       ],
     }
   },

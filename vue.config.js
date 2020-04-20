@@ -91,7 +91,15 @@ module.exports = {
         pathRewrite: {
           '^/zhuxu': ''
         }
-      }
+      },
+      zx: {
+				target: 'http://39.97.164.4:10160/', // 朱旭访客
+				// target: 'http://192.168.1.24:10160/',
+				changeOrigin: true,
+				pathRewrite: {
+					'^/zx': ''
+				}
+			},
     }
   }
 }

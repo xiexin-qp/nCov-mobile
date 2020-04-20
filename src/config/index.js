@@ -9,6 +9,7 @@ let wangxuanzhang = ''
 let zhangkukn = ''
 let zhuxu = ''
 let lvzhuo = ''
+let zx = ''
 
 if (ConfigEnv === 'test') {
   host = 'http://canpointtest.com'
@@ -23,6 +24,7 @@ if (ConfigEnv === 'test') {
   zhangkukn = '/zhangkukn'
   zhuxu = '/zhuxu'
   lvzhuo = '/lvzhuo'
+  zx = '/zx'
 }
 
 export default {
@@ -30,5 +32,6 @@ export default {
   zhangkukn,
   zhuxu,
   lvzhuo,
-  host
+  host,
+  zx
 }
