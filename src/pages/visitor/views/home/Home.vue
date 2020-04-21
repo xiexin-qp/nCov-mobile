@@ -10,18 +10,14 @@
       v-model="timeTag"
       @get-date="getDate"
     ></date-time>
-    <grade-class
-      :shcool-code="dataForm.schoolCode"
-      v-if="classTag"
-      v-model="classTag"
-      @confirm="chooseClass"
-    ></grade-class>
+    <select-data title="选择学校" :select-list="schoolList" v-model="schoolTag" @confirm="chooseSchool"></select-data>
+    <select-data title="选择事由" :select-list="causeList" v-model="causeTag" @confirm="chooseCause"></select-data>
     <div class="qui-fx-f1 qui-fx-ver">
       <div class="submit-form qui-fx-f1">
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">访客姓名：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.visitorName" type="text" placeholder="请输入姓名" />
+            <input class="input" v-model="dataForm.visitorName" maxLength="7" type="text" placeholder="请输入姓名" />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -38,14 +34,14 @@
           <div class="sub-title mar-b10">请上传1张本人正脸清晰照片用于来访识别。</div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
-          <div class="tip">随行人数：</div>
+          <div>随行人数：</div>
           <div class="submit-input qui-fx-f1">
             <input class="input" v-model="dataForm.togetherNum" type="number" placeholder="0" />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">被访人学校</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="schoolTag = true">
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="querySchool">
             {{ dataForm.school }}
           </div>
           <div class="rit-icon"></div>
@@ -53,7 +49,7 @@
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">被访人姓名：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.respondentName" type="text" placeholder="请输入被访人姓名" />
+            <input class="input" v-model="dataForm.respondentName" type="text" maxLength="7" placeholder="请输入被访人姓名" />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -64,13 +60,13 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">预计到达时间</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('startTime')">{{ dataForm.accessStartTime }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('accessStartTime')">{{ dataForm.accessStartTime }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">来访事由</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="causeTag = true">
-            {{ dataForm.cause }}
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="showCause">
+            {{ dataForm.causeName }}
           </div>
           <div class="rit-icon"></div>
         </div>
@@ -86,77 +82,143 @@
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
-import GradeClass from '@c/common/GradeClass'
 import { actions } from '../../store/index'
 import PopupBox from '@c/common/PopupBox'
-import { Radio } from 'vant'
+import SelectData from '@c/common/SelectData'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 const yzForm = {
-  visitorName: '请输入姓名',
-  gender: '1',
-  gradeCode: '请选择年级',
-  clazzCode: '请选择班级',
-  birthday: '请选择出生日期',
-  parName: '请输入家长姓名',
-  parphone: '请输入家长手机号',
+  visitorName: '请输入访客姓名',
+  visitorMobile: '请输入访客手机号',
+  profilePhoto: '请上传访客照片',
+  school: '请选择被访人学校',
+  respondentName: '请输入被访人姓名',
+  resMobile: '请输入被访人手机号',
+  accessStartTime: '请选择预计到达时间',
+  causeName: '请选择来访事由',
 }
 export default {
-  name: 'RegisterParent',
+  name: 'Visitor',
   components: {
-    [Radio.name]: Radio,
+    SelectData,
     UploadFile,
     DateTime,
-    GradeClass,
     PopupBox,
   },
   computed: {},
   beforeCreate() {
-    window.document.title = '家长注册'
+    window.document.title = '访客预约'
   },
   data() {
     return {
+      moment,
       isOk: false,
       schoolTag: false,
       causeTag: false,
+      timeTag: false,
+      schoolList: [],
+      causeList: [],
       dataForm: {
         school: '请选择',
 				visitorName: '',
 				visitorMobile: '',
-				cause: '请选择',
+				causeName: '请选择',
 				accessStartTime: '请选择',
 				togetherNum: 0,
 				respondentName: '',
-				resMobile: '',
+        resMobile: '',
+        schoolCode: '',
+        causeId:''
       },
       profilePhoto: [],
     }
   },
   mounted() {
-    var url = window.location.href
-    const paramsArr = url.substring(url.indexOf('?') + 1, url.indexOf('#/')).split('&')
-    const paramsObj = {}
-    paramsArr.forEach((item) => {
-      let arr = item.split('=')
-      paramsObj[arr[0]] = arr[1]
-    })
-    this.dataForm.schoolCode = paramsObj.schoolCode
   },
   methods: {
+    async getCause() {
+      this.causeList = []
+			if (!this.dataForm.schoolCode) {
+				this.$toast('请选择被访人学校')
+				return;
+      }
+			const req = {
+				schoolCode: this.dataForm.schoolCode
+			};
+			const res = await actions.getCauseList(req)
+			if (res.data.list.length === 0) {
+				return;
+			}
+			res.data.list.forEach(ele => {
+				this.causeList.push({
+					text: ele.causeName,
+					value: ele.id
+				});
+      });
+		},
     submitForm() {
       const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
-        if (!/^1[3456789]\d{9}$/.test(this.dataForm.parphone)) {
+        if (!/^1[3456789]\d{9}$/.test(this.dataForm.visitorMobile) || !/^1[3456789]\d{9}$/.test(this.dataForm.resMobile)) {
           this.$toast('请输入正确手机号')
           return
         }
-        actions.parRegister({ ...this.dataForm, profilePhoto: base64 }).then(() => {
-          this.isOk = true
+        let yzreq = {
+          mobile: this.dataForm.resMobile,
+          schoolCode: this.dataForm.schoolCode 
+        }
+        actions.verifUser(yzreq).then((res) => {
+          if(!res.data){
+            this.$toast('该手机号不是该校教职工')
+            return
+          }
+          let req = {
+            ...this.dataForm, 
+            profilePhoto: base64,
+            respondentType: '1',
+            type: '0'
+          }
+          req.accessStartTime = new Date(this.dataForm.accessStartTime)
+          actions.addInviteInfo(req).then(() => {
+            
+            this.$toast.success('预约成功')
+          })
         })
       })
     },
-    // 班级
-    chooseClass(item) {
-      if (item.gradeName === '') return
-      this.dataForm = Object.assign(this.dataForm, item)
+    // 学校
+    querySchool(){
+      this.schoolTag = true
+      this.getSchool()
+    },
+    getSchool(){
+      this.schoolList = []
+			actions.getSchoolList().then(res=>{
+        if (res.data.list.length === 0) {
+          return;
+        }
+        res.data.list.forEach(ele => {
+          this.schoolList.push({
+            text: ele.schoolName,
+            value: ele.schoolCode
+          });
+        });
+      })
+    },
+    chooseSchool(item) {
+      if (!item) return
+      this.dataForm.school = item.text
+      this.dataForm.schoolCode = item.value
+    },
+    // 事由
+    showCause(){
+      this.causeTag= true
+      this.getCause()
+    },
+    chooseCause(item) {
+      if (!item) return
+      this.dataForm.causeName = item.text
+      this.dataForm.causeId = item.value
     },
     // 展示日期框
     showDate(type) {
@@ -166,7 +228,7 @@ export default {
     // 获取日期
     getDate(time) {
       this.timeTag = false
-      this.dataForm[this.timeType] = time
+      this.dataForm[this.timeType] = moment(time).format('YYYY-MM-DD HH:mm')
     },
   },
 }
@@ -183,6 +245,9 @@ export default {
   font-size: 32px;
   padding: 20px 0 0;
   color: #666;
+}
+.sub-title{
+  color: #999;
 }
 .ewm-info {
   color: #666;

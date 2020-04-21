@@ -6,12 +6,26 @@
 
 import hostEnv from '@config'
 
-let homeApi = {
-  getCauseList: '/cause/info/list#post' // 获取事由列表
+let visitorApi = {
+  verifUser: '/visitor/info/rescode#get', // 验证被访用户
+  getCauseList: '/cause/info/list#post', // 获取事由列表
+  addInviteInfo: '/invite/appoint/mobile/add#post' // 添加修改邀预约信息
+}
+let schoolApi = {
+  getSchoolList: '/school/info/getSchoolInfoListPage#post' // 获取学校列表
 }
 
-for (let val in homeApi) {
-  homeApi[val] = `${hostEnv.zx}${homeApi[val]}`
+for (let val in visitorApi) {
+  visitorApi[val] = `${hostEnv.zx}${visitorApi[val]}`
+}
+
+for (let val in schoolApi) {
+  schoolApi[val] = `${hostEnv.zk}${schoolApi[val]}`
+}
+
+let homeApi = {
+  ...visitorApi,
+  ...schoolApi
 }
 
 export default homeApi
