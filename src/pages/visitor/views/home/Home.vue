@@ -78,6 +78,7 @@
 <script>
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
+import axios from 'axios'
 import validateForm from '@u/validate'
 import { actions } from '../../store/index'
 import { Dialog } from 'vant'
@@ -121,7 +122,7 @@ export default {
 				visitorMobile: '',
 				causeName: '请选择',
 				accessStartTime: '请选择',
-				togetherNum: 0,
+				togetherNum: '',
 				respondentName: '',
         resMobile: '',
         schoolCode: '',
@@ -132,18 +133,30 @@ export default {
     }
   },
   mounted() {
-    this.dataForm.openid = this.getQueryVariable('openid')
+    const url = window.location.href
+    const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
+    if (params.get('openid')) {
+      this.dataForm.openid = params.get('openid')
+      return
+    }
+    const code = params.get('code')
+    if (window.localStorage.getItem('openid')) {
+      this.dataForm.openid = window.localStorage.getItem('openid')
+    } else {
+      axios
+        .get('http://canpointtest.com/getOpenid', {
+          params: {
+            code
+          }
+        })
+        .then(res => {
+          const openid = res.data.data.openid
+          window.localStorage.setItem('openid', openid)
+          this.dataForm.openid = openid
+        })
+    }
   },
   methods: {
-    getQueryVariable (variable) {
-      let query = window.location.href.split('#')[1]
-      let vars = query.split('?')[1].split('&')
-      for (let i = 0; i < vars.length; i++) {
-        let pair = vars[i].split('=')
-        if (pair[0] === variable) { return pair[1] }
-      }
-      return (false)
-    },
     async getCause() {
       this.causeList = []
 			if (!this.dataForm.schoolCode) {
