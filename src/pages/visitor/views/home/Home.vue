@@ -1,8 +1,5 @@
 <template>
   <div class="home qui-fx-ver">
-    <popup-box :no-btn="false" v-model="isOk" width="70" height="55">
-      <div slot="title" class="ewm-title">预约成功</div>
-    </popup-box>
     <date-time
       :min-date="new Date()"
       :max-date="new Date(2030, 1, 1)"
@@ -83,7 +80,7 @@ import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
 import { actions } from '../../store/index'
-import PopupBox from '@c/common/PopupBox'
+import { Dialog } from 'vant'
 import SelectData from '@c/common/SelectData'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
@@ -103,7 +100,7 @@ export default {
     SelectData,
     UploadFile,
     DateTime,
-    PopupBox,
+    [Dialog.name]: Dialog
   },
   computed: {},
   beforeCreate() {
@@ -128,14 +125,25 @@ export default {
 				respondentName: '',
         resMobile: '',
         schoolCode: '',
-        causeId:''
+        causeId:'',
+        openid: ''
       },
       profilePhoto: [],
     }
   },
   mounted() {
+    this.dataForm.openid = this.getQueryVariable('openid')
   },
   methods: {
+    getQueryVariable (variable) {
+      let query = window.location.href.split('#')[1]
+      let vars = query.split('?')[1].split('&')
+      for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split('=')
+        if (pair[0] === variable) { return pair[1] }
+      }
+      return (false)
+    },
     async getCause() {
       this.causeList = []
 			if (!this.dataForm.schoolCode) {
@@ -174,14 +182,30 @@ export default {
           }
           let req = {
             ...this.dataForm, 
-            profilePhoto: base64,
+            visitorUrl: base64,
             respondentType: '1',
-            type: '0'
+            type: '0',
+            openid: this.dataForm.openid,
+            respondentCode: res.data
           }
-          req.accessStartTime = new Date(this.dataForm.accessStartTime)
+          req.accessStartTime =this.dataForm.accessStartTime + ':00'
           actions.addInviteInfo(req).then(() => {
-            
             this.$toast.success('预约成功')
+            this.dataForm={
+              school: '请选择',
+              visitorName: '',
+              visitorMobile: '',
+              causeName: '请选择',
+              accessStartTime: '请选择',
+              togetherNum: 0,
+              respondentName: '',
+              resMobile: '',
+              schoolCode: '',
+              causeId:'',
+              openid: ''
+            },
+            this.profilePhoto = []
+            Dialog({ message: '您的预约申请已经提交成功,正在审核中' })
           })
         })
       })
