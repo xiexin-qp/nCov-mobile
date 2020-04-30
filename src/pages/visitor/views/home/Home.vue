@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import vConsole from 'vconsole'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
@@ -137,6 +138,7 @@ export default {
     }
   },
   mounted() {
+    new vConsole()
   },
   methods: {
     async getCause() {
