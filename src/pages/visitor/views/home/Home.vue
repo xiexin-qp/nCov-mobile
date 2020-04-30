@@ -1,8 +1,5 @@
 <template>
   <div class="home qui-fx-ver">
-    <popup-box :no-btn="false" v-model="isOk" width="70" height="55">
-      <div slot="title" class="ewm-title">预约成功</div>
-    </popup-box>
     <date-time
       :min-date="new Date()"
       :max-date="new Date(2030, 1, 1)"
@@ -82,9 +79,10 @@
 import VConsole from 'vconsole/dist/vconsole.min.js'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
+import axios from 'axios'
 import validateForm from '@u/validate'
 import { actions } from '../../store/index'
-import PopupBox from '@c/common/PopupBox'
+import { Dialog } from 'vant'
 import SelectData from '@c/common/SelectData'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
@@ -104,7 +102,7 @@ export default {
     SelectData,
     UploadFile,
     DateTime,
-    PopupBox,
+    [Dialog.name]: Dialog
   },
   computed: {},
   beforeCreate() {
@@ -125,17 +123,40 @@ export default {
 				visitorMobile: '',
 				causeName: '请选择',
 				accessStartTime: '请选择',
-				togetherNum: 0,
+				togetherNum: '',
 				respondentName: '',
         resMobile: '',
         schoolCode: '',
-        causeId:''
+        causeId:'',
+        openid: ''
       },
       profilePhoto: [],
     }
   },
   mounted() {
     var vConsole = new VConsole();
+    const url = window.location.href
+    const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
+    if (params.get('openid')) {
+      this.dataForm.openid = params.get('openid')
+      return
+    }
+    const code = params.get('code')
+    if (window.localStorage.getItem('openid')) {
+      this.dataForm.openid = window.localStorage.getItem('openid')
+    } else {
+      axios
+        .get('http://canpointtest.com/getOpenid', {
+          params: {
+            code
+          }
+        })
+        .then(res => {
+          const openid = res.data.data.openid
+          window.localStorage.setItem('openid', openid)
+          this.dataForm.openid = openid
+        })
+    }
   },
   methods: {
     async getCause() {
@@ -176,15 +197,30 @@ export default {
           }
           let req = {
             ...this.dataForm, 
-            profilePhoto: base64,
+            visitorUrl: base64,
             respondentType: '1',
             type: '0',
-            userCode: res.data.userCode
+            openid: this.dataForm.openid,
+            respondentCode: res.data
           }
-          req.accessStartTime = new Date(this.dataForm.accessStartTime)
+          req.accessStartTime =this.dataForm.accessStartTime + ':00'
           actions.addInviteInfo(req).then(() => {
-            
             this.$toast.success('预约成功')
+            this.dataForm={
+              school: '请选择',
+              visitorName: '',
+              visitorMobile: '',
+              causeName: '请选择',
+              accessStartTime: '请选择',
+              togetherNum: 0,
+              respondentName: '',
+              resMobile: '',
+              schoolCode: '',
+              causeId:'',
+              openid: ''
+            },
+            this.profilePhoto = []
+            Dialog({ message: '您的预约申请已经提交成功,正在审核中' })
           })
         })
       })
