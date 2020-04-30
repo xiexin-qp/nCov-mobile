@@ -180,7 +180,7 @@ export default {
           this.$tools.goNext(()=>{
             let req = {
               ...this.dataForm, 
-              profilePhoto: base64,
+              visitorUrl: base64,
               respondentType: '1',
               type: '0',
               userCode: res.data
