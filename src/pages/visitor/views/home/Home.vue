@@ -177,17 +177,19 @@ export default {
             this.$toast('该手机号不是该校教职工')
             return
           }
-          let req = {
-            ...this.dataForm, 
-            profilePhoto: base64,
-            respondentType: '1',
-            type: '0',
-            userCode: res.data
-          }
-          req.accessStartTime = this.dataForm.accessStartTime + ":00"
-          console.log(req)
-          actions.addInviteInfo(req).then(() => {
-            this.$toast.success('预约成功')
+          this.$tools.goNext(()=>{
+            let req = {
+              ...this.dataForm, 
+              profilePhoto: base64,
+              respondentType: '1',
+              type: '0',
+              userCode: res.data
+            }
+            req.accessStartTime = this.dataForm.accessStartTime + ":00"
+            console.log(req)
+            actions.addInviteInfo(req).then(() => {
+              this.$toast.success('预约成功')
+            })
           })
         })
       })
