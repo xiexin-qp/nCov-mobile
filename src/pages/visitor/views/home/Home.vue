@@ -182,9 +182,10 @@ export default {
             profilePhoto: base64,
             respondentType: '1',
             type: '0',
-            userCode: res.data.userCode
+            userCode: res.data
           }
           req.accessStartTime = this.dataForm.accessStartTime + ":00"
+          console.log(req)
           actions.addInviteInfo(req).then(() => {
             this.$toast.success('预约成功')
           })
