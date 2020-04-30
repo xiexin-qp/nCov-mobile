@@ -1,7 +1,7 @@
 <template>
   <div class="home qui-fx-ver">
     <date-time
-      :min-date="new Date()"
+      :min-date="minDate"
       :max-date="new Date(2030, 1, 1)"
       type="date-time"
       v-model="timeTag"
@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import VConsole from 'vconsole/dist/vconsole.min.js'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import axios from 'axios'
@@ -111,6 +110,7 @@ export default {
   data() {
     return {
       moment,
+      minDate: new Date(),
       isOk: false,
       schoolTag: false,
       causeTag: false,
@@ -134,7 +134,7 @@ export default {
     }
   },
   mounted() {
-    var vConsole = new VConsole();
+    this.minDate = new Date(moment(new Date()).format('YYYY,MM,DD'))
     const url = window.location.href
     const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
     if (params.get('openid')) {
