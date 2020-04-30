@@ -16,10 +16,12 @@ if (ConfigEnv === 'test') {
   host = 'http://canpointtest.com'
   wangxuanzhang = '/api-mobile-ncov'
   zhuxu = '/api-mobile-ncov'
+  zk = '/zk_school'
 } else if (ConfigEnv === 'prod') {
   host = 'http://canpointlive.com'
   wangxuanzhang = '/api-mobile-ncov'
   zhuxu = '/api-mobile-ncov'
+  zk = '/zk_school'
 } else {
   wangxuanzhang = '/zhuxu'
   zhangkukn = '/zhangkukn'
