@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import VConsole from 'vconsole/dist/vconsole.min.js'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
@@ -134,6 +135,7 @@ export default {
     }
   },
   mounted() {
+    var vConsole = new VConsole();
   },
   methods: {
     async getCause() {
@@ -176,7 +178,8 @@ export default {
             ...this.dataForm, 
             profilePhoto: base64,
             respondentType: '1',
-            type: '0'
+            type: '0',
+            userCode: res.data.userCode
           }
           req.accessStartTime = new Date(this.dataForm.accessStartTime)
           actions.addInviteInfo(req).then(() => {
