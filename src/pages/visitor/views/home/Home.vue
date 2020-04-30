@@ -182,7 +182,7 @@ export default {
             type: '0',
             userCode: res.data.userCode
           }
-          req.accessStartTime = new Date(this.dataForm.accessStartTime)
+          req.accessStartTime = this.dataForm.accessStartTime
           actions.addInviteInfo(req).then(() => {
             this.$toast.success('预约成功')
           })
