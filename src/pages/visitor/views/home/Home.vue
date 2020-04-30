@@ -1,10 +1,14 @@
 <template>
   <div class="home qui-fx-ver">
+    <popup-box :no-btn="false" v-model="isOk" width="70" height="55">
+      <div slot="title" class="ewm-title">预约成功</div>
+    </popup-box>
     <date-time
       :min-date="minDate"
-      :max-date="new Date(2030, 1, 1)"
-      type="date-time"
+      :max-date="maxDate"
+      type="datetime"
       v-model="timeTag"
+      :date="dataForm.accessStartTime"
       @get-date="getDate"
     ></date-time>
     <select-data title="选择学校" :select-list="schoolList" v-model="schoolTag" @confirm="chooseSchool"></select-data>
@@ -57,7 +61,7 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">预计到达时间</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('accessStartTime')">{{ dataForm.accessStartTime }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="timeTag = true">{{ dataForm.accessStartTime }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -78,10 +82,9 @@
 <script>
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
-import axios from 'axios'
 import validateForm from '@u/validate'
 import { actions } from '../../store/index'
-import { Dialog } from 'vant'
+import PopupBox from '@c/common/PopupBox'
 import SelectData from '@c/common/SelectData'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
@@ -101,7 +104,7 @@ export default {
     SelectData,
     UploadFile,
     DateTime,
-    [Dialog.name]: Dialog
+    PopupBox,
   },
   computed: {},
   beforeCreate() {
@@ -111,6 +114,7 @@ export default {
     return {
       moment,
       minDate: new Date(),
+      maxDate: new Date(2030, 1, 1),
       isOk: false,
       schoolTag: false,
       causeTag: false,
@@ -123,40 +127,16 @@ export default {
 				visitorMobile: '',
 				causeName: '请选择',
 				accessStartTime: '请选择',
-				togetherNum: '',
+				togetherNum: 0,
 				respondentName: '',
         resMobile: '',
         schoolCode: '',
-        causeId:'',
-        openid: ''
+        causeId:''
       },
       profilePhoto: [],
     }
   },
   mounted() {
-    this.minDate = new Date(moment(new Date()).format('YYYY,MM,DD'))
-    const url = window.location.href
-    const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
-    if (params.get('openid')) {
-      this.dataForm.openid = params.get('openid')
-      return
-    }
-    const code = params.get('code')
-    if (window.localStorage.getItem('openid')) {
-      this.dataForm.openid = window.localStorage.getItem('openid')
-    } else {
-      axios
-        .get('http://canpointtest.com/getOpenid', {
-          params: {
-            code
-          }
-        })
-        .then(res => {
-          const openid = res.data.data.openid
-          window.localStorage.setItem('openid', openid)
-          this.dataForm.openid = openid
-        })
-    }
   },
   methods: {
     async getCause() {
@@ -197,30 +177,14 @@ export default {
           }
           let req = {
             ...this.dataForm, 
-            visitorUrl: base64,
+            profilePhoto: base64,
             respondentType: '1',
             type: '0',
-            openid: this.dataForm.openid,
-            respondentCode: res.data
+            userCode: res.data.userCode
           }
-          req.accessStartTime =this.dataForm.accessStartTime + ':00'
+          req.accessStartTime = new Date(this.dataForm.accessStartTime)
           actions.addInviteInfo(req).then(() => {
             this.$toast.success('预约成功')
-            this.dataForm={
-              school: '请选择',
-              visitorName: '',
-              visitorMobile: '',
-              causeName: '请选择',
-              accessStartTime: '请选择',
-              togetherNum: 0,
-              respondentName: '',
-              resMobile: '',
-              schoolCode: '',
-              causeId:'',
-              openid: ''
-            },
-            this.profilePhoto = []
-            Dialog({ message: '您的预约申请已经提交成功,正在审核中' })
           })
         })
       })
@@ -259,15 +223,10 @@ export default {
       this.dataForm.causeName = item.text
       this.dataForm.causeId = item.value
     },
-    // 展示日期框
-    showDate(type) {
-      this.timeTag = true
-      this.timeType = type
-    },
     // 获取日期
     getDate(time) {
-      this.timeTag = false
-      this.dataForm[this.timeType] = moment(time).format('YYYY-MM-DD HH:mm')
+      console.log(time)
+      this.dataForm.accessStartTime = moment(time).format('YYYY-MM-DD HH:mm')
     },
   },
 }
