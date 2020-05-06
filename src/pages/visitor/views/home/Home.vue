@@ -224,7 +224,7 @@ export default {
             visitorUrl: base64,
             respondentType: '1',
             type: '0',
-            userCode: this.userCode
+            respondentCode: this.userCode
           }
           req.accessStartTime = this.dataForm.accessStartTime + ":00"
           console.log(req)
