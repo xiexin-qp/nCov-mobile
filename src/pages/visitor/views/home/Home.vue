@@ -154,7 +154,7 @@ export default {
 				return;
 			}
 			if (params.get('openid') && !params.get('code')) {
-				this.openid = params.get('openid')
+				this.dataForm.openid = params.get('openid')
 				return;
 			}
 			const code = params.get('code');
@@ -163,8 +163,8 @@ export default {
           code
         }
       });
-      this.openid = res.data.data.openid;
-      console.log(this.openid)
+      this.dataForm.openid = res.data.data.openid;
+      console.log(this.dataForm.openid)
 		},
     async getCause() {
       this.causeList = []
@@ -204,6 +204,7 @@ export default {
             return
           }
           this.userCode = res.data
+          console.log(this.userCode)
         })
     },
     submitForm() {
@@ -213,6 +214,7 @@ export default {
           this.$toast('请输入正确手机号')
           return
         }
+        console.log(this.userCode)
         if(!this.userCode){
           this.$toast('该被访人手机号不是该校教职工')
             return
@@ -222,8 +224,7 @@ export default {
             visitorUrl: base64,
             respondentType: '1',
             type: '0',
-            userCode: this.userCode,
-            openid: this.openid
+            userCode: this.userCode
           }
           req.accessStartTime = this.dataForm.accessStartTime + ":00"
           console.log(req)
