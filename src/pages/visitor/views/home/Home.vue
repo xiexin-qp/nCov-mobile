@@ -128,11 +128,12 @@ export default {
 				visitorMobile: '',
 				causeName: '请选择',
 				accessStartTime: '请选择',
-				togetherNum: 0,
+				togetherNum: '',
 				respondentName: '',
         resMobile: '',
         schoolCode: '',
-        causeId:''
+        causeId:'',
+        openid: ''
       },
       profilePhoto: [],
       userCode: ''
@@ -140,8 +141,31 @@ export default {
   },
   mounted() {
     new vConsole()
+    this.getOpenid()
   },
   methods: {
+        // 获取openid
+		async getOpenid() {
+			const url = window.location.href
+			const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
+			// 本地测试使用
+			if (!params.get('openid') && !params.get('code')) {
+				this.$toast('请在地址栏输入openid进行绑定');
+				return;
+			}
+			if (params.get('openid') && !params.get('code')) {
+				this.openid = params.get('openid')
+				return;
+			}
+			const code = params.get('code');
+      const res = await axios.get('/getOpenid', {
+        params: {
+          code
+        }
+      });
+      this.openid = res.data.data.openid;
+      console.log(this.openid)
+		},
     async getCause() {
       this.causeList = []
 			if (!this.dataForm.schoolCode) {
@@ -198,7 +222,8 @@ export default {
             visitorUrl: base64,
             respondentType: '1',
             type: '0',
-            userCode: this.userCode
+            userCode: this.userCode,
+            openid: this.openid
           }
           req.accessStartTime = this.dataForm.accessStartTime + ":00"
           console.log(req)
