@@ -1,8 +1,5 @@
 <template>
   <div class="home qui-fx-ver">
-    <popup-box :no-btn="false" v-model="isOk" width="70" height="55">
-      <div slot="title" class="ewm-title">预约成功</div>
-    </popup-box>
     <date-time
       :min-date="minDate"
       :max-date="maxDate"
@@ -56,7 +53,8 @@
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">被访人手机号：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.resMobile" type="number" placeholder="请输入被访人手机号" />
+           <!--  <input class="input" v-model="dataForm.resMobile" type="number" placeholder="请输入被访人手机号" /> -->
+           <van-field v-model="dataForm.resMobile" input-align="right" @blur="yzMobile" placeholder="请输入被访人手机号" />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -85,9 +83,10 @@ import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'
 import validateForm from '@u/validate'
 import { actions } from '../../store/index'
-import PopupBox from '@c/common/PopupBox'
 import SelectData from '@c/common/SelectData'
 import moment from 'moment'
+import { Dialog, Field } from 'vant';
+
 import 'moment/locale/zh-cn'
 const yzForm = {
   visitorName: '请输入访客姓名',
@@ -105,7 +104,8 @@ export default {
     SelectData,
     UploadFile,
     DateTime,
-    PopupBox,
+    [Field.name]: Field,
+    [Dialog.name]: Dialog
   },
   computed: {},
   beforeCreate() {
@@ -135,6 +135,7 @@ export default {
         causeId:''
       },
       profilePhoto: [],
+      userCode: ''
     }
   },
   mounted() {
@@ -160,7 +161,27 @@ export default {
 					value: ele.id
 				});
       });
-		},
+    },
+    yzMobile(){
+      if (!/^1[3456789]\d{9}$/.test(this.dataForm.resMobile)) {
+          this.$toast('请输入正确手机号')
+          return
+        }
+      if(!this.dataForm.schoolCode){
+        return
+      }
+      let yzreq = {
+          mobile: this.dataForm.resMobile,
+          schoolCode: this.dataForm.schoolCode 
+        }
+        actions.verifUser(yzreq).then((res) => {
+          if(!res.data){
+            this.$toast('该被访人手机号不是该校教职工')
+            return
+          }
+          this.userCode = res.data
+        })
+    },
     submitForm() {
       const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
@@ -168,28 +189,35 @@ export default {
           this.$toast('请输入正确手机号')
           return
         }
-        let yzreq = {
-          mobile: this.dataForm.resMobile,
-          schoolCode: this.dataForm.schoolCode 
-        }
-        actions.verifUser(yzreq).then((res) => {
-          if(!res.data){
-            this.$toast('该手机号不是该校教职工')
+        if(!this.userCode){
+          this.$toast('该被访人手机号不是该校教职工')
             return
-          }
-          let req = {
+        }
+        let req = {
             ...this.dataForm, 
             visitorUrl: base64,
             respondentType: '1',
             type: '0',
-            userCode: res.data
+            userCode: this.userCode
           }
           req.accessStartTime = this.dataForm.accessStartTime + ":00"
           console.log(req)
           actions.addInviteInfo(req).then(() => {
-            this.$toast.success('预约成功')
+            Dialog({ message: '您的预约申请已经提交成功，正在审核中' })
+            this.dataForm = {
+              school: '请选择',
+              visitorName: '',
+              visitorMobile: '',
+              causeName: '请选择',
+              accessStartTime: '请选择',
+              togetherNum: 0,
+              respondentName: '',
+              resMobile: '',
+              schoolCode: '',
+              causeId:''
+            }
+            this.profilePhoto = []
           })
-        })
       })
     },
     // 学校
@@ -215,6 +243,20 @@ export default {
       if (!item) return
       this.dataForm.school = item.text
       this.dataForm.schoolCode = item.value
+      if(!this.dataForm.resMobile){
+        return
+      }
+      let yzreq = {
+          mobile: this.dataForm.resMobile,
+          schoolCode: this.dataForm.schoolCode 
+        }
+        actions.verifUser(yzreq).then((res) => {
+          if(!res.data){
+            this.$toast('该被访人手机号不是该校教职工')
+            return
+          }
+          this.userCode = res.data
+        })
     },
     // 事由
     showCause(){
@@ -318,5 +360,9 @@ export default {
   .mar-b10{
     margin-bottom: 20px;
   }
+  /deep/ .van-cell{
+  padding: 0;
 }
+}
+
 </style>
