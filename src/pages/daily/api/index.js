@@ -3,11 +3,13 @@
  */
 
 import home from './home'
-import hostEnv from '@config'
+import daily from './daily'
+import login from './login'
 
 let apiList = {
   ...home,
-  facePhoto: `${hostEnv.hpb_face}/facePhoto`
+  ...daily,
+  ...login
 }
 
 export default apiList
