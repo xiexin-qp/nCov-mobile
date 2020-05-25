@@ -7,11 +7,10 @@
         <p>
           请长按二维码关注"全品平安校园"微信公众号，在"疫情日报"中对孩子的情况进行上报，登录的账号为您注册的手机号。
         </p>
-        <p>您也可以在微信中搜索"全品平安校园"微信公众号关注进行操作。</p>
       </div>
     </popup-box>
     <date-time
-      :min-date="new Date(1995, 1, 1)"
+      :min-date="new Date(1980, 1, 1)"
       :max-date="new Date(2017, 1, 1)"
       type="date"
       v-model="timeTag"
@@ -85,7 +84,7 @@
 </template>
 
 <script>
-import wxTest from '@a/img/wx_ewm_prod.jpg'
+import wxTest from '@a/img/wx_ewm_test.jpg'
 import wxProd from '@a/img/wx_ewm_prod.jpg'
 import UploadFile from '@c/common/UploadFile'
 import DateTime from '@c/common/DateTime'

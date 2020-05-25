@@ -14,13 +14,24 @@
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">访客姓名：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.visitorName" maxLength="7" type="text" placeholder="请输入姓名" />
+            <input
+              class="input"
+              v-model="dataForm.visitorName"
+              maxlength="7"
+              type="text"
+              placeholder="请输入姓名"
+            />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">访客手机号：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.visitorMobile" type="number" placeholder="请输入访客手机号" />
+            <input
+              class="input"
+              v-model="dataForm.visitorMobile"
+              type="number"
+              placeholder="请输入访客手机号"
+            />
           </div>
         </div>
         <div class="submit-area qui-fx-ver qui-bd-b">
@@ -38,15 +49,19 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">被访人学校</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="querySchool">
-            {{ dataForm.school }}
-          </div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="querySchool">{{ dataForm.school }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">被访人姓名：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.respondentName" type="text" maxLength="7" placeholder="请输入被访人姓名" />
+            <input
+              class="input"
+              v-model="dataForm.respondentName"
+              type="text"
+              maxlength="7"
+              placeholder="请输入被访人姓名"
+            />
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
@@ -57,14 +72,15 @@
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">预计到达时间</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('accessStartTime')">{{ dataForm.accessStartTime }}</div>
+          <div
+            class="submit-input qui-tx-r qui-fx-f1"
+            @click="showDate('accessStartTime')"
+          >{{ dataForm.accessStartTime }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">来访事由</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showCause">
-            {{ dataForm.causeName }}
-          </div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="showCause">{{ dataForm.causeName }}</div>
           <div class="rit-icon"></div>
         </div>
       </div>
@@ -93,7 +109,7 @@ const yzForm = {
   respondentName: '请输入被访人姓名',
   resMobile: '请输入被访人手机号',
   accessStartTime: '请选择预计到达时间',
-  causeName: '请选择来访事由',
+  causeName: '请选择来访事由'
 }
 export default {
   name: 'Visitor',
@@ -118,93 +134,110 @@ export default {
       causeList: [],
       dataForm: {
         school: '请选择',
-				visitorName: '',
-				visitorMobile: '',
-				causeName: '请选择',
-				accessStartTime: '请选择',
-				togetherNum: '',
-				respondentName: '',
+        visitorName: '',
+        visitorMobile: '',
+        causeName: '请选择',
+        accessStartTime: '请选择',
+        togetherNum: '',
+        respondentName: '',
         resMobile: '',
         schoolCode: '',
-        causeId:'',
+        causeId: '',
         openid: ''
       },
-      profilePhoto: [],
+      profilePhoto: []
     }
   },
   mounted() {
-    const url = window.location.href
-    const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
-    if (params.get('openid')) {
-      this.dataForm.openid = params.get('openid')
-      return
-    }
-    const code = params.get('code')
-    if (window.localStorage.getItem('openid')) {
-      this.dataForm.openid = window.localStorage.getItem('openid')
-    } else {
-      axios
-        .get('http://canpointtest.com/getOpenid', {
-          params: {
-            code
-          }
-        })
-        .then(res => {
-          const openid = res.data.data.openid
-          window.localStorage.setItem('openid', openid)
-          this.dataForm.openid = openid
-        })
-    }
+    // 处理界面错位问题
+    document.body.addEventListener('focusin', () => {
+      this.isReset = false
+    })
+    document.body.addEventListener('focusout', () => {
+      this.isReset = true
+      setTimeout(() => {
+        if (this.isReset) {
+          window.scrollTo(0, 0)
+        }
+      }, 200)
+    })
+    try {
+      const url = window.location.href
+      const params = new URLSearchParams(url.substr(url.indexOf('?')).replace('#/', ''))
+      if (params.get('openid')) {
+        this.dataForm.openid = params.get('openid')
+        return
+      }
+      const code = params.get('code')
+      if (window.localStorage.getItem('openid')) {
+        this.dataForm.openid = window.localStorage.getItem('openid')
+      } else {
+        axios
+          .get('/getOpenid', {
+            params: {
+              code
+            }
+          })
+          .then(res => {
+            const openid = res.data.data.openid
+            window.localStorage.setItem('openid', openid)
+            this.dataForm.openid = openid
+          })
+      }
+    } catch (err) {}
   },
   methods: {
     async getCause() {
       this.causeList = []
-			if (!this.dataForm.schoolCode) {
-				this.$toast('请选择被访人学校')
-				return;
+      if (!this.dataForm.schoolCode) {
+        this.$toast('请选择被访人学校')
+        return
       }
-			const req = {
-				schoolCode: this.dataForm.schoolCode
-			};
-			const res = await actions.getCauseList(req)
-			if (res.data.list.length === 0) {
-				return;
-			}
-			res.data.list.forEach(ele => {
-				this.causeList.push({
-					text: ele.causeName,
-					value: ele.id
-				});
-      });
-		},
+      const req = {
+        schoolCode: this.dataForm.schoolCode
+      }
+      const res = await actions.getCauseList(req)
+      if (res.data.list.length === 0) {
+        return
+      }
+      res.data.list.forEach(ele => {
+        this.causeList.push({
+          text: ele.causeName,
+          value: ele.id
+        })
+      })
+    },
     submitForm() {
       const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
       validateForm(yzForm, this.dataForm, () => {
-        if (!/^1[3456789]\d{9}$/.test(this.dataForm.visitorMobile) || !/^1[3456789]\d{9}$/.test(this.dataForm.resMobile)) {
+        if (
+          !/^1[3456789]\d{9}$/.test(this.dataForm.visitorMobile) ||
+          !/^1[3456789]\d{9}$/.test(this.dataForm.resMobile)
+        ) {
           this.$toast('请输入正确手机号')
           return
         }
         let yzreq = {
           mobile: this.dataForm.resMobile,
-          schoolCode: this.dataForm.schoolCode 
+          schoolCode: this.dataForm.schoolCode
         }
-        actions.verifUser(yzreq).then((res) => {
-          if(!res.data){
+        actions.verifUser(yzreq).then(res => {
+          if (!res.data) {
             this.$toast('该手机号不是该校教职工')
             return
           }
           let req = {
-            ...this.dataForm, 
+            ...this.dataForm,
             visitorUrl: base64,
             respondentType: '1',
             type: '0',
             openid: this.dataForm.openid,
             respondentCode: res.data
           }
-          req.accessStartTime =this.dataForm.accessStartTime + ':00'
+          req.accessStartTime = this.dataForm.accessStartTime + ':00'
           actions.addInviteInfo(req).then(() => {
             this.$toast.success('预约成功')
-            this.dataForm={
+            ;(this.dataForm = {
               school: '请选择',
               visitorName: '',
               visitorMobile: '',
@@ -214,32 +247,32 @@ export default {
               respondentName: '',
               resMobile: '',
               schoolCode: '',
-              causeId:'',
+              causeId: '',
               openid: ''
-            },
-            this.profilePhoto = []
+            }),
+              (this.profilePhoto = [])
             Dialog({ message: '您的预约申请已经提交成功,正在审核中' })
           })
         })
       })
     },
     // 学校
-    querySchool(){
+    querySchool() {
       this.schoolTag = true
       this.getSchool()
     },
-    getSchool(){
+    getSchool() {
       this.schoolList = []
-			actions.getSchoolList().then(res=>{
+      actions.getSchoolList().then(res => {
         if (res.data.list.length === 0) {
-          return;
+          return
         }
         res.data.list.forEach(ele => {
           this.schoolList.push({
             text: ele.schoolName,
             value: ele.schoolCode
-          });
-        });
+          })
+        })
       })
     },
     chooseSchool(item) {
@@ -248,8 +281,8 @@ export default {
       this.dataForm.schoolCode = item.value
     },
     // 事由
-    showCause(){
-      this.causeTag= true
+    showCause() {
+      this.causeTag = true
       this.getCause()
     },
     chooseCause(item) {
@@ -266,8 +299,8 @@ export default {
     getDate(time) {
       this.timeTag = false
       this.dataForm[this.timeType] = moment(time).format('YYYY-MM-DD HH:mm')
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -283,7 +316,7 @@ export default {
   padding: 20px 0 0;
   color: #666;
 }
-.sub-title{
+.sub-title {
   color: #999;
 }
 .ewm-info {
@@ -351,7 +384,7 @@ export default {
     background-color: @main-color;
     text-align: center;
   }
-  .mar-b10{
+  .mar-b10 {
     margin-bottom: 20px;
   }
 }
