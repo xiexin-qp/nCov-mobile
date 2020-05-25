@@ -14,6 +14,7 @@
 <script>
 import EXIF from 'exif-js'
 import hostEnv from '@config'
+import qs from 'qs'
 import $ajax from 'axios'
 import { Uploader } from 'vant'
 export default {
@@ -22,6 +23,10 @@ export default {
     [Uploader.name]: Uploader
   },
   props: {
+    isUser: {
+      type: Boolean,
+      default: false
+    },
     maxNum: {
       type: Number,
       default: 3
@@ -64,26 +69,29 @@ export default {
   methods: {
     // 校验人脸
     async checkPhoto(baseImg) {
+      console.log(baseImg)
       try {
-        let res = await axios.post(
+        let res = await $ajax.post(
           `${hostEnv.hpb_face}/facePhoto`,
           qs.stringify({
             userCode: Math.floor(Math.random() * 100000),
             file: baseImg.split(',')[1]
           })
         )
-        if (res.data.result) {
+        if (res.data.data.result) {
           this.fileList.push({
             id: Math.floor(Math.random() * 1000000),
-            url: res.data.url
+            url: res.data.data.url
           })
         } else {
-          Dialog.alert({
+          this.$dialog({
             title: '提示',
-            message: '人脸照片不符合规范，请重新上传'
+            message: '访客人脸照片不符合规范，请重新上传'
           }).then(() => {})
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
     },
     afterRead(file) {
       if (!this.isCompress) {
@@ -154,7 +162,14 @@ export default {
       }
       drawer.drawImage(img, 0, 0, this.ctxWidth, this.ctxHeight)
       let base64 = canvas.toDataURL('image/jpeg', quality)
-      this.checkPhoto(base64)
+      if (this.isUser) {
+        this.checkPhoto(base64)
+      } else {
+        this.fileList.push({
+          id: Math.floor(Math.random() * 1000000),
+          url: base64
+        })
+      }
     }
   }
 }

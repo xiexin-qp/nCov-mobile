@@ -27,7 +27,7 @@
         <div class="submit-area qui-fx-ver qui-bd-b">
           <div class="tip">访客照片：</div>
           <div class="upload-list qui-fx-f1">
-            <upload-file :max-num="1" v-model="profilePhoto"></upload-file>
+            <upload-file isUser isCompress :max-num="1" v-model="profilePhoto"></upload-file>
           </div>
           <div class="sub-title mar-b10">请上传1张本人正脸清晰照片用于来访识别。</div>
         </div>
