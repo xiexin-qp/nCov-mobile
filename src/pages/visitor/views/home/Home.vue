@@ -215,7 +215,7 @@ export default {
       })
     },
     submitForm() {
-      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url.split(',')[1] : ''
+      const base64 = this.profilePhoto.length > 0 ? this.profilePhoto[0].url : ''
       validateForm(yzForm, this.dataForm, () => {
         if (
           !/^1[3456789]\d{9}$/.test(this.dataForm.visitorMobile) ||
