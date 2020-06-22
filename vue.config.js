@@ -93,8 +93,8 @@ module.exports = {
         }
       },
       zx: {
-        target: 'http://canpointtest.com/zx_visitor/', // 朱旭访客
-        // target: 'http://192.168.1.24:10160/',
+        // target: 'http://canpointtest.com/zx_visitor/', // 朱旭访客
+        target: 'http://192.168.2.134:10160/',
         changeOrigin: true,
         pathRewrite: {
           '^/zx': ''

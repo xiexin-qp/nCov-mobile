@@ -15,13 +15,13 @@
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">访客姓名：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.visitorName" maxlength="7" type="text" placeholder="请输入姓名" />
+            <input class="input" v-model="dataForm.visitorName" maxlength="7" type="text" placeholder="请输入姓名"/>
           </div>
         </div>
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">访客手机号：</div>
           <div class="submit-input qui-fx-f1">
-            <input class="input" v-model="dataForm.visitorMobile" type="number" placeholder="请输入访客手机号" />
+            <input class="input" v-model="dataForm.visitorMobile" type="number" placeholder="请输入访客手机号"/>
           </div>
         </div>
         <div class="submit-area qui-fx-ver qui-bd-b">
@@ -46,6 +46,7 @@
           <div class="tip">被访人姓名：</div>
           <div class="submit-input qui-fx-f1">
             <input
+              @blur="yzName"
               class="input"
               v-model="dataForm.respondentName"
               type="text"
@@ -59,9 +60,10 @@
           <div class="submit-input qui-fx-f1">
             <!--  <input class="input" v-model="dataForm.resMobile" type="number" placeholder="请输入被访人手机号" /> -->
             <van-field
+              :disabled="disabledTag" 
+              @blur="yzMobile"
               v-model="dataForm.resMobile"
               input-align="right"
-              @blur="yzMobile"
               placeholder="请输入被访人手机号"
             />
           </div>
@@ -127,6 +129,7 @@ export default {
       schoolTag: false,
       causeTag: false,
       timeTag: false,
+      disabledTag: false,
       schoolList: [],
       causeList: [],
       dataForm: {
@@ -140,7 +143,8 @@ export default {
         resMobile: '',
         schoolCode: '',
         causeId: '',
-        openid: ''
+        openid: '',
+        
       },
       profilePhoto: [],
       userCode: ''
@@ -193,12 +197,34 @@ export default {
         })
       })
     },
+    yzName(){
+      if (!this.dataForm.respondentName) {
+        this.$toast('请输入被访人姓名')
+        return
+      }
+      if (!this.dataForm.schoolCode || !this.dataForm.resMobile || !this.dataForm.respondentName) {
+        return
+      }
+      let yzreq = {
+        mobile: this.dataForm.resMobile,
+        schoolCode: this.dataForm.schoolCode,
+        userName: this.dataForm.respondentName
+      }
+      actions.verifUser(yzreq).then(res => {
+        if (!res.data) {
+          this.$toast('被访人不是该校教职工或手机号错误')
+          return
+        }
+        this.userCode = res.data
+        console.log(this.userCode)
+      })
+    },
     yzMobile() {
       if (!/^1[3456789]\d{9}$/.test(this.dataForm.resMobile)) {
         this.$toast('请输入正确手机号')
         return
       }
-      if (!this.dataForm.schoolCode) {
+      if (!this.dataForm.schoolCode || !this.dataForm.resMobile || !this.dataForm.respondentName) {
         return
       }
       let yzreq = {
@@ -227,7 +253,7 @@ export default {
         }
         console.log(this.userCode)
         if (!this.userCode) {
-          this.$toast('该被访人手机号不是该校教职工')
+          this.$toast('被访人不是该校教职工或手机号错误')
           return
         }
         let req = {
@@ -280,16 +306,17 @@ export default {
       if (!item) return
       this.dataForm.school = item.text
       this.dataForm.schoolCode = item.value
-      if (!this.dataForm.resMobile) {
+      if (!this.dataForm.resMobile || !this.dataForm.schoolCode || !this.dataForm.respondentName) {
         return
       }
       let yzreq = {
         mobile: this.dataForm.resMobile,
-        schoolCode: this.dataForm.schoolCode
+        schoolCode: this.dataForm.schoolCode,
+        userName: this.dataForm.respondentName
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('该被访人手机号不是该校教职工')
+          this.$toast('被访人不是该校教职工或手机号错误')
           return
         }
         this.userCode = res.data
