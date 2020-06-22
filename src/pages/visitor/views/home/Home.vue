@@ -203,11 +203,12 @@ export default {
       }
       let yzreq = {
         mobile: this.dataForm.resMobile,
-        schoolCode: this.dataForm.schoolCode
+        schoolCode: this.dataForm.schoolCode,
+        userName: this.dataForm.respondentName
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('该被访人手机号不是该校教职工')
+          this.$toast('被访人不是该校教职工或手机号错误')
           return
         }
         this.userCode = res.data
