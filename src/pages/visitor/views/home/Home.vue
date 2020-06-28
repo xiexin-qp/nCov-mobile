@@ -212,7 +212,8 @@ export default {
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('被访人不是该校教职工或手机号错误')
+          this.userCode = null
+          this.$toast('请核对受访人信息')
           return
         }
         this.userCode = res.data
@@ -234,7 +235,8 @@ export default {
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('被访人不是该校教职工或手机号错误')
+          this.userCode = null
+          this.$toast('请核对受访人信息')
           return
         }
         this.userCode = res.data
@@ -253,7 +255,7 @@ export default {
         }
         console.log(this.userCode)
         if (!this.userCode) {
-          this.$toast('被访人不是该校教职工或手机号错误')
+          this.$toast('请核对受访人信息')
           return
         }
         let req = {
@@ -316,7 +318,8 @@ export default {
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('被访人不是该校教职工或手机号错误')
+          this.userCode = null
+          this.$toast('请核对受访人信息')
           return
         }
         this.userCode = res.data
