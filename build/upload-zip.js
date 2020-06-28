@@ -15,7 +15,7 @@ const buildModule = process.argv[process.argv.length - 1]
 const envHost = {
   prod: {
     url: 'http://39.97.164.4:8090/upload-zip',
-    uploadPath: '/usr/local/openresty/nginx/html/mobile-protal/'
+    uploadPath: '/usr/local/nginx/html/mobile-protal/'
   },
   test: {
     url: 'http://112.125.89.37:8090/upload-zip',
