@@ -101,6 +101,13 @@ export default {
           url: 'visitor',
           randomNum: 1,
         },
+        {
+          id: 5,
+          name: '入学申请',
+          icon: app,
+          url: 'apply',
+          randomNum: 1,
+        }
       ],
     }
   },
