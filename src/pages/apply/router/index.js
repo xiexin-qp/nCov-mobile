@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './home'
+import Apply from './applyForm'
+import Search from './searchForm'
 
 /**
  * @des 路由界面统计
  */
 const RouterPage = [
-  ...Home
+  ...Home,
+  ...Apply,
+  ...Search
 ]
 
 /**

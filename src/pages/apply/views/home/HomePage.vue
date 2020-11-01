@@ -4,8 +4,12 @@
       <img src="../../assets/bg.jpg" alt="" />
     </div>
     <div class="btn">
-      <van-button type="info" size="normal" style="width:30%" color="rgba(22, 155, 213, 1)">提交申请</van-button>
-      <van-button type="info" size="normal" style="width:30%" color="rgba(22, 155, 213, 1)">查看进度</van-button>
+      <van-button @click="routeTo('applyForm')" type="info" size="normal" style="width: 30%; border-radius: 8px" color="rgba(22, 155, 213, 1)"
+        >提交申请</van-button
+      >
+      <van-button @click="routeTo('searchForm')" type="info" size="normal" style="width: 30%; border-radius: 8px" color="rgba(22, 155, 213, 1)"
+        >查看进度</van-button
+      >
     </div>
   </div>
 </template>
@@ -14,7 +18,7 @@
 import moment from 'moment'
 
 export default {
-  name: 'Visitor',
+  name: 'HomePage',
   computed: {},
   data() {
     return {
@@ -24,7 +28,13 @@ export default {
     }
   },
   mounted() {},
-  methods: {},
+  methods: {
+    routeTo(path) {
+      this.$router.push({
+        path: `/${path}`,
+      })
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
