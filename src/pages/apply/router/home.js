@@ -11,7 +11,6 @@ const Home = [
     module: 'home',
     path: 'HomePage',
     type: 'index',
-    keepAlive: true,
     title: '入学申请'
   }
 ]

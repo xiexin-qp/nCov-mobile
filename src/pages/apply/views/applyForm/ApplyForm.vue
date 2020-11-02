@@ -59,6 +59,9 @@ export default {
     },
     submit() {
       console.log(this.dataForm)
+      this.$router.push({
+        path: '/'
+      })
     },
   },
 }

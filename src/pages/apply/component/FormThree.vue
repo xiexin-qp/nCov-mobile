@@ -19,8 +19,13 @@
         <div class="get-code submit-input qui-fx-f1">
           <input class="input code-input" v-model="dataForm.regTel" type="text" placeholder="输入联系手机号" />
           <div class="code-btn">
-            <van-button type="info" size="small" style="border-radius: 8px" color="rgba(22, 155, 213, 1)"
-              >获取验证码</van-button
+            <van-button
+              @click="getYzm"
+              type="info"
+              size="small"
+              class="getBtn"
+              :color="total == 60 ? 'rgba(22, 155, 213, 1)' : 'rgb(184, 183, 183)'"
+              >{{ tip }}</van-button
             >
           </div>
         </div>
@@ -70,8 +75,14 @@ export default {
   },
   data() {
     return {
-      profilePhoto: [],
+      total: 60,
+      tip: '获取验证码',
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.total = 60
+    clearInterval(this.timer)
+    next()
   },
   mounted() {},
   methods: {
@@ -86,6 +97,43 @@ export default {
     },
     goBack() {
       this.$emit('changeStep', 2)
+    },
+    getYzm() {
+      if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.dataForm.regTel) || this.dataForm.regTel === '') {
+        this.$toast('请输入正确的手机号码')
+        return false
+      }
+      if (this.timer) return
+
+      this.timer = setInterval(() => {
+        this.total--
+        this.tip = `${this.total} s`
+        if (this.total === 0) {
+          this.total = 60
+          this.tip = '获取验证码'
+          clearInterval(this.timer)
+          this.timer = null
+        }
+      }, 1000)
+
+      // actions
+      //   .getYzm({
+      //     phone: this.dataForm.regTel,
+      //     type: 2,
+      //   })
+      //   .then(() => {
+      //     this.$notify('验证码已发送')
+      //     this.timer = setInterval(() => {
+      //       this.total--
+      //       this.tip = `${this.total} s`
+      //       if (this.total === 0) {
+      //         this.total = 60
+      //         this.tip = '获取验证码'
+      //         clearInterval(this.timer)
+      //         this.timer = null
+      //       }
+      //     }, 1000)
+      //   })
     },
     // 提交
     submit() {
@@ -103,7 +151,7 @@ export default {
       }
       // const base64 = this.profilePhoto[0].url
 
-      if (!/^1[3456789]\d{9}$/.test(this.dataForm.regTel)) {
+      if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.dataForm.regTel)) {
         this.$toast('请输入正确手机号')
         return
       }
@@ -138,6 +186,7 @@ export default {
   align-items: flex-end;
   height: 80px;
   background-color: #f5f5f5;
+  
   .msg-title {
     display: flex;
     justify-content: flex-start;
@@ -191,6 +240,10 @@ export default {
 
     .get-code {
       display: flex;
+    }
+    .getBtn {
+      border-radius: 6px;
+      width: 160px;
     }
   }
   .submit-area {
