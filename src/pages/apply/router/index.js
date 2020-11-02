@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from './home'
 import Apply from './applyForm'
 import Search from './searchForm'
+import TimeOut from './timeOut'
+import ApplyList from './applyList'
 
 /**
  * @des 路由界面统计
@@ -10,7 +12,9 @@ import Search from './searchForm'
 const RouterPage = [
   ...Home,
   ...Apply,
-  ...Search
+  ...Search,
+  ...TimeOut,
+  ...ApplyList,
 ]
 
 /**

@@ -33,6 +33,10 @@ export default {
       this.$router.push({
         path: `/${path}`,
       })
+
+      // this.$router.push({
+      //   path: `/timeOut`,
+      // })
     },
   },
 }

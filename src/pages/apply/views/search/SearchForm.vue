@@ -10,7 +10,7 @@
       <span class="title">短信验证码</span>
       <input type="tel" v-model="loginForm.authCode" placeholder="请输入验证码" />
     </div>
-    <div class="login-btn" @click="login">查询</div>
+    <div class="login-btn" @click="search">查询</div>
   </div>
 </template>
 
@@ -52,6 +52,11 @@ export default {
           }, 1000)
         })
     },
+    search() {
+      this.$router.push({
+        path: '/applyList'
+      })
+    }
   },
 }
 </script>
