@@ -1,13 +1,12 @@
 <template>
   <div class="form-two qui-fx-f1 qui-fx-ver">
-    <select-data title="身份类型" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
-    <select-panel title="民族" :select-list="typeList" v-model="nationTag" @confirm="chooseNation"></select-panel>
+    <select-data title="居住类型" :select-list="liveType" v-model="liveTag" @confirm="chooseLiveType"></select-data>
     <div class="census-msg">户籍信息</div>
     <div class="submit-form qui-fx-f1 form-list">
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">户口性质</div>
         <div class="submit-input qui-fx-f1 qui-fx-je">
-          <van-radio-group class="qui-fx-ac" v-model="dataForm.sex">
+          <van-radio-group class="qui-fx-ac" v-model="dataForm.houseType">
             <van-radio name="1">农业</van-radio>
             <van-radio name="2" style="margin-left: 15px">非农</van-radio>
           </van-radio-group>
@@ -16,26 +15,28 @@
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">户口地址</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="请输入户口地址" />
+          <input class="input" v-model="dataForm.houseAddress" type="text" placeholder="请输入户口地址" />
         </div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">所属派出所</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="输入所属派出所名称" />
+          <input class="input" v-model="dataForm.policeStation" type="text" placeholder="输入所属派出所名称" />
         </div>
       </div>
       <div class="mar-t20">
         <div class="submit-item qui-fx-ac qui-bd-b">
           <div class="tip">居住类型</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.type }}</div>
+          <div class="submit-input qui-tx-r qui-fx-f1" @click="liveTag = true">
+            {{ dataForm.liveType || '请选择居住类型' }}
+          </div>
           <div class="rit-icon"></div>
         </div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">家庭地址</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="输入家庭现住址" />
+          <input class="input" v-model="dataForm.address" type="text" placeholder="输入家庭现住址" />
         </div>
       </div>
       <div class="parents-msg">
@@ -44,25 +45,25 @@
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">家长姓名</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="输入家长姓名" />
+          <input class="input" v-model="dataForm.parentName" type="text" placeholder="输入家长姓名" />
         </div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">家长手机</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="家长手机" />
+          <input class="input" v-model="dataForm.parentTel" type="text" placeholder="家长手机" />
         </div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">与本人关系</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="输入家长与本人关系，如：父亲" />
+          <input class="input" v-model="dataForm.relation" type="text" placeholder="输入家长与本人关系，如：父亲" />
         </div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">是否监护人</div>
         <div class="submit-input qui-fx-f1 qui-fx-je">
-          <van-radio-group class="qui-fx-ac" v-model="dataForm.sex">
+          <van-radio-group class="qui-fx-ac" v-model="dataForm.isGuardian">
             <van-radio name="1">是</van-radio>
             <van-radio name="2" style="margin-left: 15px">否</van-radio>
           </van-radio-group>
@@ -91,37 +92,44 @@
 </template>
 
 <script>
+import validateForm from '@u/validate'
 import SelectData from '@c/common/SelectData'
-import SelectPanel from '../component/SelectPanel'
 import { Radio } from 'vant'
+const yzForm = {
+  houseAddress: '请输入户口地址',
+  policeStation: '请输入所属派出所',
+  liveType: '请选择居住类型',
+  address: '请输入家庭地址',
+  parentName: '请输入家长姓名',
+  parentTel: '请输入家长手机号码',
+  relation: '请输入家长与本人关系',
+}
 export default {
+  props: {
+    dataForm: {
+      type: Object,
+      default: () => {},
+    },
+  },
   components: {
     [Radio.name]: Radio,
     SelectData,
-    SelectPanel,
   },
   data() {
     return {
-      typeTag: false,
-      dataForm: {
-        studentName: '',
-        sex: '1',
-        idCard: '',
-        type: '请选择',
-        nation: '请选择',
-      },
-      typeList: [
+      liveTag: false,
+      liveType: [
         {
           id: 1,
-          text: '身份证',
+          text: '农村',
         },
         {
           id: 2,
-          text: '驾驶证',
+          text: '城镇',
         },
         {
           id: 3,
-          text: '港澳通行证',
+          text: '县城',
         },
       ],
     }
@@ -129,17 +137,42 @@ export default {
   mounted() {},
   methods: {
     nextTo() {},
-    // 选择民族
-    chooseType(item) {
-      this.dataForm.type = item.text
+    // 选择居住类型
+    chooseLiveType(item) {
+      this.dataForm.liveType = item.text
     },
-    // 选择民族
-    chooseNation() {
-      this.dataForm.nation = item.text
-    },
+    // 下一页
     goNext() {
-      this.$emit('changeStep', 3)
+      validateForm(yzForm, this.dataForm, () => {
+        if (this.dataForm.houseAddress.trim().length > 20) {
+          this.$toast('户口地址限制20个字符')
+          return
+        }
+        if (this.dataForm.policeStation.trim().length > 20) {
+          this.$toast('所属派出所限制20个字符')
+          return
+        }
+        if (this.dataForm.address.trim().length > 20) {
+          this.$toast('家庭地址限制20个字符')
+          return
+        }
+        if (this.dataForm.parentName.trim().length > 20) {
+          this.$toast('家长姓名限制20个字符')
+          return
+        }
+        if (this.dataForm.relation.trim().length > 10) {
+          this.$toast('与本人关系限制10个字符')
+          return
+        }
+        const telReg = /^1[3|4|5|6|7|8|9][0-9]{9}$/
+        if (!telReg.test(this.dataForm.parentTel)) {
+          this.$toast('请输入正确手机号码')
+          return
+        }
+        this.$emit('changeStep', 3)
+      })
     },
+    // 上一页
     goBack() {
       this.$emit('changeStep', 1)
     },

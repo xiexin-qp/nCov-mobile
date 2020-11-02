@@ -1,25 +1,23 @@
 <template>
   <div class="form-two qui-fx-f1 qui-fx-ver">
-    <select-data title="身份类型" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
-    <select-panel title="民族" :select-list="typeList" v-model="nationTag" @confirm="chooseNation"></select-panel>
     <div class="census-msg">其他信息</div>
     <div class="submit-form qui-fx-f1 form-list">
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">健康状况</div>
         <div class="submit-input qui-fx-f1">
-          <input class="input" v-model="dataForm.idCard" type="text" placeholder="输入健康状况，如：良好、残疾" />
+          <input class="input" v-model="dataForm.physical" type="text" placeholder="输入健康状况，如：良好、残疾" />
         </div>
       </div>
       <div class="submit-area qui-fx-ver">
         <div class="tip">人脸照片</div>
         <div class="upload-list qui-fx-f1">
-          <upload-file :max-num="1" v-model="profilePhoto"></upload-file>
+          <upload-file :max-num="1" v-model="dataForm.profilePhoto"></upload-file>
         </div>
       </div>
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">联系手机&nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div class="get-code submit-input qui-fx-f1">
-          <input class="input code-input" v-model="dataForm.idCard" type="text" placeholder="输入联系手机号" />
+          <input class="input code-input" v-model="dataForm.regTel" type="text" placeholder="输入联系手机号" />
           <div class="code-btn">
             <van-button type="info" size="small" style="border-radius: 8px" color="rgba(22, 155, 213, 1)"
               >获取验证码</van-button
@@ -30,7 +28,7 @@
       <div class="submit-item qui-fx-ac qui-bd-b">
         <div class="tip">短信验证码</div>
         <div class="get-code submit-input qui-fx-f1">
-          <input class="input code-input" v-model="dataForm.idCard" type="text" placeholder="输入短信验证码" />
+          <input class="input code-input" v-model="dataForm.regCode" type="text" placeholder="输入短信验证码" />
           <div class="code-btn" />
         </div>
       </div>
@@ -57,41 +55,22 @@
 </template>
 
 <script>
-import SelectData from '@c/common/SelectData'
-import SelectPanel from '../component/SelectPanel'
 import UploadFile from '@c/common/UploadFile'
 import { Radio } from 'vant'
 export default {
   components: {
     [Radio.name]: Radio,
-    SelectData,
-    SelectPanel,
     UploadFile,
+  },
+  props: {
+    dataForm: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
-      typeTag: false,
-      dataForm: {
-        studentName: '',
-        sex: '1',
-        idCard: '',
-        type: '请选择',
-        nation: '请选择',
-      },
-      typeList: [
-        {
-          id: 1,
-          text: '身份证',
-        },
-        {
-          id: 2,
-          text: '驾驶证',
-        },
-        {
-          id: 3,
-          text: '港澳通行证',
-        },
-      ],
+      profilePhoto: [],
     }
   },
   mounted() {},
@@ -110,6 +89,28 @@ export default {
     },
     // 提交
     submit() {
+      if (this.dataForm.physical.trim().length === 0) {
+        this.$toast('请输入健康状况')
+        return
+      }
+      if (this.dataForm.physical.trim().length > 10) {
+        this.$toast('健康状况限制10个字符')
+        return
+      }
+      if (this.dataForm.profilePhoto.length === 0) {
+        this.$toast('请上传申请学生人脸照片')
+        return
+      }
+      // const base64 = this.profilePhoto[0].url
+
+      if (!/^1[3456789]\d{9}$/.test(this.dataForm.regTel)) {
+        this.$toast('请输入正确手机号')
+        return
+      }
+      if (this.dataForm.regCode.trim().length === 0) {
+        this.$toast('请输入短信验证码')
+        return
+      }
       this.$emit('submit')
     },
   },
