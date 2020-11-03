@@ -1,13 +1,20 @@
 <template>
   <div class="home qui-fx-ver">
-    <div class="bg-img">
-      <img src="../../assets/bg.jpg" alt="" />
-    </div>
     <div class="btn">
-      <van-button @click="routeTo('applyForm')" type="info" size="normal" style="width: 30%; border-radius: 8px" color="rgba(22, 155, 213, 1)"
+      <van-button
+        @click="routeTo('applyForm')"
+        type="info"
+        size="normal"
+        style="width: 55%; border-radius: 8px; font-size: 16px; margin-bottom: 15px"
+        color="#0084FF"
         >提交申请</van-button
       >
-      <van-button @click="routeTo('searchForm')" type="info" size="normal" style="width: 30%; border-radius: 8px" color="rgba(22, 155, 213, 1)"
+      <van-button
+        @click="routeTo('searchForm')"
+        type="info"
+        size="normal"
+        style="width: 55%; border-radius: 8px; font-size: 16px;"
+        color="#0084FF"
         >查看进度</van-button
       >
     </div>
@@ -46,28 +53,34 @@ export default {
   height: 100vh;
   position: relative;
 }
-.bg-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  z-index: 1;
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100;
-  }
-}
 .btn {
   position: absolute;
-  bottom: 50px;
+  top: 35%;
   left: 0;
   width: 100%;
-  height: 100px;
   z-index: 2;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+
+@media screen and (max-width: 375px) {
+  .home {
+    background-image: url(../../assets/bg.png);
+    background-size: 100% 100%;
+  }
+}
+@media screen and (min-width:376px) and (max-width: 750px) {
+  .home {
+    background-image: url(../../assets/bg@2x.png);
+    background-size: 100% 100%;
+  }
+}
+@media screen and (min-width:751px) and (max-width: 1125px) {
+  .home {
+    background-image: url(../../assets/bg@3x.png);
+    background-size: 100% 100%;
+  }
 }
 </style>

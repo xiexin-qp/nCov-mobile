@@ -3,7 +3,9 @@
     <Header title="申请详情" />
     <div class="msg-form">
       <div class="msg-top msg">
-        <div class="apply-status">申请成功</div>
+        <div class="apply-status" :style="{ background: getStatus(1)[2], color: getStatus(1)[1] }">
+          {{ getStatus(1)[3] }}
+        </div>
         <div class="msg-title">申请信息</div>
         <div class="msg-area">
           <div class="msg-item">
@@ -113,12 +115,17 @@ export default {
   components: {
     Header,
   },
+  methods: {
+    getStatus(status) {
+      return this.$getStatus(status)
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
 .apply-details {
   height: 100vh;
-  background-color: #fff;
+  background-color: #f4f7fc;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -130,23 +137,35 @@ export default {
   padding: 20px;
 
   .msg {
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
+    background-color: #fff;
     border-radius: 6px;
-    padding: 15px;
+    padding: 18px;
     box-sizing: border-box;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.117647), 0 -3px 15px rgba(0, 0, 0, 0.117647);
 
     .msg-title {
-      margin-bottom: 20px;
+      // margin-bottom: 20px;
+      padding: 30px 0 40px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      font-size: 36px;
+      font-weight: bolder;
+      font-family: PingFang SC;
     }
     .msg-area {
       .msg-item {
         display: flex;
         margin-bottom: 10px;
+        border-bottom: 1px solid rgba(204, 204, 204, 0.4);
+        padding: 15px 0;
 
         .msg-item-title {
           width: 25%;
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-start;
           align-items: center;
           color: #999;
         }
@@ -154,7 +173,8 @@ export default {
           flex: 1;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: flex-end;
+          color: #333;
         }
         .photo {
           img {
@@ -162,6 +182,9 @@ export default {
             height: 150px;
           }
         }
+      }
+      .msg-item:last-child {
+        border-bottom: 0;
       }
       .user-photo {
         align-items: flex-start;
@@ -176,12 +199,16 @@ export default {
     .apply-status {
       position: absolute;
       right: 0;
-      top: 15px;
-      padding: 8px 15px;
-      background-color: #666;
-      color: #fff;
-      border-top-left-radius: 40px;
-      border-bottom-left-radius: 40px;
+      top: 30px;
+      border-top-left-radius: 35px;
+      border-bottom-left-radius: 35px;
+      width: 200px;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      font-weight: bold;
     }
   }
 }
