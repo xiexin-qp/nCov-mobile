@@ -92,6 +92,7 @@
 import validateForm from '@u/validate'
 import SelectData from '@c/common/SelectData'
 import SelectPanel from '../component/SelectPanel'
+import { nation } from '@u/nation'
 import { Radio } from 'vant'
 const yzForm = {
   studentName: '请输入学生姓名',
@@ -117,32 +118,9 @@ export default {
       identityTag: false,
       nationTag: false,
       projectTag: false,
-      nationList: [
-        {
-          id: 1,
-          text: '汉族',
-        },
-        {
-          id: 2,
-          text: '壮族',
-        },
-        {
-          id: 3,
-          text: '苗族',
-        },
-        {
-          id: 4,
-          text: '维吾尔族',
-        },
-        {
-          id: 5,
-          text: '黎族',
-        },
-        {
-          id: 6,
-          text: '土家族',
-        },
-      ],
+      nationList: nation.map((item) => {
+        return { id: item.id, text: item.name }
+      }),
       identityList: [
         {
           id: 1,
