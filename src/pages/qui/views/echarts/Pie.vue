@@ -1,5 +1,5 @@
 <template>
-  <div class="echarts qui-page qui-fx-ver">
+  <div class="echarts u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <echart-pie ref="draw" :color="color" :data="data" :id="id" :format="format"></echart-pie>
   </div>
@@ -15,7 +15,7 @@ export default {
     HeaderCom,
     EchartPie
   },
-  data () {
+  data() {
     return {
       color: ['#d4cef1', '#9a9aea', '#d1ace5'],
       id: 'total-pic',
@@ -26,24 +26,23 @@ export default {
         { value: 310, name: '桌椅类' },
         { value: 234, name: '建筑类' },
         { value: 135, name: '水电类' },
-        { value: 148, name: '易碎品' }],
+        { value: 148, name: '易碎品' }
+      ],
       legendData: ['多媒体', '桌椅类', '建筑类', '水电类', '易碎品']
     }
   },
-  mounted () {
+  mounted() {
     this.draw()
   },
   methods: {
-    format (name, data) {
+    format(name, data) {
       return name
     },
-    draw () {
+    draw() {
       this.$refs.draw.drawLine(this.legendData, this.data, this.size, this.position)
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>

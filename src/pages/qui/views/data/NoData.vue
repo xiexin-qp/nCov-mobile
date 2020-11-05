@@ -1,7 +1,7 @@
 <template>
-  <div class="no-data qui-page qui-fx-ver">
+  <div class="no-data u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="qui-fx-f1">
+    <div class="u-fx-f1">
       <no-data msg="什么也没有~"></no-data>
     </div>
   </div>
@@ -16,17 +16,12 @@ export default {
     NoData,
     HeaderCom
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
-  mounted () {
-  },
-  methods: {
-  }
+  mounted() {},
+  methods: {}
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>

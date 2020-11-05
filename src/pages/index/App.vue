@@ -1,25 +1,25 @@
 <template>
-  <div class="qui-page qui-fx-ver">
+  <div class="u-page u-fx-ver">
     <div id="header" class="header">
-      <div class="header-slide qui-fx"></div>
+      <div class="header-slide u-fx"></div>
       <div class="co-header-title">{{ title }}</div>
-      <div class="header-slide qui-fx-je" @click="toogleDemo">
+      <div class="header-slide u-fx-je" @click="toogleDemo">
         <img class="down-img" :src="show" alt />
       </div>
     </div>
     <div class="fx-f1">
-      <div :class="['qui-fx-wp qui-list qui-bd-b', { 'qui-list--toogle': toogle }]">
-        <div @click="goApp(app.url)" class="app-list qui-fx-ac-jc" v-for="(app, index) in appList" :key="index">
+      <div :class="['u-fx-wp u-list u-bd-b', { 'u-list--toogle': toogle }]">
+        <div @click="goApp(app.url)" class="app-list u-fx-ac-jc" v-for="(app, index) in appList" :key="index">
           <div class="app-img" :style="{ backgroundColor: bgCol[app.randomNum] }">
             <img :src="app.icon" alt />
           </div>
           <div class="app-name" :style="{ color: bgCol[app.randomNum] }">{{ app.name }}</div>
         </div>
       </div>
-      <div class="module-list qui-fx-wp">
+      <div class="module-list u-fx-wp">
         <div
           @click="goApp(app.url)"
-          class="app-list module-app qui-fx-ac-jc"
+          class="app-list module-app u-fx-ac-jc"
           v-for="(app, index) in moduleList"
           :key="index"
         >
@@ -44,7 +44,7 @@ export default {
   components: {},
   data() {
     return {
-      title: 'Qui',
+      title: '移动端',
       show,
       toogle: true,
       downTag: false,
@@ -55,22 +55,22 @@ export default {
           name: 'Qui文档',
           icon: docs,
           randomNum: 0,
-          url: 'http://39.97.164.4:8090/',
+          url: 'http://39.97.164.4:8090/'
         },
         {
           id: 2,
           name: 'Qui组件',
           icon: demo,
           randomNum: 1,
-          url: 'qui',
+          url: 'qui'
         },
         {
           id: 3,
           name: '项目模块',
           icon: app,
           url: 'protal',
-          randomNum: 2,
-        },
+          randomNum: 2
+        }
       ],
       moduleList: [
         {
@@ -78,30 +78,44 @@ export default {
           name: '疫情日报',
           icon: app,
           url: 'protal',
-          randomNum: 3,
+          randomNum: 3
         },
         {
           id: 2,
           name: '注册',
           icon: app,
           url: 'register',
-          randomNum: 2,
+          randomNum: 2
         },
         {
           id: 3,
           name: '分享教职工',
           icon: app,
           url: 'shareTeacher',
-          randomNum: 3,
+          randomNum: 3
         },
         {
           id: 4,
           name: '访客预约',
           icon: app,
           url: 'visitor',
-          randomNum: 1,
+          randomNum: 1
         },
-      ],
+        {
+          id: 5,
+          name: '人脸录入',
+          icon: app,
+          url: 'face',
+          randomNum: 2
+        },
+        {
+          id: 6,
+          name: '家长注册',
+          icon: app,
+          url: 'parentReg',
+          randomNum: 1
+        }
+      ]
     }
   },
   methods: {
@@ -115,9 +129,9 @@ export default {
       } else {
         window.location.href = `./${path}.html`
       }
-    },
+    }
   },
-  mounted() {},
+  mounted() {}
 }
 </script>
 
@@ -155,13 +169,13 @@ export default {
 .down-aim {
   transform: rotate(180deg);
 }
-.qui-list {
+.u-list {
   border-bottom: 1px #f5f5f5 solid;
   transition: height 0.3s linear;
   height: 0px;
   overflow: hidden;
 }
-.qui-list--toogle {
+.u-list--toogle {
   height: 200px;
 }
 .app-list {

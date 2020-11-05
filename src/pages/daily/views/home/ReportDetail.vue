@@ -1,13 +1,13 @@
 <template>
-  <div class="set qui-page qui-fx-ver">
-    <div class="qui-fx qui-fx-jsb set-info div-shadow">
+  <div class="set u-page u-fx-ver">
+    <div class="u-fx u-fx-jsb set-info div-shadow">
       <div class="set-img">
         <img :src="detailInfo.profilePhoto ? detailInfo.profilePhoto : img" alt />
       </div>
-      <div class="qui-fx-ver">
-        <div class="set-name">{{detailInfo.userName}}</div>
-        <div class="set-class">{{detailInfo.className}}</div>
-        <div class="set-class">ID: {{detailInfo.userCode}}</div>
+      <div class="u-fx-ver">
+        <div class="set-name">{{ detailInfo.userName }}</div>
+        <div class="set-class">{{ detailInfo.className }}</div>
+        <div class="set-class">ID: {{ detailInfo.userCode }}</div>
       </div>
       <div>
         <div class="set-heat" v-if="detailInfo.feverMark === '1'">
@@ -24,18 +24,15 @@
       <van-cell-group :border="false">
         <van-cell
           title="体温"
-          :value="`${detailInfo.temperature}℃(${detailInfo.feverMark === '1' ? '发热' : '正常' })`"
-          :value-class="detailInfo.feverMark === '1'?'set-heat':'set-normal'"
+          :value="`${detailInfo.temperature}℃(${detailInfo.feverMark === '1' ? '发热' : '正常'})`"
+          :value-class="detailInfo.feverMark === '1' ? 'set-heat' : 'set-normal'"
         />
         <van-cell title="测量部位" :value="detailInfo.bodyPartsName" />
         <van-cell title="是否接触疫情人员" :value="detailInfo.mark01 === '1' ? '是' : '否'" />
         <van-cell title="附带症状" :value="detailInfo.symptomsName ? detailInfo.symptomsName : '暂无'" />
         <van-cell title="上报人" :value="detailInfo.reportPersonName" />
         <van-cell title="上报时间" :value="detailInfo.reportTime" />
-        <van-cell
-          title="其他说明"
-          :value="detailInfo.symptomsRemarks ? detailInfo.symptomsRemarks : '暂无'"
-        />
+        <van-cell title="其他说明" :value="detailInfo.symptomsRemarks ? detailInfo.symptomsRemarks : '暂无'" />
       </van-cell-group>
     </div>
   </div>

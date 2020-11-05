@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import '@a/css/qui-base.css'
+import '@a/css/u-base.less'
 import '@u/rem.js'
 
 const attachFastClick = require('fastclick')

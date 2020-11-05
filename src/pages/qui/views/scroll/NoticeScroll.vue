@@ -1,7 +1,7 @@
 <template>
-  <div class="notice-scroll qui-page qui-fx-ver">
+  <div class="notice-scroll u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="qui-fx-f1">
+    <div class="u-fx-f1">
       <notice-scroll :notice-list="noticeList" ref="levelScroll"></notice-scroll>
       <div style="margin-top: 20px;">
         <notice-scroll :height="3" :notice-list="noticeList" ref="levelScroll"></notice-scroll>
@@ -19,7 +19,7 @@ export default {
     noticeScroll,
     HeaderCom
   },
-  data () {
+  data() {
     return {
       noticeList: [
         {
@@ -37,13 +37,9 @@ export default {
       ]
     }
   },
-  mounted () {
-  },
-  methods: {
-  }
+  mounted() {},
+  methods: {}
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>

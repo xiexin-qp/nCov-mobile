@@ -1,6 +1,13 @@
 <template>
-  <div class="tab-bar qui-fx-ac">
-    <van-tabs v-model="activeTab" @change="change" :title-active-color="color" color="#7b91f4" :type="type" class="tab-reset">
+  <div class="tab-bar u-fx-ac">
+    <van-tabs
+      v-model="activeTab"
+      @change="change"
+      :title-active-color="color"
+      color="#7b91f4"
+      :type="type"
+      class="tab-reset"
+    >
       <van-tab :title="tab.title" v-for="(tab, index) in tabList" :key="index"></van-tab>
     </van-tabs>
   </div>
@@ -26,14 +33,14 @@ export default {
     }
   },
   computed: {
-    color () {
+    color() {
       return this.type === 'card' ? '#fff' : '#7b91f4'
     },
     activeTab: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
@@ -43,7 +50,7 @@ export default {
     [Tabs.name]: Tabs
   },
   methods: {
-    change (index) {
+    change(index) {
       this.$emit('change', index)
     }
   }
@@ -51,22 +58,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .tab-bar {
-    .tab-reset {
-      width: 100%;
+.tab-bar {
+  .tab-reset {
+    width: 100%;
+  }
+  /deep/ .van-tab {
+    font-size: 32px !important;
+  }
+  .van-tabs--card {
+    padding-top: 0 !important;
+    /deep/ .van-tabs__wrap,
+    /deep/ .van-tabs__nav--card {
+      height: 70px;
     }
-    /deep/ .van-tab {
-      font-size: 32px !important;
-    }
-    .van-tabs--card{
-      padding-top: 0 !important;
-      /deep/ .van-tabs__wrap, /deep/ .van-tabs__nav--card{
-        height:70px;
-      }
-      /deep/ .van-tab span{
-        height:70px;
-        line-height: 70px;
-      }
+    /deep/ .van-tab span {
+      height: 70px;
+      line-height: 70px;
     }
   }
+}
 </style>

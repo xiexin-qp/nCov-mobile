@@ -1,58 +1,247 @@
-/**
- * @description 全局less变量，混合
- * @main-color 主色
- * @title-color 标题颜色
- * @des-color 描述性颜色
- * @second-color 辅助性，次要颜色
- * @dark-color 暗淡色
- * @bor-color 边框，线条颜色
- * @tip-color 提示颜色
- * @err-color 错误颜色
- */
-@main-color: #7b92f5;
-@title-color: #333;
-@des-color: #666;
-@second-color: #999;
-@dark-color: #ccc;
-@bor-color: #eee;
-@tip-color: #ff0000;
-@err-color: #f05248;
+@u-main-color: #303133;
+@u-content-color: #606266;
+@u-tips-color: #909399;
+@u-light-color: #c0c4cc;
+@u-border-color: #e4e7ed;
+@u-bg-color: #f3f4f6;
 
-/**
- * 辅助色彩（彩色）
- * @other1-color
- * @other2-color
- * @other3-color
- * @other4-color
- */
-@other1-color: #74d4d4;
-@other2-color: #90bef1;
-@other3-color: #9292f2;
-@other4-color: #caa4e6;
+@u-type-primary: #2979ff;
+@u-type-primary-light: #ecf5ff;
+@u-type-primary-disabled: #a0cfff;
+@u-type-primary-dark: #2b85e4;
 
-/**
- * @font-large 重要的标题字体大小
- * @font-middle 次要的标题字体大小
- * @font-title 普通的标题字体大小
- * @font-des 描述性字体大小
- * @font-second 辅助性文字大小
- * @font-tip 提示性文字大小
- */
-@font-large: 36px;
-@font-middle: 32px;
-@font-title: 30px;
-@font-des: 28px;
-@font-second: 24px;
-@font-tip: 20px;
+@u-type-warning: #ff9900;
+@u-type-warning-disabled: #fcbd71;
+@u-type-warning-dark: #f29100;
+@u-type-warning-light: #fdf6ec;
 
-/**
- * @box-mar 元素与界面左右间距 普通块之间的间距
- * @box-padd 元素内间距
- */
-@box-mar: 20px;
-@box-padd: 20px 30px;
+@u-type-success: #19be6b;
+@u-type-success-disabled: #71d5a1;
+@u-type-success-dark: #18b566;
+@u-type-success-light: #dbf1e1;
 
-/**
- * @radius 圆角大小
- */
-@radius: 8px;
+@u-type-error: #fa3534;
+@u-type-error-disabled: #fab6b6;
+@u-type-error-dark: #dd6161;
+@u-type-error-light: #fef0f0;
+
+@u-type-info: #909399;
+@u-type-info-disabled: #c8c9cc;
+@u-type-info-dark: #82848a;
+@u-type-info-light: #f4f4f5;
+
+/**间距 背景 圆角**/
+@u-mp-10: 10px;
+@u-mp-20: 20px;
+@u-mp-30: 30px;
+@u-mp-40: 40px;
+@u-type-white: #fff;
+
+@u-border-radius: 8px;
+@u-border-radius-big: 16px;
+@u-border-radius-all: 100%;
+
+/* 字体大小 */
+@u-font-01: 26px;
+@u-font-02: 24px;
+@u-font-03: 20px;
+@u-font-1: 32px;
+@u-font-2: 34px;
+@u-font-3: 36px;
+
+/* 边框颜色 */
+@u-border-color-dark: #dcdfe6;
+@u-border-color-disabled: #ebeef5;
+@u-border-color-light: #e4e7ed;
+
+/* 颜色 */
+.u-type-primary-light {
+  color: @u-type-primary-light;
+}
+
+.u-type-warning-light {
+  color: @u-type-warning-light;
+}
+
+.u-type-success-light {
+  color: @u-type-success-light;
+}
+
+.u-type-error-light {
+  color: @u-type-error-light;
+}
+
+.u-type-info-light {
+  color: @u-type-info-light;
+}
+
+.u-type-primary-light-bg {
+  background-color: @u-type-primary-light;
+}
+
+.u-type-warning-light-bg {
+  background-color: @u-type-warning-light;
+}
+
+.u-type-success-light-bg {
+  background-color: @u-type-success-light;
+}
+
+.u-type-error-light-bg {
+  background-color: @u-type-error-light;
+}
+
+.u-type-info-light-bg {
+  background-color: @u-type-info-light;
+}
+
+.u-type-primary-dark {
+  color: @u-type-primary-dark;
+}
+
+.u-type-warning-dark {
+  color: @u-type-warning-dark;
+}
+
+.u-type-success-dark {
+  color: @u-type-success-dark;
+}
+
+.u-type-error-dark {
+  color: @u-type-error-dark;
+}
+
+.u-type-info-dark {
+  color: @u-type-info-dark;
+}
+
+.u-type-primary-dark-bg {
+  background-color: @u-type-primary-dark;
+}
+
+.u-type-warning-dark-bg {
+  background-color: @u-type-warning-dark;
+}
+
+.u-type-success-dark-bg {
+  background-color: @u-type-success-dark;
+}
+
+.u-type-error-dark-bg {
+  background-color: @u-type-error-dark;
+}
+
+.u-type-info-dark-bg {
+  background-color: @u-type-info-dark;
+}
+
+.u-type-primary-disabled {
+  color: @u-type-primary-disabled;
+}
+
+.u-type-warning-disabled {
+  color: @u-type-warning-disabled;
+}
+
+.u-type-success-disabled {
+  color: @u-type-success-disabled;
+}
+
+.u-type-error-disabled {
+  color: @u-type-error-disabled;
+}
+
+.u-type-info-disabled {
+  color: @u-type-info-disabled;
+}
+
+.u-type-primary {
+  color: @u-type-primary;
+}
+
+.u-type-warning {
+  color: @u-type-warning;
+}
+
+.u-type-success {
+  color: @u-type-success;
+}
+
+.u-type-error {
+  color: @u-type-error;
+}
+
+.u-type-info {
+  color: @u-type-info;
+}
+
+.u-type-primary-bg {
+  background-color: @u-type-primary;
+}
+
+.u-type-warning-bg {
+  background-color: @u-type-warning;
+}
+
+.u-type-success-bg {
+  background-color: @u-type-success;
+}
+
+.u-type-error-bg {
+  background-color: @u-type-error;
+}
+
+.u-type-info-bg {
+  background-color: @u-type-info;
+}
+
+.u-main-color {
+  color: @u-main-color;
+}
+
+.u-content-color {
+  color: @u-content-color;
+}
+
+.u-tips-color {
+  color: @u-tips-color;
+}
+
+.u-light-color {
+  color: @u-light-color;
+}
+
+.u-type-primary-disabled-bg {
+  background-color: @u-type-primary-disabled;
+}
+.u-type-warning-disabled-bg {
+  background-color: @u-type-warning-disabled;
+}
+.u-type-success-disabled-bg {
+  background-color: @u-type-success-disabled;
+}
+.u-type-error-disabled-bg {
+  background-color: @u-type-error-disabled;
+}
+.u-type-info-disabled-bg {
+  background-color: @u-type-info-disabled;
+}
+.u-type-white {
+  color: @u-type-white !important;
+}
+.u-type-white-bg,
+.u-bg-fff {
+  background-color: @u-type-white !important;
+}
+.u-bg-color {
+  background-color: @u-bg-color !important;
+}
+.u-border-radius {
+  border-radius: @u-border-radius;
+}
+.u-border-radius-big {
+  border-radius: @u-border-radius-big;
+}
+.u-border-radius-all {
+  border-radius: @u-border-radius-all;
+}

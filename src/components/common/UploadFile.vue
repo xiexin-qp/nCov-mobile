@@ -1,7 +1,7 @@
 <template>
-  <div class="upload-file qui-fx-ac">
-    <div class="qui-fx">
-      <div class="pic-user qui-fx-ac-jc" @click="delFile(index)" v-for="(item, index) in fileList" :key="item.id">
+  <div class="upload-file u-fx-ac">
+    <div class="u-fx">
+      <div class="pic-user u-fx-ac-jc" @click="delFile(index)" v-for="(item, index) in fileList" :key="item.id">
         <div class="del-icon"></div>
         <img :src="item.url" alt id="iosphoto" />
       </div>
@@ -69,7 +69,6 @@ export default {
   methods: {
     // 校验人脸
     async checkPhoto(baseImg) {
-      console.log(baseImg)
       try {
         let res = await $ajax.post(
           `${hostEnv.hpb_face}/facePhoto`,
@@ -81,7 +80,8 @@ export default {
         if (res.data.data.result) {
           this.fileList.push({
             id: Math.floor(Math.random() * 1000000),
-            url: res.data.data.url
+            url: res.data.data.url,
+            base64: baseImg
           })
         } else {
           this.$dialog({

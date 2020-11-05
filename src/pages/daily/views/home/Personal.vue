@@ -1,12 +1,17 @@
 <template>
-  <div class="personal qui-page qui-flex-ver">
+  <div class="personal u-page u-flex-ver">
     <header-com v-if="false" title="个人中心" isBack></header-com>
-    <grade-class v-if="classTag" v-model="classTag" :shcoolCode="userInfo.schoolCode" @confirm="chooseClass"></grade-class>
+    <grade-class
+      v-if="classTag"
+      v-model="classTag"
+      :shcoolCode="userInfo.schoolCode"
+      @confirm="chooseClass"
+    ></grade-class>
     <select-data title="切换角色" :select-list="roleList" v-model="roleTag" @confirm="chooseRole"></select-data>
-    <div class="top qui-fx-jsb">
-      <div class="info qui-fx-ac">
+    <div class="top u-fx-jsb">
+      <div class="info u-fx-ac">
         <img :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg" alt="" :onerror="errorImg" />
-        <div class="qui-fx-ver">
+        <div class="u-fx-ver">
           <span class="name">{{ userInfo.userName }}</span>
           <span class="role">{{
             userInfo.roleCode === 'JZ'
@@ -21,30 +26,30 @@
       </div>
       <div class="school">{{ userInfo.schoolName }}</div>
     </div>
-    <div class="submit-form qui-fx-f1">
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="canChangeRole">
+    <div class="submit-form u-fx-f1">
+      <div class="submit-item u-fx-ac u-bd-b" v-if="canChangeRole">
         <div class="tip">身份类型</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="roleTag = true">{{ dataForm.roleType }}</div>
+        <div class="submit-input u-tx-r u-fx-f1" @click="roleTag = true">{{ dataForm.roleType }}</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" @click="goClass()" v-if="userInfo.roleCode === 'BZR'">
+      <div class="submit-item u-fx-ac u-bd-b" @click="goClass()" v-if="userInfo.roleCode === 'BZR'">
         <div class="tip">我的班级</div>
-        <div class="submit-input qui-tx-r qui-fx-f1"><!-- {{ dataForm.studentTotal }}人 --></div>
+        <div class="submit-input u-tx-r u-fx-f1"><!-- {{ dataForm.studentTotal }}人 --></div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode === 'BZR'" @click="classTag = true">
+      <div class="submit-item u-fx-ac u-bd-b" v-if="userInfo.roleCode === 'BZR'" @click="classTag = true">
         <div class="tip">换绑班级</div>
-        <div class="qui-fx-f1 qui-tx-r" style="color: #666; margin-right: 10px;">{{ dataForm.className }}</div>
+        <div class="u-fx-f1 u-tx-r" style="color: #666; margin-right: 10px;">{{ dataForm.className }}</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" @click="backSchool">
+      <div class="submit-item u-fx-ac u-bd-b" @click="backSchool">
         <div class="tip">返校计划</div>
-        <div class="qui-fx-f1 qui-tx-r" style="color: #666; margin-right: 10px;"></div>
+        <div class="u-fx-f1 u-tx-r" style="color: #666; margin-right: 10px;"></div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" v-if="userInfo.roleCode === 'BZR'">
+      <div class="submit-item u-fx-ac u-bd-b" v-if="userInfo.roleCode === 'BZR'">
         <div class="tip">邀请学生</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="shareParent()">点击分享链接</div>
+        <div class="submit-input u-tx-r u-fx-f1" @click="shareParent()">点击分享链接</div>
       </div>
     </div>
   </div>
@@ -62,10 +67,10 @@ export default {
   components: {
     HeaderCom,
     SelectData,
-    GradeClass,
+    GradeClass
   },
   computed: {
-    userInfo: () => store.userInfo,
+    userInfo: () => store.userInfo
   },
   data() {
     return {
@@ -79,9 +84,9 @@ export default {
       dataForm: {
         roleType: '',
         className: '',
-        studentTotal: '',
+        studentTotal: ''
       },
-      type: '请选择',
+      type: '请选择'
     }
   },
   created() {
@@ -107,22 +112,19 @@ export default {
       this.$dialog({
         title: '温馨提示',
         message: '请点击网页右上角按钮分享给家长'
-      }).then(() => {
-      })
+      }).then(() => {})
       wx.updateAppMessageShareData({
         title: '家长注册', // 分享标题
         desc: '疫情防控家长注册', // 分享描述
         link: `${config.host}/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: `${config.host}/mobile-protal/ncov.png`, // 分享图标
-        success: function () {
-        },
+        success: function() {}
       })
       wx.updateTimelineShareData({
         title: '家长注册', // 分享标题
         link: `${config.host}/mobile-protal/register/?schoolCode=${this.userInfo.schoolCode}#/`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: `${config.host}/mobile-protal/ncov.png`, // 分享图标
-        success: function () {
-        },
+        success: function() {}
       })
     },
     //查询可切换的角色
@@ -130,7 +132,7 @@ export default {
       this.roleList = []
       const req = {
         userCode: this.userInfo.userCode,
-        schoolCode: this.userInfo.schoolCode,
+        schoolCode: this.userInfo.schoolCode
       }
       const res = await actions.getRoleInfo(req)
       if (res.result.length <= 1) {
@@ -141,12 +143,12 @@ export default {
       if (this.userInfo.roleCode === 'JZ') {
         this.roleList.push({
           id: 'JZG',
-          text: '教职工',
+          text: '教职工'
         })
       } else {
         this.roleList.push({
           id: 'JZ',
-          text: '家长',
+          text: '家长'
         })
       }
     },
@@ -156,7 +158,7 @@ export default {
       const req = {
         userCode: this.userInfo.userCode,
         schoolCode: this.userInfo.schoolCode,
-        userType: item.id,
+        userType: item.id
       }
       const res = await actions.changeRole(req)
       console.log(res)
@@ -170,8 +172,8 @@ export default {
         key: 'userInfo',
         data: {
           ...this.userInfo,
-          ...result,
-        },
+          ...result
+        }
       })
       this.getRoleList()
     },
@@ -182,7 +184,7 @@ export default {
         teacherCode: this.userInfo.userCode,
         schoolCode: this.userInfo.schoolCode,
         gradeCode: item.gradeCode,
-        classCode: item.clazzCode,
+        classCode: item.clazzCode
       }
       const res = await actions.changeMyClass(req)
       if (res.success) {
@@ -194,8 +196,8 @@ export default {
             gradeCode: item.gradeCode,
             gradeName: item.gradeName,
             clazzName: item.clazzName,
-            clazzCode: item.clazzCode,
-          },
+            clazzCode: item.clazzCode
+          }
         })
       }
     },
@@ -206,7 +208,7 @@ export default {
       }
       const req = {
         teacherCode: this.userInfo.userCode,
-        schoolCode: this.userInfo.schoolCode,
+        schoolCode: this.userInfo.schoolCode
       }
       const res = await actions.getMyClass(req)
       this.dataForm.className = res.result.gradeName + res.result.clazzName
@@ -217,8 +219,8 @@ export default {
     },
     backSchool() {
       this.$router.push('/backSchool')
-    },
-  },
+    }
+  }
 }
 </script>
 

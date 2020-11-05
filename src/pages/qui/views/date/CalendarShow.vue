@@ -1,8 +1,13 @@
 <template>
-  <div class="level-scroll qui-page qui-fx-ver">
+  <div class="level-scroll u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="qui-fx-f1 qui-of">
-      <calendar-show :exception-list = "exceptionList" :zc-list="zcList" ref="calendar" @get-date = "getDate"></calendar-show>
+    <div class="u-fx-f1 u-of">
+      <calendar-show
+        :exception-list="exceptionList"
+        :zc-list="zcList"
+        ref="calendar"
+        @get-date="getDate"
+      ></calendar-show>
     </div>
   </div>
 </template>
@@ -16,22 +21,19 @@ export default {
     CalendarShow,
     HeaderCom
   },
-  data () {
+  data() {
     return {
       exceptionList: [1, 2, 3, 4],
       zcList: [10, 12, 14]
     }
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    getDate (date, type) {
+    getDate(date, type) {
       console.log(date, type)
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>
