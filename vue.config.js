@@ -94,15 +94,15 @@ module.exports = {
       },
       zx: {
         // target: 'http://canpointtest.com/zx_visitor/', // 朱旭访客
-        target: 'http://192.168.2.134:10160/',
+        target: 'http://192.168.2.242:10160/',
         changeOrigin: true,
         pathRewrite: {
           '^/zx': ''
         }
       },
       zk: {
-        // target: 'http://192.168.1.23:10050/', // 张坤平台学校
-        target: 'http://canpointtest.com/zk_school/',
+        target: 'http://192.168.2.242:10050/', // 张坤平台学校
+        // target: 'http://canpointtest.com/zk_school/',
         changeOrigin: true,
         pathRewrite: {
           '^/zk': ''
