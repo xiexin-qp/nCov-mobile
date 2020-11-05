@@ -14,14 +14,25 @@
       <div class="submit-form u-fx-f1">
         <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">访客姓名：</div>
-          <div class="submit-input u-fx-f1">
-            <input class="input" v-model="dataForm.visitorName" maxlength="7" type="text" placeholder="请输入姓名" />
+          <div class="submit-input qui-fx-f1">
+            <input
+              class="input"
+              v-model="dataForm.visitorName"
+              maxlength="7"
+              type="text"
+              placeholder="请输入姓名"
+            />
           </div>
         </div>
         <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">访客手机号：</div>
-          <div class="submit-input u-fx-f1">
-            <input class="input" v-model="dataForm.visitorMobile" type="number" placeholder="请输入访客手机号" />
+          <div class="submit-input qui-fx-f1">
+            <input
+              class="input"
+              v-model="dataForm.visitorMobile"
+              type="number"
+              placeholder="请输入访客手机号"
+            />
           </div>
         </div>
         <div class="submit-area u-fx-ver u-bd-b">
@@ -50,6 +61,7 @@
           <div class="tip">被访人姓名：</div>
           <div class="submit-input u-fx-f1">
             <input
+              @blur="yzName"
               class="input"
               v-model="dataForm.respondentName"
               type="text"
@@ -63,16 +75,20 @@
           <div class="submit-input u-fx-f1">
             <!--  <input class="input" v-model="dataForm.resMobile" type="number" placeholder="请输入被访人手机号" /> -->
             <van-field
+              :disabled="disabledTag"
+              @blur="yzMobile"
               v-model="dataForm.resMobile"
               input-align="right"
-              @blur="yzMobile"
               placeholder="请输入被访人手机号"
             />
           </div>
         </div>
         <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">预计到达时间</div>
-          <div class="submit-input u-tx-r u-fx-f1" @click="timeTag = true">{{ dataForm.accessStartTime }}</div>
+          <div
+            class="submit-input u-tx-r u-fx-f1"
+            @click="timeTag = true"
+          >{{ dataForm.accessStartTime }}</div>
           <div class="rit-icon"></div>
         </div>
         <div class="submit-item u-fx-ac u-bd-b">
@@ -137,6 +153,7 @@ export default {
       schoolTag: false,
       causeTag: false,
       timeTag: false,
+      disabledTag: false,
       schoolList: [],
       causeList: [],
       dataForm: {
@@ -306,21 +323,46 @@ export default {
         })
       })
     },
+    yzName() {
+      if (!this.dataForm.respondentName) {
+        this.$toast('请输入被访人姓名')
+        return
+      }
+      if (!this.dataForm.schoolCode || !this.dataForm.resMobile || !this.dataForm.respondentName) {
+        return
+      }
+      let yzreq = {
+        mobile: this.dataForm.resMobile,
+        schoolCode: this.dataForm.schoolCode,
+        userName: this.dataForm.respondentName
+      }
+      actions.verifUser(yzreq).then(res => {
+        if (!res.data) {
+          this.userCode = null
+          this.$toast('请核对受访人信息')
+          return
+        }
+        this.userCode = res.data
+        console.log(this.userCode)
+      })
+    },
     yzMobile() {
       if (!/^1[3456789]\d{9}$/.test(this.dataForm.resMobile)) {
         this.$toast('请输入正确手机号')
         return
       }
-      if (!this.dataForm.schoolCode) {
+      if (!this.dataForm.schoolCode || !this.dataForm.resMobile || !this.dataForm.respondentName) {
         return
       }
       let yzreq = {
         mobile: this.dataForm.resMobile,
-        schoolCode: this.dataForm.schoolCode
+        schoolCode: this.dataForm.schoolCode,
+        userName: this.dataForm.respondentName
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('该被访人手机号不是该校教职工')
+          this.userCode = null
+          this.$toast('请核对受访人信息')
           return
         }
         this.userCode = res.data
@@ -337,7 +379,7 @@ export default {
           return
         }
         if (!this.userCode) {
-          this.$toast('该被访人手机号不是该校教职工')
+          this.$toast('请核对受访人信息')
           return
         }
         let req = {
@@ -389,16 +431,18 @@ export default {
       if (!item) return
       this.dataForm.school = item.text
       this.dataForm.schoolCode = item.value
-      if (!this.dataForm.resMobile) {
+      if (!this.dataForm.resMobile || !this.dataForm.schoolCode || !this.dataForm.respondentName) {
         return
       }
       let yzreq = {
         mobile: this.dataForm.resMobile,
-        schoolCode: this.dataForm.schoolCode
+        schoolCode: this.dataForm.schoolCode,
+        userName: this.dataForm.respondentName
       }
       actions.verifUser(yzreq).then(res => {
         if (!res.data) {
-          this.$toast('该被访人手机号不是该校教职工')
+          this.userCode = null
+          this.$toast('请核对受访人信息')
           return
         }
         this.userCode = res.data

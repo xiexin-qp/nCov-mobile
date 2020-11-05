@@ -193,9 +193,15 @@ module.exports = {
           '^/zhuxu': ''
         }
       },
+<<<<<<< HEAD
       '/zx_visitor': {
         target: 'http://canpointtest.com/zx_visitor/', // 朱旭访客
         // target: 'http://192.168.1.24:10160/',
+=======
+      zx: {
+        // target: 'http://canpointtest.com/zx_visitor/', // 朱旭访客
+        target: 'http://192.168.2.134:10160/',
+>>>>>>> 06e6b63a44f02b451bc1dbeb54ffb679364686a8
         changeOrigin: true,
         pathRewrite: {
           '^/zx_visitor': ''
