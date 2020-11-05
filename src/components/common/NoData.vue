@@ -1,7 +1,7 @@
 <template>
-  <div class="no-data qui-fx-ac-jc">
+  <div class="no-data u-fx-ac-jc">
     <div>
-      <img class="no-data-img" :src="noData" alt="">
+      <img class="no-data-img" :src="noData" alt="" />
     </div>
     <p>{{ msg }}</p>
   </div>
@@ -17,7 +17,7 @@ export default {
       default: ''
     }
   },
-  data () {
+  data() {
     return {
       noData
     }
@@ -26,21 +26,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .no-data {
-    padding: 120px 0;
-    font-size: 20px;
-    color:#999;
-    .sj-icon {
-      font-size: 100px;
-    }
-    .no-data-img {
-      width: 387px;
-      height: 278px;
-      display: block
-    }
-    p {
-      text-align: center;
-      padding: 10px 0
-    }
+.no-data {
+  padding: 120px 0;
+  font-size: 20px;
+  color: #999;
+  .sj-icon {
+    font-size: 100px;
   }
+  .no-data-img {
+    width: 387px;
+    height: 278px;
+    display: block;
+  }
+  p {
+    text-align: center;
+    padding: 10px 0;
+  }
+}
 </style>

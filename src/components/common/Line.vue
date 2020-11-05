@@ -1,10 +1,6 @@
 <template>
-  <div class="echarts qui-fx-ver">
-    <div
-    class="total-bi"
-    :id="id"
-    :style="{height:height+'px'}">
-    </div>
+  <div class="echarts u-fx-ver">
+    <div class="total-bi" :id="id" :style="{ height: height + 'px' }"></div>
   </div>
 </template>
 <script>
@@ -31,13 +27,13 @@ export default {
     },
     format: {
       type: Function,
-      default: (value) => {
+      default: value => {
         return value
       }
     }
   },
   methods: {
-    drawLine (legendData, xData, yData, size = [50, 20, 20, 20], yName = '', yStep = 50) {
+    drawLine(legendData, xData, yData, size = [50, 20, 20, 20], yName = '', yStep = 50) {
       // 基于准备好的dom，初始化echarts实例
       let myChart = echarts.init(document.getElementById(this.id))
       // 绘制图表
@@ -52,10 +48,12 @@ export default {
         yAxis: {
           type: 'value'
         },
-        series: [{
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
-          type: 'line'
-        }]
+        series: [
+          {
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line'
+          }
+        ]
       })
     }
   }
@@ -63,9 +61,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .echarts {
-    .total-bi {
-      display: block
-    }
+.echarts {
+  .total-bi {
+    display: block;
   }
+}
 </style>

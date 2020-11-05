@@ -1,5 +1,5 @@
 <template>
-  <div class="echarts qui-page qui-fx-ver">
+  <div class="echarts u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <echart-radar ref="draw" :color="color" :id="id" :format="format"></echart-radar>
   </div>
@@ -15,7 +15,7 @@ export default {
     HeaderCom,
     EchartRadar
   },
-  data () {
+  data() {
     return {
       color: ['#d4cef1', '#9a9aea'],
       id: 'total-pic',
@@ -27,51 +27,51 @@ export default {
         { name: '研发', max: 52000 },
         { name: '市场', max: 25000 }
       ],
-      series: [{
-        name: '预算 vs 开销',
-        type: 'radar',
-        data: [
-          {
-            value: [4300, 10000, 28000, 35000, 50000, 19000],
-            name: '预算分配',
-            label: {
-              normal: {
-                show: true,
-                position: 'top'
+      series: [
+        {
+          name: '预算 vs 开销',
+          type: 'radar',
+          data: [
+            {
+              value: [4300, 10000, 28000, 35000, 50000, 19000],
+              name: '预算分配',
+              label: {
+                normal: {
+                  show: true,
+                  position: 'top'
+                }
+              }
+            },
+            {
+              value: [5000, 14000, 28000, 31000, 42000, 21000],
+              name: '实际开销',
+              label: {
+                normal: {
+                  show: true,
+                  position: 'top'
+                }
               }
             }
-          },
-          {
-            value: [5000, 14000, 28000, 31000, 42000, 21000],
-            name: '实际开销',
-            label: {
-              normal: {
-                show: true,
-                position: 'top'
-              }
-            }
-          }
-        ]
-      }],
+          ]
+        }
+      ],
       legendData: ['预算分配', '实际开销'],
       position: ['50%', '50%'],
       size: 70
     }
   },
-  mounted () {
+  mounted() {
     this.draw()
   },
   methods: {
-    format (name, data) {
+    format(name, data) {
       return name
     },
-    draw () {
+    draw() {
       this.$refs.draw.drawLine(this.legendData, this.maxData, this.series, this.size, this.position)
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>

@@ -1,7 +1,14 @@
 <template>
-  <div class="notice-scroll" :style="{backgroundColor: bgColor,height: height + 'rem',}">
-    <ul :style="{marginTop: mTop + 'rem'}">
-      <li @click="show(item)" :style="{height: height + 'rem', lineHeight: height + 'rem'}" v-for="(item, index) in noticeList" :key="index" class="qui-te" v-html="item.content || '暂无公告~'"></li>
+  <div class="notice-scroll" :style="{ backgroundColor: bgColor, height: height + 'rem' }">
+    <ul :style="{ marginTop: mTop + 'rem' }">
+      <li
+        @click="show(item)"
+        :style="{ height: height + 'rem', lineHeight: height + 'rem' }"
+        v-for="(item, index) in noticeList"
+        :key="index"
+        class="u-te"
+        v-html="item.content || '暂无公告~'"
+      ></li>
     </ul>
   </div>
 </template>
@@ -32,17 +39,17 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       mTop: 0
     }
   },
   methods: {
-    show (item) {
+    show(item) {
       this.$emit('show', item)
     }
   },
-  mounted () {
+  mounted() {
     let currIndex = 1
     let time = setInterval(() => {
       if (this.noticeList.length <= 1) {
@@ -61,11 +68,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .notice-scroll {
-    overflow: hidden;
-    ul {
-      transition: all 1s linear;
-      width: 100%;
-    }
+.notice-scroll {
+  overflow: hidden;
+  ul {
+    transition: all 1s linear;
+    width: 100%;
   }
+}
 </style>

@@ -1,9 +1,9 @@
 <template>
-  <div class="mutil-menu qui-page qui-fx-ver">
+  <div class="mutil-menu u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="select-list qui-fx-ac qui-fx-jsb qui-bd-b">
+    <div class="select-list u-fx-ac u-fx-jsb u-bd-b">
       <div>请假类型：</div>
-      <div @click="isShow = true" class="qui-fx-f1 qui-tx-r" style="color:#666">
+      <div @click="isShow = true" class="u-fx-f1 u-tx-r" style="color:#666">
         <multi-menu title="请假类型" :select-list="selectList" v-model="selectValue"></multi-menu>
       </div>
       <div class="rit-icon"></div>

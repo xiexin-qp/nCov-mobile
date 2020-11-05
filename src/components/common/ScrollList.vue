@@ -1,5 +1,5 @@
 <template>
-  <div :class="'qui-fx-f1 qui-of scroll-list ' + className" ref="wrapper">
+  <div :class="'u-fx-f1 u-of scroll-list ' + className" ref="wrapper">
     <div :class="{ 'scroll-padd': isPadd }">
       <slot></slot>
     </div>

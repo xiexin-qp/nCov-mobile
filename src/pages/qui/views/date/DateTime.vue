@@ -1,15 +1,22 @@
 <template>
-  <div class="level-scroll qui-page qui-fx-ver">
-    <date-time :min-date="minDate" :max-date="maxDate" type="datetime" :date="currentDate" v-model="isShow" @get-date = 'getDate'></date-time>
+  <div class="level-scroll u-page u-fx-ver">
+    <date-time
+      :min-date="minDate"
+      :max-date="maxDate"
+      type="datetime"
+      :date="currentDate"
+      v-model="isShow"
+      @get-date="getDate"
+    ></date-time>
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="select-list qui-fx-ac qui-fx-jsb qui-bd-b">
+    <div class="select-list u-fx-ac u-fx-jsb u-bd-b">
       <div>开始日期：</div>
-      <div @click="changeTime('startTime')" class="qui-fx-f1 qui-tx-r" style="color:#666">{{ startTime }}</div>
+      <div @click="changeTime('startTime')" class="u-fx-f1 u-tx-r" style="color:#666">{{ startTime }}</div>
       <div class="rit-icon"></div>
     </div>
-    <div class="select-list qui-fx-ac qui-fx-jsb qui-bd-b">
+    <div class="select-list u-fx-ac u-fx-jsb u-bd-b">
       <div>结束日期：</div>
-      <div @click="changeTime('endTime')" class="qui-fx-f1 qui-tx-r" style="color:#666">{{ endTime }}</div>
+      <div @click="changeTime('endTime')" class="u-fx-f1 u-tx-r" style="color:#666">{{ endTime }}</div>
       <div class="rit-icon"></div>
     </div>
   </div>
@@ -24,7 +31,7 @@ export default {
     DateTime,
     HeaderCom
   },
-  data () {
+  data() {
     return {
       startTime: '2019/08/14 10:10',
       endTime: '2019/08/14 10:10',
@@ -34,13 +41,12 @@ export default {
       isShow: false
     }
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    getDate (date) {
+    getDate(date) {
       this[this.tag] = date
     },
-    changeTime (tag) {
+    changeTime(tag) {
       this.isShow = true
       this.tag = tag
       this.currentDate = this[tag]
@@ -51,8 +57,7 @@ export default {
 
 <style lang="less" scoped>
 .select-list {
-  background-color:#fff;
+  background-color: #fff;
   padding: 30px 20px;
 }
 </style>
-

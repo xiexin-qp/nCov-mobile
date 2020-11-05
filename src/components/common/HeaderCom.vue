@@ -1,12 +1,12 @@
 <template>
   <div id="header" class="header">
-    <div class="header-slide qui-fx">
+    <div class="header-slide u-fx">
       <div class="back-btn" @click="goBack" v-if="isBack">
         <img :src="back" alt />
       </div>
     </div>
-    <div class="co-header-title">{{title}}</div>
-    <div class="header-slide qui-fx-je"></div>
+    <div class="co-header-title">{{ title }}</div>
+    <div class="header-slide u-fx-je"></div>
   </div>
 </template>
 <script>

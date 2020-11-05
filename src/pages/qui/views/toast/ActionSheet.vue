@@ -1,10 +1,10 @@
 <template>
-  <div class="action-sheet qui-page qui-fx-ver">
+  <div class="action-sheet u-page u-fx-ver">
     <action-sheet title="选择菜单" :action-list="actionList" v-model="isShow" @select="select"></action-sheet>
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="select-list qui-fx-ac qui-fx-jsb qui-bd-b">
+    <div class="select-list u-fx-ac u-fx-jsb u-bd-b">
       <div>选择菜单：</div>
-      <div @click="isShow = true" class="qui-fx-f1 qui-tx-r" style="color:#666">{{ type }}</div>
+      <div @click="isShow = true" class="u-fx-f1 u-tx-r" style="color:#666">{{ type }}</div>
       <div class="rit-icon"></div>
     </div>
   </div>
@@ -19,7 +19,7 @@ export default {
     ActionSheet,
     HeaderCom
   },
-  data () {
+  data() {
     return {
       isShow: false,
       type: '请选择',
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    select (item) {
+    select(item) {
       this.type = item.name
     }
   }
@@ -48,9 +48,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .select-list {
-    background-color:#fff;
-    padding: 30px 20px;
-  }
+.select-list {
+  background-color: #fff;
+  padding: 30px 20px;
+}
 </style>
-

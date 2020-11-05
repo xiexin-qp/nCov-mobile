@@ -1,5 +1,5 @@
 <template>
-  <div class="tab-bar qui-page qui-fx-ver">
+  <div class="tab-bar u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <div style="padding: 20px 0">
       <tab-bar :tab-list="tabList" type="line"></tab-bar>
@@ -19,27 +19,27 @@ export default {
     TabBar,
     HeaderCom
   },
-  data () {
+  data() {
     return {
-      tabList: [{
-        id: 1,
-        title: '待审批'
-      }, {
-        id: 2,
-        title: '已审批'
-      }, {
-        id: 3,
-        title: '已撤销'
-      }]
+      tabList: [
+        {
+          id: 1,
+          title: '待审批'
+        },
+        {
+          id: 2,
+          title: '已审批'
+        },
+        {
+          id: 3,
+          title: '已撤销'
+        }
+      ]
     }
   },
-  mounted () {
-  },
-  methods: {
-  }
+  mounted() {},
+  methods: {}
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>

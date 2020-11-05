@@ -16,11 +16,11 @@ let schoolApi = {
 }
 
 for (let val in visitorApi) {
-  visitorApi[val] = `${hostEnv.zx}${visitorApi[val]}`
+  visitorApi[val] = `${hostEnv.zx_visitor}${visitorApi[val]}`
 }
 
 for (let val in schoolApi) {
-  schoolApi[val] = `${hostEnv.zk}${schoolApi[val]}`
+  schoolApi[val] = `${hostEnv.zk_school}${schoolApi[val]}`
 }
 
 let homeApi = {

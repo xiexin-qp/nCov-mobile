@@ -1,12 +1,12 @@
 <template>
-  <div class="scroll-list qui-page qui-fx-ver">
+  <div class="scroll-list u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <scroll-list ref="scrollList" pullUpLoad @loadMore="showList">
-      <div class="list qui-bd-b" v-for="data in dataList" :key="data.id">
-        <div class="qui-te2">
+      <div class="list u-bd-b" v-for="data in dataList" :key="data.id">
+        <div class="u-te2">
           {{ data.title }}
         </div>
-        <div class="qui-tx-r">
+        <div class="u-tx-r">
           {{ data.time }}
         </div>
       </div>
@@ -25,7 +25,7 @@ export default {
     ScrollList,
     HeaderCom
   },
-  data () {
+  data() {
     return {
       dataList: [],
       params: {
@@ -34,14 +34,12 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.showList()
   },
   methods: {
-    ...mapActions('home', [
-      'getIndex'
-    ]),
-    showList (type, fn, params, data) {
+    ...mapActions('home', ['getIndex']),
+    showList(type, fn, params, data) {
       /**
        * @des 列表数据加载
        * @type 是否下拉加载
@@ -56,11 +54,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .scroll-list {
-    .list {
-      padding: 30px 20px;
-      background-color:#fff;
-    }
+.scroll-list {
+  .list {
+    padding: 30px 20px;
+    background-color: #fff;
   }
+}
 </style>
-

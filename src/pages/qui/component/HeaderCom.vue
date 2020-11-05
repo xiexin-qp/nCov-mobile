@@ -1,13 +1,12 @@
 <template>
   <div id="header" class="header">
-    <div class="header-slide qui-fx">
+    <div class="header-slide u-fx">
       <div class="back-btn" @click="goBack" v-if="isBack">
-        <img :src="back" alt="">
+        <img :src="back" alt="" />
       </div>
     </div>
-    <div class="co-header-title">{{title}}</div>
-    <div class="header-slide qui-fx-je">
-    </div>
+    <div class="co-header-title">{{ title }}</div>
+    <div class="header-slide u-fx-je"></div>
   </div>
 </template>
 <script>
@@ -24,13 +23,13 @@ export default {
       default: 'Qui'
     }
   },
-  data () {
+  data() {
     return {
       back
     }
   },
   methods: {
-    goBack () {
+    goBack() {
       this.$router.go(-1)
     }
   }
@@ -38,33 +37,33 @@ export default {
 </script>
 
 <style lang="less" scoped>
- #header {
-    width: 100%;
-    background: #10436B;
-    padding: 0 .5rem;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    .back-btn {
-      img {
-        width: 48px;
-        height: 48px;
-        display: block
-      }
-    }
-    .header-slide {
-      min-width:4rem
-    }
-    .co-header-title {
-      flex: 1;
-      color:#fff;
-      font-size: .8rem;
-      text-align: center;
-      height: 44Px;
-      line-height: 44Px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+#header {
+  width: 100%;
+  background: #10436b;
+  padding: 0 0.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  .back-btn {
+    img {
+      width: 48px;
+      height: 48px;
+      display: block;
     }
   }
+  .header-slide {
+    min-width: 4rem;
+  }
+  .co-header-title {
+    flex: 1;
+    color: #fff;
+    font-size: 0.8rem;
+    text-align: center;
+    height: 44px;
+    line-height: 44px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
 </style>

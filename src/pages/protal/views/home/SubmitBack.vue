@@ -1,71 +1,56 @@
 <template>
-  <div class="qui-fx-f1 qui-fx-ver">
+  <div class="u-fx-f1 u-fx-ver">
     <header-com title="提交返校计划" isBack></header-com>
     <select-data title="出行方式" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
     <van-popup v-model="fromArea" position="bottom">
-      <van-area
-        :area-list="areaList"
-        @confirm="onConfirm"
-        @cancel="fromArea = false"
-      />
+      <van-area :area-list="areaList" @confirm="onConfirm" @cancel="fromArea = false" />
     </van-popup>
     <van-popup v-model="toArea" position="bottom">
-      <van-area
-        :area-list="areaList"
-        @confirm="onConfirm"
-        @cancel="toArea = false"
-      />
+      <van-area :area-list="areaList" @confirm="onConfirm" @cancel="toArea = false" />
     </van-popup>
     <date-time v-model="timeTag" @get-date="getDate" type="date" :minDate="minDate" :maxDate="maxDate"></date-time>
-    <div class="submit-form qui-fx-f1">
-      <div class="submit-item qui-fx-ac qui-bd-b">
+    <div class="submit-form u-fx-f1">
+      <div class="submit-item u-fx-ac u-bd-b">
         <div class="tip">姓名</div>
-        <div class="submit-input qui-fx-f1">
+        <div class="submit-input u-fx-f1">
           <input class="input" v-model="dataForm.name" type="text" placeholder="请输入姓名" />
         </div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b">
+      <div class="submit-item u-fx-ac u-bd-b">
         <div class="tip">返校日期</div>
-        <div
-          class="submit-input qui-tx-r qui-fx-f1"
-          @click="showDate('startTime')"
-        >{{ dataForm.startTime }}</div>
+        <div class="submit-input u-tx-r u-fx-f1" @click="showDate('startTime')">{{ dataForm.startTime }}</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" @click="fromArea = true">
+      <div class="submit-item u-fx-ac u-bd-b" @click="fromArea = true">
         <div class="tip">出发地</div>
-        <div
-          class="submit-input qui-tx-r qui-fx-f1"
-        >{{ dataForm.fromAddress }}</div>
+        <div class="submit-input u-tx-r u-fx-f1">{{ dataForm.fromAddress }}</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b" @click="toArea = true">
+      <div class="submit-item u-fx-ac u-bd-b" @click="toArea = true">
         <div class="tip">目的地</div>
-        <div
-          class="submit-input qui-tx-r qui-fx-f1"
-        >{{ dataForm.toAddress }}</div>
+        <div class="submit-input u-tx-r u-fx-f1">{{ dataForm.toAddress }}</div>
         <div class="rit-icon"></div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b">
+      <div class="submit-item u-fx-ac u-bd-b">
         <div class="tip">出行方式</div>
-        <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ dataForm.type }}</div>
+        <div class="submit-input u-tx-r u-fx-f1" @click="typeTag = true">{{ dataForm.type }}</div>
         <div class="rit-icon"></div>
       </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+      <div class="submit-item u-fx-ac u-bd-b">
         <div class="tip">出行备注</div>
-        <div class="submit-input qui-fx-f1">
+        <div class="submit-input u-fx-f1">
           <input class="input" v-model="dataForm.remark" type="text" placeholder="输入车牌号、车次号、航班号等" />
         </div>
       </div>
-      <div class="submit-item qui-fx-ac qui-bd-b">
+      <div class="submit-item u-fx-ac u-bd-b">
         <div class="tip">是否接触疫情人员(近14天)</div>
-        <div class="submit-input qui-fx-f1 qui-fx-je">
+        <div class="submit-input u-fx-f1 u-fx-je">
           <van-switch v-model="dataForm.isMarry" />
         </div>
       </div>
-      <div class="submit-area qui-fx-ver">
+      <div class="submit-area u-fx-ver">
         <div class="tip">健康状态</div>
-        <div class="qui-fx-f1" style="padding: 10px 0 ">
+        <div class="u-fx-f1" style="padding: 10px 0 ">
           <van-checkbox-group v-model="dataForm.health">
             <van-checkbox style="margin-bottom: 10px" shape="square" name="1">正常</van-checkbox>
             <van-checkbox style="margin-bottom: 10px" shape="square" name="2">发热</van-checkbox>
@@ -75,9 +60,9 @@
           </van-checkbox-group>
         </div>
       </div>
-      <div class="submit-area qui-fx-ver">
+      <div class="submit-area u-fx-ver">
         <div class="tip">高发地旅居史(近14天)</div>
-        <div class="qui-fx-f1" style="padding: 10px 0 ">
+        <div class="u-fx-f1" style="padding: 10px 0 ">
           <van-checkbox-group v-model="dataForm.treavl">
             <van-checkbox style="margin-bottom: 10px" shape="square" name="1">无</van-checkbox>
             <van-checkbox style="margin-bottom: 10px" shape="square" name="2">湖北</van-checkbox>
@@ -87,9 +72,9 @@
           </van-checkbox-group>
         </div>
       </div>
-      <div class="submit-area qui-fx-ver">
+      <div class="submit-area u-fx-ver">
         <div class="tip">被诊断为确诊/疑似/隔离经历</div>
-        <div class="qui-fx-f1" style="padding: 10px 0 ">
+        <div class="u-fx-f1" style="padding: 10px 0 ">
           <van-checkbox-group v-model="dataForm.diagnose">
             <van-checkbox style="margin-bottom: 10px" shape="square" name="1">无</van-checkbox>
             <van-checkbox style="margin-bottom: 10px" shape="square" name="2">确诊</van-checkbox>
@@ -98,9 +83,9 @@
           </van-checkbox-group>
         </div>
       </div>
-      <div class="submit-area qui-fx-ver">
+      <div class="submit-area u-fx-ver">
         <div class="tip">个人说明</div>
-        <div class="qui-fx-f1">
+        <div class="u-fx-f1">
           <textarea class="text-area" v-model="dataForm.address" placeholder="输入不能正常返校等原因说明"></textarea>
         </div>
       </div>
@@ -144,7 +129,7 @@ export default {
       toArea: false,
       areaList: {},
       minDate: new Date(),
-      maxDate: new Date(new Date().getTime()+3600*24*365*3*1000),
+      maxDate: new Date(new Date().getTime() + 3600 * 24 * 365 * 3 * 1000),
       typeList: [
         {
           id: 1,
@@ -188,7 +173,7 @@ export default {
     onConfirm(values) {
       //this.value = values.map(item => item.name).join('/');
       console.log(values)
-      this.showArea = false;
+      this.showArea = false
     },
     // 展示日期框
     showDate(type) {
@@ -255,7 +240,7 @@ export default {
     line-height: 80px;
     border-radius: 8px;
     color: #fff;
-    background-color: @main-color;
+    background-color: @u-type-primary;
     text-align: center;
   }
 }
