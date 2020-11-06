@@ -42,7 +42,7 @@ Vue.prototype.$getStatus = function(status) {
   if (status == 1) {
     return [huang, '#F29100', 'rgba(242, 145,0, 0.15)', '申请中']
   }
-  if (status == 2) {
+  if (status == 3) {
     return [lv, '#00D277', 'rgba(0, 210, 119,0.15)', '申请成功']
   }
   return [hong, '#F34646', 'rgba(243, 70, 70,0.15)', '申请失败']

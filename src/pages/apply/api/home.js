@@ -6,26 +6,28 @@
 
 import hostEnv from '@config'
 
-let visitorApi = {
-  verifUser: '/visitor/info/rescode#get', // 验证被访用户
-  getCauseList: '/cause/info/list#post', // 获取事由列表
-  addInviteInfo: '/invite/appoint/mobile/add#post' // 添加修改邀预约信息
-}
-let schoolApi = {
-  getSchoolList: '/school/info/getSchoolInfoListPage#post' // 获取学校列表
+let applyApi = {
+  applySubmit: '/recruitStudentInfo/add/mobile#post', // 申请提交
+  getApplyDetails: '/recruitStudentInfo/info/mobile#get', // 获取申请详情
+  getApplyList: '/recruitStudentInfo/list/mobile#post', // 查询验证
+  getCode: '/sms/valid/code#getUrl' // 获取短信验证码
 }
 
-for (let val in visitorApi) {
-  visitorApi[val] = `${hostEnv.zx}${visitorApi[val]}`
+let baseApi = {
+  getSubjectList : '/class/manage/query/subject/by/grade#get', // 获取专业列表
 }
 
-for (let val in schoolApi) {
-  schoolApi[val] = `${hostEnv.zk}${schoolApi[val]}`
+for (let val in applyApi) {
+  applyApi[val] = `${hostEnv.wq_school}${applyApi[val]}`
+}
+
+for (let val in baseApi) {
+  baseApi[val] = `${hostEnv.ljj_high}${baseApi[val]}`
 }
 
 let homeApi = {
-  ...visitorApi,
-  ...schoolApi
+  ...applyApi,
+  ...baseApi
 }
 
 export default homeApi

@@ -4,7 +4,7 @@
     <div class="list-area">
       <div
         class="list-item"
-        :style="{ borderLeftColor: getStatus(item.status)[1] }"
+        :style="{ borderLeftColor: getStatus(item.state)[1] }"
         v-for="item in applyList"
         :key="item.id"
         @click="toDetails(item)"
@@ -12,17 +12,17 @@
         <div class="apply-user">
           <div class="apply-left">
             <div class="user-name">
-              <img :src="getStatus(item.status)[0]" alt="" />
-              <span> {{ item.name }} </span>
+              <img :src="getStatus(item.state)[0]" alt="" />
+              <span> {{ item.studentName }} </span>
             </div>
-            <div class="project-name">{{ item.project }}</div>
-            <div class="apply-time">{{ getTime(item.time) }}</div>
+            <div class="project-name">{{ item.majorName }}</div>
+            <div class="apply-time">{{ getTime(item.createTime) }}</div>
           </div>
           <div class="apply-right">
             <span
-              :style="{ background: getStatus(item.status)[2], color: getStatus(item.status)[1] }"
+              :style="{ background: getStatus(item.state)[2], color: getStatus(item.state)[1] }"
               class="status-block"
-              >{{ getStatus(item.status)[3] }}</span
+              >{{ getStatus(item.state)[3] }}</span
             >
           </div>
         </div>
@@ -35,38 +35,21 @@ import Header from '../../component/Header'
 export default {
   data() {
     return {
-      applyList: [
-        {
-          id: '1',
-          name: '雷佳佳',
-          project: '化工技术',
-          status: 1,
-          time: 1604389892000,
-        },
-        {
-          id: '2',
-          name: '雷妍妍',
-          project: '护理',
-          status: 2,
-          time: 1604389892000,
-        },
-        {
-          id: '3',
-          name: '雷琳琳',
-          project: '软件技术',
-          status: 3,
-          time: 1604389892000,
-        },
-      ],
+      applyList: [],
     }
   },
   components: {
     Header,
   },
+  mounted() {
+    const list = JSON.parse(sessionStorage.getItem('applyList'))
+    this.applyList = list || []
+  },
   methods: {
-    toDetails() {
+    toDetails(item) {
       this.$router.push({
         path: `/applyDetails`,
+        query: { id: item.id },
       })
     },
     getStatus(status) {

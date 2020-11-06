@@ -17,12 +17,12 @@
 
 <script>
 import Header from '../../component/Header.vue'
+import { actions } from '../../store/index'
 import { Notify } from 'vant'
 export default {
   name: 'Login',
   components: {
     Header,
-    [Notify.Component.name]: Notify.Component,
   },
   computed: {},
   data() {
@@ -36,10 +36,6 @@ export default {
         return false
       }
       if (this.timer) return
-      Notify({
-        type: 'success',
-        message: '验证码已发送',
-      })
       this.timer = setInterval(() => {
         this.total--
         this.tip = `${this.total} s`
@@ -50,31 +46,41 @@ export default {
           this.timer = null
         }
       }, 1000)
-      // actions
-      //   .getYzm({
-      //     phone: this.loginForm.phone,
-      //     type: 2,
-      //   })
-      //   .then(() => {
-      //     this.$notify('验证码已发送')
-      //     this.timer = setInterval(() => {
-      //       this.total--
-      //       this.tip = `${this.total} s`
-      //       if (this.total === 0) {
-      //         this.total = 60
-      //         this.tip = '获取验证码'
-      //         clearInterval(this.timer)
-      //         this.timer = null
-      //       }
-      //     }, 1000)
-      //   })
+      actions.getCode(this.loginForm.phone).then(() => {
+        Notify({
+          type: 'success',
+          message: '验证码已发送',
+        })
+        this.timer = setInterval(() => {
+          this.total--
+          this.tip = `${this.total} s`
+          if (this.total === 0) {
+            this.total = 60
+            this.tip = '获取验证码'
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      })
     },
     search() {
       if (this.loginForm.authCode.trim().length === 0) {
         this.$notify('请输入验证码')
+        return
       }
-      this.$router.push({
-        path: '/applyList',
+      const req = {
+        mobile: this.loginForm.phone,
+        code: this.loginForm.authCode,
+      }
+      actions.getApplyList(req).then((res) => {
+        if (res && res.code === 200) {
+          sessionStorage.setItem('applyList', JSON.stringify(res.data))
+          this.$router.push({
+            path: '/applyList',
+          })
+        } else {
+          this.$notify(res.message || '查询失败')
+        }
       })
     },
   },
@@ -86,7 +92,7 @@ export default {
   height: 100vh;
   background-color: #fff;
   overflow: hidden;
-  .tip-title{
+  .tip-title {
     padding: 20px 0 20px 50px;
   }
   .login-input {

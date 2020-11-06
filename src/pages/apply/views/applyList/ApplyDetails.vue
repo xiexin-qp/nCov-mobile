@@ -3,30 +3,30 @@
     <Header title="申请详情" />
     <div class="msg-form">
       <div class="msg-top msg">
-        <div class="apply-status" :style="{ background: getStatus(1)[2], color: getStatus(1)[1] }">
-          {{ getStatus(1)[3] }}
+        <div class="apply-status" :style="{ background: getStatus(formData.state)[2], color: getStatus(formData.state)[1] }">
+          {{ getStatus(formData.state)[3] }}
         </div>
         <div class="msg-title">申请信息</div>
         <div class="msg-area">
           <div class="msg-item">
             <div class="msg-item-title">姓名：</div>
-            <div class="msg-item-content">张学良</div>
+            <div class="msg-item-content">{{ formData.studentName || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">申请学校：</div>
-            <div class="msg-item-content">旬阳中等职业学校</div>
+            <div class="msg-item-content">{{ formData.schoolName || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">申请专业：</div>
-            <div class="msg-item-content">化工技术</div>
+            <div class="msg-item-content">{{ formData.majorName || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">联系手机：</div>
-            <div class="msg-item-content">13111111111</div>
+            <div class="msg-item-content">{{ formData.mobile || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">申请时间：</div>
-            <div class="msg-item-content">2020/11/02 12:00:00</div>
+            <div class="msg-item-content">{{ formData.schoolName || '' }}</div>
           </div>
         </div>
       </div>
@@ -35,72 +35,72 @@
         <div class="msg-area">
           <div class="msg-item">
             <div class="msg-item-title">年级：</div>
-            <div class="msg-item-content">2020级</div>
+            <div class="msg-item-content">{{ formData.grade || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">性别：</div>
-            <div class="msg-item-content">男</div>
+            <div class="msg-item-content">{{ formData.gender || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">民族：</div>
-            <div class="msg-item-content">汉族</div>
+            <div class="msg-item-content">{{ formData.nationality || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">政治面貌：</div>
-            <div class="msg-item-content">群众</div>
+            <div class="msg-item-content">{{ formData.politicalOutlook || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">学生来源：</div>
-            <div class="msg-item-content">应届</div>
+            <div class="msg-item-content">{{ formData.studentSource || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">毕业学校：</div>
-            <div class="msg-item-content">旬阳五中</div>
+            <div class="msg-item-content">{{ formData.graduationSchool || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">户口性质：</div>
-            <div class="msg-item-content">农业</div>
+            <div class="msg-item-content">{{ formData.registrationNature || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">户口地址：</div>
-            <div class="msg-item-content">陕西省安康市旬阳县XX村</div>
+            <div class="msg-item-content">{{ formData.registrationAddress || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">所属派出所：</div>
-            <div class="msg-item-content">旬阳派出所</div>
+            <div class="msg-item-content">{{ formData.policeStation || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">居住类型：</div>
-            <div class="msg-item-content">农村</div>
+            <div class="msg-item-content">{{ formData.residentialType || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">家庭地址：</div>
-            <div class="msg-item-content">旬阳县XX镇CC村</div>
+            <div class="msg-item-content">{{ formData.homeAddress || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">家长姓名：</div>
-            <div class="msg-item-content">张作霖</div>
+            <div class="msg-item-content">{{ formData.parentName || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">家长手机：</div>
-            <div class="msg-item-content">13111111111</div>
+            <div class="msg-item-content">{{ formData.parentMobile || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">与本人关系：</div>
-            <div class="msg-item-content">父亲</div>
+            <div class="msg-item-content">{{ formData.relationship || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">是否监视人：</div>
-            <div class="msg-item-content">是</div>
+            <div class="msg-item-content">{{ formData.hasGuardian || '' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">健康状况：</div>
-            <div class="msg-item-content">良好</div>
+            <div class="msg-item-content">{{ formData.healthyState || '' }}</div>
           </div>
           <div class="msg-item user-photo">
             <div class="msg-item-title">人脸照片：</div>
             <div class="msg-item-content photo">
-              <img src="../../assets/close.png" alt="" />
+              <img :src="formData.photoUrl || ''" alt="" />
             </div>
           </div>
         </div>
@@ -111,13 +111,33 @@
 
 <script>
 import Header from '../../component/Header'
+import { actions } from '../../store/index'
 export default {
   components: {
     Header,
   },
+  data() {
+    return {
+      formData: {},
+    }
+  },
+  mounted() {
+    const id = this.$route.query.id
+    if (!id) {
+      this.$router.go(-1)
+    }
+    this.getDetails(id)
+  },
   methods: {
     getStatus(status) {
       return this.$getStatus(status)
+    },
+    getDetails(id) {
+      actions.getApplyDetails(id).then((res) => {
+        if (res && res.code === 200) {
+          this.formData = res.data || {}
+        }
+      })
     },
   },
 }

@@ -25,8 +25,8 @@
         <div class="tip">性别</div>
         <div class="submit-input qui-fx-f1 qui-fx-je">
           <van-radio-group class="qui-fx-ac" v-model="dataForm.studentSex">
-            <van-radio name="1">男</van-radio>
-            <van-radio name="2" style="margin-left: 15px">女</van-radio>
+            <van-radio name="0">男</van-radio>
+            <van-radio name="1" style="margin-left: 15px">女</van-radio>
           </van-radio-group>
         </div>
       </div>
@@ -54,8 +54,8 @@
         <div class="tip">学生来源</div>
         <div class="submit-input qui-fx-f1 qui-fx-je">
           <van-radio-group class="qui-fx-ac" v-model="dataForm.source">
-            <van-radio name="1">应届</van-radio>
-            <van-radio name="2" style="margin-left: 15px">非应届</van-radio>
+            <van-radio name="应届">应届</van-radio>
+            <van-radio name="非应届" style="margin-left: 15px">非应届</van-radio>
           </van-radio-group>
         </div>
       </div>
@@ -94,6 +94,7 @@ import SelectData from '@c/common/SelectData'
 import SelectPanel from '../component/SelectPanel'
 import { nation } from '@u/nation'
 import { Radio } from 'vant'
+import { actions } from '../store/index'
 const yzForm = {
   studentName: '请输入学生姓名',
   studentIdCard: '请输入正确身份证号码',
@@ -139,36 +140,26 @@ export default {
           text: '其他',
         },
       ],
-      projectList: [
-        {
-          id: 1,
-          text: '语文',
-        },
-        {
-          id: 2,
-          text: '数学',
-        },
-        {
-          id: 3,
-          text: '英语',
-        },
-        {
-          id: 4,
-          text: '化学',
-        },
-        {
-          id: 5,
-          text: '软件技术',
-        },
-        {
-          id: 6,
-          text: '物联网',
-        },
-      ],
+      projectList: [],
     }
   },
-  mounted() {},
+  mounted() {
+    this.getSubJect()
+  },
   methods: {
+    async getSubJect() {
+      const gradeName = 2020
+      const schoolCode = 'CANPOINTAI'
+      const res = await actions.getSubjectList({ gradeName, schoolCode })
+      if (res && res.code === 200) {
+        this.projectList = res.data.map((item) => {
+          return {
+            id: item.subjectCode,
+            text: item.subjectName,
+          }
+        })
+      }
+    },
     // 选择民族
     chooseNation(item) {
       this.dataForm.studentNation = item.text
@@ -179,6 +170,7 @@ export default {
     },
     // 选择专业
     chooseProject(item) {
+      this.dataForm.subjectCode = item.id
       this.dataForm.applyProject = item.text
     },
     // 下一步

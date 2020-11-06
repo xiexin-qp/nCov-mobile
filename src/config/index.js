@@ -12,6 +12,8 @@ let lvzhuo = ''
 let zx = ''
 let zk = ''
 let hpb_face = ''
+let ljj_high = ''
+let wq_school = 'wq_school'
 
 if (ConfigEnv === 'test') {
   host = 'http://canpointtest.com'
@@ -20,6 +22,8 @@ if (ConfigEnv === 'test') {
   zx = '/zx_visitor'
   zk = '/zk_school'
   hpb_face = '/hpb_face'
+  ljj_high = './ljj_high'
+  wq_school = './wq_school'
 } else if (ConfigEnv === 'prod') {
   host = 'http://canpointlive.com'
   wangxuanzhang = '/api-mobile-ncov'
@@ -27,6 +31,8 @@ if (ConfigEnv === 'test') {
   zx = '/zx_visitor'
   zk = '/zk_school'
   hpb_face = '/hpb_face'
+  ljj_high = './ljj_high'
+  wq_school = './wq_school'
 } else {
   wangxuanzhang = '/zhuxu'
   zhangkukn = '/zhangkukn'
@@ -35,6 +41,8 @@ if (ConfigEnv === 'test') {
   zx = '/zx'
   zk = '/zk'
   hpb_face = '/hpb_face'
+  ljj_high = './ljj_high'
+  wq_school = './wq_school'
 }
 
 export default {
@@ -45,5 +53,7 @@ export default {
   host,
   zx,
   zk,
-  hpb_face
+  hpb_face,
+  ljj_high,
+  wq_school
 }

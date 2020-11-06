@@ -62,6 +62,7 @@
 <script>
 import UploadFile from '@c/common/UploadFile'
 import { Radio } from 'vant'
+import { actions } from '../store/index'
 export default {
   components: {
     [Radio.name]: Radio,
@@ -116,24 +117,21 @@ export default {
         }
       }, 1000)
 
-      // actions
-      //   .getYzm({
-      //     phone: this.dataForm.regTel,
-      //     type: 2,
-      //   })
-      //   .then(() => {
-      //     this.$notify('验证码已发送')
-      //     this.timer = setInterval(() => {
-      //       this.total--
-      //       this.tip = `${this.total} s`
-      //       if (this.total === 0) {
-      //         this.total = 60
-      //         this.tip = '获取验证码'
-      //         clearInterval(this.timer)
-      //         this.timer = null
-      //       }
-      //     }, 1000)
-      //   })
+      actions
+        .getCode(this.dataForm.regTel)
+        .then(() => {
+          this.$notify('验证码已发送')
+          this.timer = setInterval(() => {
+            this.total--
+            this.tip = `${this.total} s`
+            if (this.total === 0) {
+              this.total = 60
+              this.tip = '获取验证码'
+              clearInterval(this.timer)
+              this.timer = null
+            }
+          }, 1000)
+        })
     },
     // 提交
     submit() {

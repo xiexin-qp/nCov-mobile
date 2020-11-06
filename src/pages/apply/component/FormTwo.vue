@@ -7,8 +7,8 @@
         <div class="tip">户口性质</div>
         <div class="submit-input qui-fx-f1 qui-fx-je">
           <van-radio-group class="qui-fx-ac" v-model="dataForm.houseType">
-            <van-radio name="1">农业</van-radio>
-            <van-radio name="2" style="margin-left: 15px">非农</van-radio>
+            <van-radio name="农业">农业</van-radio>
+            <van-radio name="非农" style="margin-left: 15px">非农</van-radio>
           </van-radio-group>
         </div>
       </div>
@@ -64,8 +64,8 @@
         <div class="tip">是否监护人</div>
         <div class="submit-input qui-fx-f1 qui-fx-je">
           <van-radio-group class="qui-fx-ac" v-model="dataForm.isGuardian">
-            <van-radio name="1">是</van-radio>
-            <van-radio name="2" style="margin-left: 15px">否</van-radio>
+            <van-radio name="是">是</van-radio>
+            <van-radio name="否" style="margin-left: 15px">否</van-radio>
           </van-radio-group>
         </div>
       </div>

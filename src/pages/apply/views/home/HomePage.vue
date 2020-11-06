@@ -13,7 +13,7 @@
         @click="routeTo('searchForm')"
         type="info"
         size="normal"
-        style="width: 55%; border-radius: 8px; font-size: 16px;"
+        style="width: 55%; border-radius: 8px; font-size: 16px"
         color="#0084FF"
         >查看进度</van-button
       >
@@ -52,6 +52,8 @@ export default {
 .home {
   height: 100vh;
   position: relative;
+  background-image: url(../../assets/bg@3x.png);
+  background-size: 100% 100%;
 }
 .btn {
   position: absolute;
@@ -63,24 +65,5 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-}
-
-@media screen and (max-width: 375px) {
-  .home {
-    background-image: url(../../assets/bg.png);
-    background-size: 100% 100%;
-  }
-}
-@media screen and (min-width:376px) and (max-width: 750px) {
-  .home {
-    background-image: url(../../assets/bg@2x.png);
-    background-size: 100% 100%;
-  }
-}
-@media screen and (min-width:751px) and (max-width: 1125px) {
-  .home {
-    background-image: url(../../assets/bg@3x.png);
-    background-size: 100% 100%;
-  }
 }
 </style>
