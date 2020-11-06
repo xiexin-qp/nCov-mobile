@@ -26,7 +26,7 @@
           </div>
           <div class="msg-item">
             <div class="msg-item-title">申请时间：</div>
-            <div class="msg-item-content">{{ formData.schoolName || '' }}</div>
+            <div class="msg-item-content">{{ getTime(formData.createTime) || '' }}</div>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@
           </div>
           <div class="msg-item">
             <div class="msg-item-title">性别：</div>
-            <div class="msg-item-content">{{ formData.gender || '' }}</div>
+            <div class="msg-item-content">{{ formData.gender == 0 ? '男' : '女' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">民族：</div>
@@ -91,7 +91,7 @@
           </div>
           <div class="msg-item">
             <div class="msg-item-title">是否监视人：</div>
-            <div class="msg-item-content">{{ formData.hasGuardian || '' }}</div>
+            <div class="msg-item-content">{{ formData.hasGuardian ? '是' : '否' }}</div>
           </div>
           <div class="msg-item">
             <div class="msg-item-title">健康状况：</div>
@@ -139,6 +139,9 @@ export default {
         }
       })
     },
+    getTime(time) {
+      return this.$tools.gmtToDate(time)
+    }
   },
 }
 </script>

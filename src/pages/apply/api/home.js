@@ -8,7 +8,7 @@ import hostEnv from '@config'
 
 let applyApi = {
   applySubmit: '/recruitStudentInfo/add/mobile#post', // 申请提交
-  getApplyDetails: '/recruitStudentInfo/info/mobile#get', // 获取申请详情
+  getApplyDetails: '/recruitStudentInfo/info/mobile#getUrl', // 获取申请详情
   getApplyList: '/recruitStudentInfo/list/mobile#post', // 查询验证
   getCode: '/sms/valid/code#getUrl' // 获取短信验证码
 }
