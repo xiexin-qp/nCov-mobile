@@ -1,11 +1,7 @@
 <template>
   <div class="u-page u-fx-ver">
     <select-data title="身份类型" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
-    <van-popup
-      v-model="isMore"
-      :close-on-click-overlay="false"
-      :style="{ width: '80%', height: 'auto' }"
-    >
+    <van-popup v-model="isMore" :close-on-click-overlay="false" :style="{ width: '80%', height: 'auto' }">
       <div class="dialog-more u-fx-ver">
         <div class="dialog-bg"></div>
         <div class="u-padd-20">请确认您要绑定的学生是：</div>
@@ -25,10 +21,7 @@
           </div>
         </div>
         <div class="u-fx-ac u-bd-t u-mar-t20">
-          <div
-            class="u-fx-f1 u-fx-ac-jc dialog-btn u-content-color u-bd-r"
-            @click="isMore = false"
-          >取消</div>
+          <div class="u-fx-f1 u-fx-ac-jc dialog-btn u-content-color u-bd-r" @click="isMore = false">取消</div>
           <div class="u-fx-f1 u-fx-ac-jc dialog-btn u-type-primary" @click="chooseChild">确定</div>
         </div>
       </div>
@@ -37,11 +30,7 @@
       <div class="error-bg"></div>
       <div class="error-btn">邀请链接已失效</div>
     </van-popup>
-    <van-popup
-      v-model="isOk"
-      :close-on-click-overlay="false"
-      :style="{ width: '100%', height: '100%' }"
-    >
+    <van-popup v-model="isOk" :close-on-click-overlay="false" :style="{ width: '100%', height: '100%' }">
       <div class="reg-ok">
         <div class="u-fx-ac u-fx-jc u-padd-t40">
           <div class="reg-title">
@@ -76,12 +65,7 @@
         <div class="submit-item u-fx-ac u-bd-b">
           <div class="icon-xm"></div>
           <div class="submit-input u-fx-f1">
-            <input
-              class="input u-tips-color"
-              v-model="dataForm.userName"
-              type="text"
-              placeholder="孩子姓名"
-            />
+            <input class="input u-tips-color" v-model="dataForm.userName" type="text" placeholder="孩子姓名" />
           </div>
         </div>
         <div class="submit-item u-fx-ac u-bd-b">
@@ -100,34 +84,19 @@
         <div class="submit-item u-fx-ac u-bd-b">
           <div class="icon-jz"></div>
           <div class="submit-input u-fx-f1">
-            <input
-              class="input u-tips-color"
-              v-model="dataForm.parentName"
-              type="text"
-              placeholder="家长姓名"
-            />
+            <input class="input u-tips-color" v-model="dataForm.parentName" type="text" placeholder="家长姓名" />
           </div>
         </div>
         <div class="submit-item u-fx-ac u-bd-b">
           <div class="icon-phone"></div>
           <div class="submit-input u-fx-f1">
-            <input
-              class="input u-tips-color"
-              v-model="dataForm.mobile"
-              type="tel"
-              placeholder="手机号"
-            />
+            <input class="input u-tips-color" v-model="dataForm.mobile" type="tel" placeholder="手机号" />
           </div>
         </div>
         <div class="submit-item u-fx-ac">
           <div class="icon-yzm"></div>
           <div class="submit-input u-fx-f1">
-            <input
-              class="input u-tips-color"
-              v-model="dataForm.captchaCode"
-              type="text"
-              placeholder="验证码"
-            />
+            <input class="input u-tips-color" v-model="dataForm.captchaCode" type="text" placeholder="验证码" />
           </div>
           <div class="u-type-primary" @click="getCode">{{ total === 60 ? '获取验证码' : total + 'S' }}</div>
         </div>
@@ -152,12 +121,12 @@ const yzForm = {
   relationShip: '请选择家属类型',
   parentName: '请输入家长姓名',
   mobile: '请输入家长手机号',
-  captchaCode: '请输入验证码'
+  captchaCode: '请输入验证码',
 }
 export default {
   name: 'RegisterParent',
   components: {
-    SelectData
+    SelectData,
   },
   computed: {},
   beforeCreate() {
@@ -174,24 +143,24 @@ export default {
       typeList: [
         {
           id: 1,
-          text: '爸爸'
+          text: '爸爸',
         },
         {
           id: 2,
-          text: '妈妈'
+          text: '妈妈',
         },
         {
           id: 3,
-          text: '爷爷'
+          text: '爷爷',
         },
         {
           id: 4,
-          text: '奶奶'
+          text: '奶奶',
         },
         {
           id: 5,
-          text: '其他'
-        }
+          text: '其他',
+        },
       ],
       total: 60,
       childList: [],
@@ -210,8 +179,8 @@ export default {
         gradeCode: '',
         classCode: '',
         yzmCode: '',
-        captchaCode: ''
-      }
+        captchaCode: '',
+      },
     }
   },
   async mounted() {
@@ -221,6 +190,10 @@ export default {
     if (new Date().getTime() - this.dateTime > 1000 * 60 * 5) {
       this.isError = true
       return
+    }
+    this.isGX = params.get('isHighSchool') === '1'
+    if (this.isGX) {
+      this.subjectCode = params.get('subjectCode')
     }
     this.schoolCode = params.get('schoolCode') || 'CANPOINTAI'
     this.gradeCode = params.get('gradeCode')
@@ -272,17 +245,17 @@ export default {
           this.$toast('请输入正确手机号')
           return
         }
-        const cInfo = await actions.getChildInfo({
-          page: 1,
-          size: 5,
-          schoolCode: this.schoolCode,
-          schoolYearId: this.schoolYearId,
-          gradeId: this.gradeCode,
-          classId: this.classCode,
-          keyword: this.dataForm.userName,
-          hasDorm: '',
-          hasPhoto: ''
-        })
+        if (this.isGX) {
+           const cInfo = await actions.getChildInfo({
+            page: 1,
+            size: 5,
+            schoolCode: this.schoolCode,
+            schoolYearId: this.gradeCode,
+            classId: this.classCode,
+            keyword: this.dataForm.userName,
+            hasDorm: '',
+            hasPhoto: '',
+          })
         if (cInfo.data.list.length === 0) {
           this.$toast('输入的孩子姓名有误')
           return
@@ -295,23 +268,52 @@ export default {
             this.isMore = true
           }
         }
+        } else {
+          const cInfo = await actions.getChildInfo({
+            page: 1,
+            size: 5,
+            schoolCode: this.schoolCode,
+            schoolYearId: this.schoolYearId,
+            gradeId: this.gradeCode,
+            classId: this.classCode,
+            keyword: this.dataForm.userName,
+            hasDorm: '',
+            hasPhoto: '',
+          })
+          if (cInfo.data.list.length === 0) {
+            this.$toast('输入的孩子姓名有误')
+            return
+          } else if (cInfo.data.list.length > 0) {
+            this.childList = cInfo.data.list
+            this.dataForm.workNo = cInfo.data.list[0].workNo
+            if (cInfo.data.list.length === 1) {
+              this.sendQeq()
+            } else {
+              this.isMore = true
+            }
+          }
+        }
       })
     },
     async sendQeq() {
+      const req = {
+        classCode: this.classCode,
+        gradeCode: this.gradeCode,
+        openid: '',
+        photoUrl: '',
+        schoolCode: this.schoolCode,
+        userName: this.dataForm.userName,
+        workNo: this.dataForm.workNo,
+        relationShip: this.relationShip,
+        parentName: this.dataForm.parentName,
+        mobile: this.dataForm.mobile,
+        captchaCode: this.dataForm.captchaCode,
+      }
+      if (this.isGX) {
+        req.subjectCode = this.subjectCode
+      }
       try {
-        await actions.parRegister({
-          classCode: this.classCode,
-          gradeCode: this.gradeCode,
-          openid: '',
-          photoUrl: '',
-          schoolCode: this.schoolCode,
-          userName: this.dataForm.userName,
-          workNo: this.dataForm.workNo,
-          relationShip: this.relationShip,
-          parentName: this.dataForm.parentName,
-          mobile: this.dataForm.mobile,
-          captchaCode: this.dataForm.captchaCode
-        })
+        await actions.parRegister(req)
         this.isOk = true
       } catch (err) {
         this.$toast(err.message || '注册失败')
@@ -325,8 +327,8 @@ export default {
       this.isMore = false
       this.dataForm.workNo = this.childList[this.currentIndex].workNo
       this.sendQeq()
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="less" scoped>

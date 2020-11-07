@@ -18,5 +18,6 @@ for (let val in homeApi) {
 export default {
   ...homeApi,
   getSchoolInfo: `${hostEnv.zk_school}/school/info/getSchoolByCode#getUrl`, // 查询学校信息
-  getChildInfo: `${hostEnv.lz_user_center}/userinfo/student/user/queryStudentInfoList#postJsonQuery` // 获取学生信息
+  getChildInfo: `${hostEnv.lz_user_center}/userinfo/student/user/queryStudentInfoList#postJsonQuery`, // 获取学生信息
+  getChildInfoHighSchool: `${hostEnv.lz_user_center}/student/manage/queryStudentInfoByUserCode#get` // 高校获取学生信息
 }
