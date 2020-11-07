@@ -1,14 +1,14 @@
 <template>
-  <div class="login qui-fx-ver">
+  <div class="login u-fx-ver">
     <div class="logo">
       <div class="welcome">疫情防控系统</div>
       <img :src="logo" alt />
     </div>
-    <div class="login-input qui-bd-b qui-fx-ac">
-      <input class="qui-fx-f1" v-model="loginForm.phone" type="tel" placeholder="请输入手机号" />
+    <div class="login-input u-bd-b u-fx-ac">
+      <input class="u-fx-f1" v-model="loginForm.phone" type="tel" placeholder="请输入手机号" />
       <span @click="getYzm" :class="['yzm-btn', { act: total !== 60 }]">{{ tip }}</span>
     </div>
-    <div class="login-input qui-bd-b">
+    <div class="login-input u-bd-b">
       <input type="tel" v-model="loginForm.authCode" placeholder="请输入验证码" />
     </div>
     <div class="login-btn" @click="login">登录</div>
@@ -154,7 +154,7 @@ export default {
     }
   }
   .yzm-btn {
-    color: @main-color;
+    color: @u-type-primary;
     &.act {
       color: #999;
     }
@@ -166,8 +166,8 @@ export default {
     color: #fff;
     letter-spacing: 8px;
     margin: 40px 80px;
-    border-radius: @radius;
-    background-color: @main-color;
+    border-radius: @u-border-radius;
+    background-color: @u-type-primary;
   }
 }
 </style>

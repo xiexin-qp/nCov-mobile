@@ -1,8 +1,8 @@
 <template>
-  <div class="home qui-fx-ver">
+  <div class="home u-fx-ver">
     <popup-box :no-btn="false" v-model="isOk" width="70" height="55">
       <div slot="title" class="ewm-title">注册成功</div>
-      <div class="qui-fx-ver ewm-info">
+      <div class="u-fx-ver ewm-info">
         <img class="wx-img" :src="wxImg" alt />
         <p>
           请长按二维码关注"全品平安校园"微信公众号，在"疫情日报"中对自己的情况进行上报，登录的账号为您注册的手机号。
@@ -17,66 +17,71 @@
       v-model="timeTag"
       @get-date="getDate"
     ></date-time>
-    <grade-class :shcool-code="dataForm.schoolCode" v-if="classTag" v-model="classTag" @confirm="chooseClass"></grade-class>
-    <div class="qui-fx-f1 qui-fx-ver">
-      <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b">
+    <grade-class
+      :shcool-code="dataForm.schoolCode"
+      v-if="classTag"
+      v-model="classTag"
+      @confirm="chooseClass"
+    ></grade-class>
+    <div class="u-fx-f1 u-fx-ver">
+      <div class="submit-form u-fx-f1">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">姓名</div>
-          <div class="submit-input qui-fx-f1">
+          <div class="submit-input u-fx-f1">
             <input class="input" v-model="dataForm.userName" type="text" placeholder="请输入姓名" />
           </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">性别</div>
-          <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-radio-group class="qui-fx-ac" v-model="dataForm.gender">
+          <div class="submit-input u-fx-f1 u-fx-je">
+            <van-radio-group class="u-fx-ac" v-model="dataForm.gender">
               <van-radio name="1">男</van-radio>
               <van-radio name="2" style="margin-left: 15px;">女</van-radio>
             </van-radio-group>
           </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">手机号</div>
-          <div class="submit-input qui-fx-f1">
+          <div class="submit-input u-fx-f1">
             <input class="input" v-model="dataForm.phone" type="tel" placeholder="请输入手机号" />
           </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">出生日期</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="showDate('birthday')">{{ dataForm.birthday }}</div>
+          <div class="submit-input u-tx-r u-fx-f1" @click="showDate('birthday')">{{ dataForm.birthday }}</div>
           <div class="rit-icon"></div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div>工号</div>
-          <div class="submit-input qui-fx-f1">
+          <div class="submit-input u-fx-f1">
             <input class="input" v-model="dataForm.userNo" type="text" placeholder="请输入工号，可不填" />
           </div>
         </div>
         <div class="mar-t20">
-          <div class="submit-item qui-fx-ac qui-bd-b">
+          <div class="submit-item u-fx-ac u-bd-b">
             <div class="tip">职位</div>
-            <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">
+            <div class="submit-input u-tx-r u-fx-f1" @click="typeTag = true">
               {{ dataForm.classChargeMarkText }}
             </div>
             <div class="rit-icon"></div>
           </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b" v-if="classShow">
+        <div class="submit-item u-fx-ac u-bd-b" v-if="classShow">
           <div class="tip">选择班级</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="classTag = true">
+          <div class="submit-input u-tx-r u-fx-f1" @click="classTag = true">
             {{ dataForm.gradeName }}{{ dataForm.clazzName }}
           </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b" v-if="classShow">
+        <div class="submit-item u-fx-ac u-bd-b" v-if="classShow">
           <div class="tip">班级人数</div>
-          <div class="submit-input qui-fx-f1">
+          <div class="submit-input u-fx-f1">
             <input class="input" v-model="dataForm.clazzUserSum" type="text" placeholder="请输入班级人数" />
           </div>
           <div class="rit-icon"></div>
         </div>
-        <div class="submit-area qui-fx-ver">
+        <div class="submit-area u-fx-ver">
           <div>人脸照片</div>
-          <div class="upload-list qui-fx-f1">
+          <div class="upload-list u-fx-f1">
             <upload-file :max-num="1" v-model="profilePhoto"></upload-file>
           </div>
         </div>
@@ -105,7 +110,7 @@ const yzForm = {
   phone: '请输入手机号',
   birthday: '请选择出生日期',
   classChargeMarkText: '请选择职务类型',
-  gender: '请选择性别',
+  gender: '请选择性别'
 }
 export default {
   name: 'RegisterTeacher',
@@ -115,7 +120,7 @@ export default {
     DateTime,
     SelectData,
     GradeClass,
-    PopupBox,
+    PopupBox
   },
   props: {},
   computed: {},
@@ -141,19 +146,19 @@ export default {
         gradeCode: '',
         gradeName: '请选择',
         clazzUserSum: '45',
-        schoolCode: '',
+        schoolCode: ''
       },
       profilePhoto: [],
       typeList: [
         {
           id: 1,
-          text: '班主任',
+          text: '班主任'
         },
         {
           id: 2,
-          text: '教职工',
-        },
-      ],
+          text: '教职工'
+        }
+      ]
     }
   },
   beforeCreate() {
@@ -163,7 +168,7 @@ export default {
     var url = window.location.href
     const paramsArr = url.substring(url.indexOf('?') + 1, url.indexOf('#/')).split('&')
     const paramsObj = {}
-    paramsArr.forEach((item) => {
+    paramsArr.forEach(item => {
       let arr = item.split('=')
       paramsObj[arr[0]] = arr[1]
     })
@@ -213,8 +218,8 @@ export default {
     getDate(time) {
       this.timeTag = false
       this.dataForm[this.timeType] = time
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -292,7 +297,7 @@ export default {
     line-height: 80px;
     border-radius: 8px;
     color: #fff;
-    background-color: @main-color;
+    background-color: @u-type-primary;
     text-align: center;
   }
 }

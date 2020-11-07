@@ -1,6 +1,6 @@
 <template>
-  <div class="home qui-page qui-fx-ver">
-    <div class="top qui-fx-jsb qui-fx-ac">
+  <div class="home u-page u-fx-ver">
+    <div class="top u-fx-jsb u-fx-ac">
       <div class="table">
         <van-tabs
           v-if="userInfo.roleCode === 'BZR' || userInfo.roleCode === 'XY'"
@@ -12,14 +12,14 @@
           <van-tab :title="userInfo.roleCode === 'BZR' ? '班级' : '学校'" name="2"></van-tab>
         </van-tabs>
       </div>
-      <div class="set qui-fx-ac" @click="goPersonal">
+      <div class="set u-fx-ac" @click="goPersonal">
         <img :src="userInfo.profilePhoto ? userInfo.profilePhoto : errorImg" alt :onerror="errorImg" />
         <span>{{ userInfo.userName }}</span>
       </div>
     </div>
     <scroll-list ref="scroll" pullUpLoad>
-      <div class="calendar qui-fx-ver">
-        <div class="sub-title qui-fx-jsb">
+      <div class="calendar u-fx-ver">
+        <div class="sub-title u-fx-jsb">
           <span>武汉加油！中国加油</span>
           <span>全品与你共克时艰</span>
         </div>
@@ -31,11 +31,11 @@
           @toggle="toggle"
         ></calendar-show>
       </div>
-      <div class="title qui-fx-jsb" v-if="role === '1'">
+      <div class="title u-fx-jsb" v-if="role === '1'">
         <span>今日上报</span>
         <span @click="nowReport(1)">立即上报</span>
       </div>
-      <div v-else class="title qui-fx-jsb">
+      <div v-else class="title u-fx-jsb">
         <span>今日上报情况</span>
         <!-- <span @click="nowReport(2)">立即上报</span> -->
         <span class="num">学生共{{ total ? total : 0 }}人</span>
@@ -43,8 +43,8 @@
       <div class="list" v-if="role === '1'">
         <ul v-if="personList.length > 0">
           <li :class="item.mark02 === '1' ? 'warn' : 'normal'" v-for="(item, i) in personList" :key="i">
-            <div class="info qui-fx-jsb">
-              <div class="qui-fx-ver">
+            <div class="info u-fx-jsb">
+              <div class="u-fx-ver">
                 <span>测温：{{ item.bodyPartsName }} {{ item.temperature }}</span>
                 <span>症状：{{ item.symptomsName ? item.symptomsName : '暂无' }}</span>
               </div>
@@ -57,22 +57,22 @@
         </ul>
         <no-data v-else msg="没有数据~"></no-data>
       </div>
-      <div class="report qui-fx-ver" v-else>
-        <div class="gather qui-fx-jsa">
+      <div class="report u-fx-ver" v-else>
+        <div class="gather u-fx-jsa">
           <div class="unappear" @click="countDetail(0)">
-            <div class="data qui-fx-ver">
+            <div class="data u-fx-ver">
               <span>{{ unappearNum ? unappearNum : 0 }}</span>
               <span>未上报</span>
             </div>
           </div>
           <div class="unusual" @click="countDetail(1)">
-            <div class="data qui-fx-ver">
+            <div class="data u-fx-ver">
               <span>{{ unusualNum ? unusualNum : 0 }}</span>
               <span>异常</span>
             </div>
           </div>
           <div class="fever" @click="countDetail(2)">
-            <div class="data qui-fx-ver">
+            <div class="data u-fx-ver">
               <span>{{ feverNum ? feverNum : 0 }}</span>
               <span>发热</span>
             </div>
@@ -80,8 +80,8 @@
         </div>
         <div class="student-list">
           <ul v-if="collectLIst.length > 0">
-            <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item)">
-              <div class="student qui-fx-ac">
+            <li class="u-fx-jsb u-fx-ac" v-for="(item, i) in collectLIst" :key="i" @click="reportDetail(item)">
+              <div class="student u-fx-ac">
                 <img :src="item.photoImg ? item.photoImg : errorImg" alt :onerror="errorImg" />
                 <span>{{ item.userName }}</span>
               </div>

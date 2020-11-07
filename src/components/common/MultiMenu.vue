@@ -1,7 +1,7 @@
 <template>
-    <div>
-      <div id="multiMenu">请选择</div>
-    </div>
+  <div>
+    <div id="multiMenu">请选择</div>
+  </div>
 </template>
 
 <script>
@@ -21,23 +21,24 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     const _self = this
     let mobileSelect = new MobileSelect({
       trigger: '#multiMenu',
       title: _self.title,
-      wheels: [{
-        data: _self.selectList
-      }
+      wheels: [
+        {
+          data: _self.selectList
+        }
       ],
       keyMap: {
         id: 'id',
         value: 'title',
         childs: 'children'
       },
-      callback: function (indexArr, data) {
+      callback: function(indexArr, data) {
         console.log(data)
-        _self.$emit('input',data)
+        _self.$emit('input', data)
       }
     })
   }
@@ -46,22 +47,22 @@ export default {
 
 <style lang="less">
 .mobileSelect .content .btnBar .ensure {
-  color: @main-color;
-  font-size: 14PX
+  color: @u-type-primary;
+  font-size: 14px;
 }
-.mobileSelect .content .btnBar .cancel  {
-  color:#fff;
+.mobileSelect .content .btnBar .cancel {
+  color: #fff;
 }
 .mobileSelect .content .btnBar .title {
-  font-size: 16PX
+  font-size: 16px;
 }
 .mobileSelect .content .fixWidth {
   width: 100%;
 }
 .mobileSelect .content .btnBar {
-  border-color:#ebedf0 !important
+  border-color: #ebedf0 !important;
 }
 .mobileSelect .content .panel .selectLine {
-  border-color: #ebedf0 !important
+  border-color: #ebedf0 !important;
 }
 </style>

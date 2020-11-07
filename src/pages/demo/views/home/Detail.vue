@@ -1,12 +1,12 @@
 <template>
-  <div class="qui-page qui-flex-ver">
+  <div class="u-page u-flex-ver">
     <header-com title="详情" isBack></header-com>
-    <div class="qui-fx-f1 detail">
-      <p>姓名：{{detail.name}}</p>
-      <p>性别：{{detail.sex}}</p>
-      <p>年龄：{{detail.age}}</p>
-      <p>体温：{{detail.number}}</p>
-      <p>住址：{{detail.address}}</p>
+    <div class="u-fx-f1 detail">
+      <p>姓名：{{ detail.name }}</p>
+      <p>性别：{{ detail.sex }}</p>
+      <p>年龄：{{ detail.age }}</p>
+      <p>体温：{{ detail.number }}</p>
+      <p>住址：{{ detail.address }}</p>
     </div>
   </div>
 </template>

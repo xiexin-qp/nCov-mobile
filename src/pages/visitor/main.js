@@ -6,7 +6,7 @@ import tools from '@u/tools'
 import '@u/filters.js'
 import '@u/directives.js'
 import '@u/rem.js'
-import '@a/css/qui-base.css'
+import '@a/css/u-base.less'
 import '@a/css/global.less'
 import '@a/js/vant-plugin.js'
 

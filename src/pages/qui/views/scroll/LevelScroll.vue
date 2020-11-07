@@ -1,11 +1,11 @@
 <template>
-  <div class="scroll-lef-rit qui-page qui-fx-ver">
+  <div class="scroll-lef-rit u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <div style="margin-top: 20px; background-color:#fff">
       <level-scroll>
         <ul class="scroll-list">
           <li v-for="i in 20" :key="i">
-            <div class="pic" :style="{backgroundColor: '#' + Math.floor(Math.random() * 1000000)}">{{ i }}</div>
+            <div class="pic" :style="{ backgroundColor: '#' + Math.floor(Math.random() * 1000000) }">{{ i }}</div>
           </li>
         </ul>
       </level-scroll>
@@ -31,61 +31,57 @@ export default {
     HeaderCom,
     LevelScroll
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
-  computed: {
-  },
-  methods: {
-  },
-  mounted () {
-  }
+  computed: {},
+  methods: {},
+  mounted() {}
 }
 </script>
 
-<style lang = "less" scoped>
-  .scroll-lef-rit {
-    .container {
-      white-space: nowrap;
-      display:inline-block
-    }
-    .scrollDiv{
-      width:2.6rem;
-      height:2.6rem;
-      -webkit-border-radius: 100%;
-      border-radius: 100%
-    }
-    .ScrollList {
-      padding:.6rem;
+<style lang="less" scoped>
+.scroll-lef-rit {
+  .container {
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .scrollDiv {
+    width: 2.6rem;
+    height: 2.6rem;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+  }
+  .ScrollList {
+    padding: 0.6rem;
+    display: inline-block;
+  }
+  .scroll-list {
+    padding: 20px 0;
+    white-space: nowrap;
+    display: inline-block;
+    background-color: #fff;
+    li {
       display: inline-block;
-    }
-    .scroll-list {
-      padding: 20px 0;
-      white-space: nowrap;
-      display:inline-block;
-      background-color:#fff;
-      li {
-        display:inline-block;
-        .pic {
-          background-color:#ccc;
-          border-radius: 8px;
-          margin: 0 10px;
-          width: 100px;
-          color:#fff;
-          line-height: 100px;
-          text-align:center;
-          height: 100px;
-        }
-      }
-    }
-    .level-list {
-      display: inline-block;
-      white-space: nowrap;
-      li {
-        display: inline-block;
-        padding: 20px;
+      .pic {
+        background-color: #ccc;
+        border-radius: 8px;
+        margin: 0 10px;
+        width: 100px;
+        color: #fff;
+        line-height: 100px;
+        text-align: center;
+        height: 100px;
       }
     }
   }
+  .level-list {
+    display: inline-block;
+    white-space: nowrap;
+    li {
+      display: inline-block;
+      padding: 20px;
+    }
+  }
+}
 </style>

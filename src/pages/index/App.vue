@@ -1,25 +1,25 @@
 <template>
-  <div class="qui-page qui-fx-ver">
+  <div class="u-page u-fx-ver">
     <div id="header" class="header">
-      <div class="header-slide qui-fx"></div>
+      <div class="header-slide u-fx"></div>
       <div class="co-header-title">{{ title }}</div>
-      <div class="header-slide qui-fx-je" @click="toogleDemo">
+      <div class="header-slide u-fx-je" @click="toogleDemo">
         <img class="down-img" :src="show" alt />
       </div>
     </div>
     <div class="fx-f1">
-      <div :class="['qui-fx-wp qui-list qui-bd-b', { 'qui-list--toogle': toogle }]">
-        <div @click="goApp(app.url)" class="app-list qui-fx-ac-jc" v-for="(app, index) in appList" :key="index">
+      <div :class="['u-fx-wp u-list u-bd-b', { 'u-list--toogle': toogle }]">
+        <div @click="goApp(app.url)" class="app-list u-fx-ac-jc" v-for="(app, index) in appList" :key="index">
           <div class="app-img" :style="{ backgroundColor: bgCol[app.randomNum] }">
             <img :src="app.icon" alt />
           </div>
           <div class="app-name" :style="{ color: bgCol[app.randomNum] }">{{ app.name }}</div>
         </div>
       </div>
-      <div class="module-list qui-fx-wp">
+      <div class="module-list u-fx-wp">
         <div
           @click="goApp(app.url)"
-          class="app-list module-app qui-fx-ac-jc"
+          class="app-list module-app u-fx-ac-jc"
           v-for="(app, index) in moduleList"
           :key="index"
         >
@@ -44,7 +44,7 @@ export default {
   components: {},
   data() {
     return {
-      title: 'Qui',
+      title: '移动端',
       show,
       toogle: true,
       downTag: false,
@@ -107,7 +107,21 @@ export default {
           icon: app,
           url: 'apply',
           randomNum: 1,
-        }
+        },
+        {
+          id: 7,
+          name: '人脸录入',
+          icon: app,
+          url: 'face',
+          randomNum: 2,
+        },
+        {
+          id: 6,
+          name: '家长注册',
+          icon: app,
+          url: 'parentReg',
+          randomNum: 1,
+        },
       ],
     }
   },
@@ -162,13 +176,13 @@ export default {
 .down-aim {
   transform: rotate(180deg);
 }
-.qui-list {
+.u-list {
   border-bottom: 1px #f5f5f5 solid;
   transition: height 0.3s linear;
   height: 0px;
   overflow: hidden;
 }
-.qui-list--toogle {
+.u-list--toogle {
   height: 200px;
 }
 .app-list {

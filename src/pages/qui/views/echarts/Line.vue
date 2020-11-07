@@ -1,5 +1,5 @@
 <template>
-  <div class="echarts qui-page qui-fx-ver">
+  <div class="echarts u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <echart-line ref="draw" :color="color" :id="id" :format="format"></echart-line>
   </div>
@@ -15,7 +15,7 @@ export default {
     HeaderCom,
     EchartLine
   },
-  data () {
+  data() {
     return {
       color: ['#d4cef1', '#9a9aea'],
       id: 'total-pic',
@@ -40,20 +40,18 @@ export default {
       yStep: 50
     }
   },
-  mounted () {
+  mounted() {
     this.draw()
   },
   methods: {
-    format (name, data) {
+    format(name, data) {
       return name
     },
-    draw () {
+    draw() {
       this.$refs.draw.drawLine(this.legendData, this.xData, this.yData, this.size, this.yName, this.yStep)
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
-
+<style lang="less" scoped></style>

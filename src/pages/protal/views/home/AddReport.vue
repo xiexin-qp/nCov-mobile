@@ -1,5 +1,5 @@
 <template>
-  <div class="qui-page qui-flex-ver">
+  <div class="u-page u-flex-ver">
     <!-- <popup-box
       v-model="isShow"
       @confirm="choose"
@@ -13,28 +13,28 @@
       <div class="info-list">
         <div
           style="height: 2rem; line-height: 2rem; padding-left: 10px;"
-          :class="['qui-bd-b',currentIndex === index ? 'active' : '']"
+          :class="['u-bd-b',currentIndex === index ? 'active' : '']"
           v-for="(item,index) in studentList"
           :key="item.id"
           @click="chooseStudent(item,index)"
         >{{ item.studentName }}</div>
       </div>
     </popup-box> -->
-    <div class="qui-fx-f1 qui-fx-ver">
+    <div class="u-fx-f1 u-fx-ver">
       <select-data title="测量部位" :select-list="typeList" v-model="typeTag" @confirm="chooseType"></select-data>
-      <div class="submit-form qui-fx-f1">
-        <div class="submit-item qui-fx-ac qui-bd-b">
+      <div class="submit-form u-fx-f1">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">姓名</div>
-           <div class="submit-input qui-tx-r qui-fx-f1">{{ dataForm.userName }}</div>
+          <div class="submit-input u-tx-r u-fx-f1">{{ dataForm.userName }}</div>
         </div>
-        <!-- <div class="submit-item qui-fx-ac qui-bd-b" v-else>
+        <!-- <div class="submit-item u-fx-ac u-bd-b" v-else>
           <div class="tip">姓名</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="isShow = true">{{ dataForm.userName }}</div>
+          <div class="submit-input u-tx-r u-fx-f1" @click="isShow = true">{{ dataForm.userName }}</div>
           <div class="rit-icon"></div>
         </div> -->
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">体温</div>
-          <div class="submit-input qui-fx-f1">
+          <div class="submit-input u-fx-f1">
             <input
               class="input"
               v-model="dataForm.temperature"
@@ -43,28 +43,28 @@
             />
           </div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">测量部位</div>
-          <div class="submit-input qui-tx-r qui-fx-f1" @click="typeTag = true">{{ bodyParts }}</div>
+          <div class="submit-input u-tx-r u-fx-f1" @click="typeTag = true">{{ bodyParts }}</div>
           <div class="rit-icon"></div>
         </div>
-        <div class="submit-item qui-fx-ac qui-bd-b">
+        <div class="submit-item u-fx-ac u-bd-b">
           <div class="tip">是否接触疫情人员</div>
-          <div class="submit-input qui-fx-f1 qui-fx-je">
-            <van-switch v-model="dataForm.mark01" size="22px"/>
+          <div class="submit-input u-fx-f1 u-fx-je">
+            <van-switch v-model="dataForm.mark01" size="22px" />
           </div>
         </div>
-        <div class="submit-area qui-fx-ver">
+        <div class="submit-area u-fx-ver">
           <div>附带症状</div>
-          <div class="qui-fx-f1" style="padding: 10px 0 ">
+          <div class="u-fx-f1" style="padding: 10px 0 ">
             <van-checkbox-group v-model="dataForm.symptom" :max="1">
-              <van-checkbox 
-                style="margin-bottom: 10px" 
+              <van-checkbox
+                style="margin-bottom: 10px"
                 v-for="item in symptomsList"
                 :key="item.id"
                 :name="item.symptomsCode"
-              > 
-                {{item.symptomsName}}
+              >
+                {{ item.symptomsName }}
               </van-checkbox>
               <!-- <van-checkbox name="b">复选框 b</van-checkbox>
               <van-checkbox name="c">复选框 c</van-checkbox> -->
@@ -81,9 +81,9 @@
             </van-radio-group> -->
           </div>
         </div>
-        <div class="submit-area qui-fx-ver">
+        <div class="submit-area u-fx-ver">
           <div>其他说明</div>
-          <div class="qui-fx-f1">
+          <div class="u-fx-f1">
             <textarea
               class="text-area"
               v-model="dataForm.symptomsRemarks"
@@ -120,7 +120,7 @@ export default {
     [RadioGroup.name]: RadioGroup,
     [Radio.name]: Radio,
     [Switch.name]: Switch,
-    SelectData,
+    SelectData
     // PopupBox
   },
   computed: {},
@@ -135,7 +135,7 @@ export default {
       dataForm: {
         userName: '',
         temperature: '',
-        symptom:  [],
+        symptom: [],
         symptomsRemarks: '',
         bodyParts: '请选择测量部位'
       },
@@ -144,7 +144,7 @@ export default {
       currentIndex: '',
       curVal: '',
       bodyParts: '请选择测量部位',
-      symptomsList:[]
+      symptomsList: []
     }
   },
   // watch:{
@@ -163,19 +163,19 @@ export default {
     this.symptomsGet()
   },
   methods: {
-    async bodyGet(){
+    async bodyGet() {
       const res = await actions.getBody()
-      this.typeList = res.result.map(item=>{
+      this.typeList = res.result.map(item => {
         item.id = item.bodyPartsCode
         item.text = item.bodyPartsName
         return item
       })
     },
-    async symptomsGet(){
+    async symptomsGet() {
       const res = await actions.getSymptoms()
       this.symptomsList = res.result
     },
-   submitForm() {
+    submitForm() {
       validateForm(yzForm, this.dataForm, () => {
         this.dataForm.reportPersonName = store.userInfo.userName
         this.dataForm.reportPersonCode = store.userInfo.userCode
@@ -191,16 +191,16 @@ export default {
         }
         actions.addReport(this.dataForm).then(() => {
           this.$toast.success({ message: '提交成功' })
-            setTimeout(() => {
-              this.$router.go(-1)
-            }, 1000)
-          })
+          setTimeout(() => {
+            this.$router.go(-1)
+          }, 1000)
+        })
       })
     },
     chooseType(item) {
       this.bodyParts = item.text
       this.dataForm.bodyParts = item.id
-    },
+    }
     // chooseStudent(record, index){
     //   this.chooseItem = record
     //   this.currentIndex = index
@@ -247,7 +247,7 @@ export default {
     .rit-icon {
       width: 30px;
       height: 30px;
-      background:url('../../assets/img/select.png') no-repeat;
+      background: url('../../assets/img/select.png') no-repeat;
       background-size: 100%;
     }
   }
@@ -274,13 +274,15 @@ export default {
     line-height: 80px;
     border-radius: 8px;
     color: #fff;
-    background-color: @main-color;
+    background-color: @u-type-primary;
     text-align: center;
   }
 }
-.active{
+.active {
   background-color: #7d88fc;
   color: #fff;
 }
-* { touch-action: pan-y; } 
+* {
+  touch-action: pan-y;
+}
 </style>

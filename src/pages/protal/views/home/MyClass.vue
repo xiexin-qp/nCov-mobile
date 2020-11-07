@@ -1,25 +1,25 @@
 <template>
-  <div class="my-class qui-page qui-fx-ver">
+  <div class="my-class u-page u-fx-ver">
     <header-com title="我的班级" isBack></header-com>
-    <div class="info qui-fx-jsa">
-      <div class="data qui-fx-ver">
+    <div class="info u-fx-jsa">
+      <div class="data u-fx-ver">
         <span>班级</span>
         <span>{{ userInfo.gradeName }}{{ userInfo.clazzName }}</span>
       </div>
-      <!-- <div class="data qui-fx-ver">
+      <!-- <div class="data u-fx-ver">
         <span>人数</span>
         <span>{{ total }}</span>
       </div> -->
-      <div class="data qui-fx-ver">
+      <div class="data u-fx-ver">
         <span>已加入</span>
         <span>{{ total }}人</span>
       </div>
     </div>
-    <scroll-list ref="scroll" pullUpLoad  @loadMore="showList(true)">
-      <div class="student-list qui-fx-ver">
+    <scroll-list ref="scroll" pullUpLoad @loadMore="showList(true)">
+      <div class="student-list u-fx-ver">
         <ul>
-          <li class="qui-fx-jsb qui-fx-ac" v-for="(item, i) in dataList" :key="i">
-            <div class="student qui-fx-ac">
+          <li class="u-fx-jsb u-fx-ac" v-for="(item, i) in dataList" :key="i">
+            <div class="student u-fx-ac">
               <img :src="item.profilePhoto ? item.profilePhoto : errorImg" alt="" :onerror="errorImg" />
               <span>{{ item.userName }}</span>
             </div>
@@ -47,10 +47,10 @@ export default {
   data() {
     return {
       dataList: [],
-      className:'',
-      total:'',
-      inNum:'',
-      errorImg: 'this.src="' + require('@a/img/photo.png') + '"',
+      className: '',
+      total: '',
+      inNum: '',
+      errorImg: 'this.src="' + require('@a/img/photo.png') + '"'
     }
   },
   async mounted() {
@@ -59,7 +59,7 @@ export default {
   methods: {
     async showList(tag = false) {
       const req = {
-        schoolCode : this.userInfo.schoolCode,
+        schoolCode: this.userInfo.schoolCode,
         clazzCode: this.userInfo.clazzCode,
         pageNum: 1,
         pageSize: 15

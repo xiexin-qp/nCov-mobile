@@ -1,7 +1,7 @@
 <template>
-  <div class="submit-form qui-page qui-fx-ver">
+  <div class="submit-form u-page u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
-    <div class="qui-fx-f1 qui-fx">
+    <div class="u-fx-f1 u-fx">
       <submit-form></submit-form>
     </div>
   </div>
@@ -16,20 +16,15 @@ export default {
     HeaderCom,
     SubmitForm
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
-  mounted () {
-  },
-  methods: {
-  }
+  mounted() {},
+  methods: {}
 }
 </script>
 
 <style lang="less" scoped>
 .submit-form {
-
 }
 </style>
-

@@ -1,182 +1,194 @@
 <template>
-    <div class="calendar-box" ref="body">
-      <!-- calendar-header 显示周列表头 -->
-      <div class="qui-fx-ac year-header">
-        <div @click="changeMonth('prev')">上一月</div>
-        <div class="qui-fx-f1 qui-tx-c" style="font-weight: bold; font-size: 16PX">
-          {{currentYear}}-{{currentMonth}}-{{currentDate}}
-        </div>
-        <div @click="changeMonth('next')">下一月</div>
+  <div class="calendar-box" ref="body">
+    <!-- calendar-header 显示周列表头 -->
+    <div class="u-fx-ac year-header">
+      <div @click="changeMonth('prev')">上一月</div>
+      <div class="u-fx-f1 u-tx-c" style="font-weight: bold; font-size: 16PX">
+        {{ currentYear }}-{{ currentMonth }}-{{ currentDate }}
       </div>
-      <div class="calendar-header">
-        <span class="calendar-week" v-if="type==='START_SUN'">日</span>
-        <span class="calendar-week">一</span>
-        <span class="calendar-week">二</span>
-        <span class="calendar-week">三</span>
-        <span class="calendar-week">四</span>
-        <span class="calendar-week">五</span>
-        <span class="calendar-week">六</span>
-        <span class="calendar-week" v-if="type==='START_MON'">日</span>
-      </div>
-      <!-- 日历列表 -->
-      <div :class="['calendar-body showCal', {'showHeight' : isOpen}]" ref="calendar" id="calendar">
-        <div class="calendar-row" v-for="(week, weekId) in sortDate" :key="weekId">
-          <span :id="day ? 'day' + day.date: ''" v-for="(day, dayId) in week" :key="dayId" :class="['calendar-day', {'exception': day ?  exceptionList.indexOf(day.date) > -1: false, 'zhengchang': day ?  zcList.indexOf(day.date) > -1: false, 'current': day ? currentDate === day.date : false}]"
-            @click="changeDate(day)">
-            <i>{{day ? day.date : ''}}</i>
-            <i>{{day ? day.lunnar : ''}}</i>
-          </span>
-        </div>
-      </div>
-      <div v-if="isToggle" class="down-icon qui-fx-ac qui-fx-jc" @click="toogleCal">
-        <div :style="{transform: downStyle}">
-          <img src="./img/down-icon.png" alt="">
-        </div>
+      <div @click="changeMonth('next')">下一月</div>
+    </div>
+    <div class="calendar-header">
+      <span class="calendar-week" v-if="type === 'START_SUN'">日</span>
+      <span class="calendar-week">一</span>
+      <span class="calendar-week">二</span>
+      <span class="calendar-week">三</span>
+      <span class="calendar-week">四</span>
+      <span class="calendar-week">五</span>
+      <span class="calendar-week">六</span>
+      <span class="calendar-week" v-if="type === 'START_MON'">日</span>
+    </div>
+    <!-- 日历列表 -->
+    <div :class="['calendar-body showCal', { showHeight: isOpen }]" ref="calendar" id="calendar">
+      <div class="calendar-row" v-for="(week, weekId) in sortDate" :key="weekId">
+        <span
+          :id="day ? 'day' + day.date : ''"
+          v-for="(day, dayId) in week"
+          :key="dayId"
+          :class="[
+            'calendar-day',
+            {
+              exception: day ? exceptionList.indexOf(day.date) > -1 : false,
+              zhengchang: day ? zcList.indexOf(day.date) > -1 : false,
+              current: day ? currentDate === day.date : false
+            }
+          ]"
+          @click="changeDate(day)"
+        >
+          <i>{{ day ? day.date : '' }}</i>
+          <i>{{ day ? day.lunnar : '' }}</i>
+        </span>
       </div>
     </div>
+    <div v-if="isToggle" class="down-icon u-fx-ac u-fx-jc" @click="toogleCal">
+      <div :style="{ transform: downStyle }">
+        <img src="./img/down-icon.png" alt="" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="less" scoped>
-  .calendar-day {
-    width: 2.2rem;
-    height:2.2rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    top: 8px;
+.calendar-day {
+  width: 2.2rem;
+  height: 2.2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 8px;
+}
+.year-header {
+  height: 90px;
+  padding: 0 20px;
+  color: #fff;
+  background-color: #7b91f4;
+}
+.calendar-box {
+}
+.calendar-box i {
+  font-style: normal;
+}
+.down-icon {
+  height: 50px;
+  background-color: #eee;
+  img {
+    width: 26px;
+    height: 26px;
+    display: block;
   }
-  .year-header {
-    height: 90px;
-    padding: 0 20px;
-    color:#fff;
-    background-color:#7b91f4
-  }
-  .calendar-box {
-  }
-  .calendar-box i {
-    font-style: normal;
-  }
-  .down-icon {
-    height: 50px;
-    background-color:#eee;
-    img {
-      width: 26px;
-      height: 26px;
-      display: block
-    }
-  }
-  .calendar-header {
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+}
+.calendar-header {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .calendar-week {
-    flex: 1;
-    text-align: center;
-    color: #444;
-    font-size: 28px;
-    font-weight: bold
-  }
+.calendar-week {
+  flex: 1;
+  text-align: center;
+  color: #444;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-  .calendar-body {
-    background: #fff;
-    transition: transform .1s linear;
-  }
+.calendar-body {
+  background: #fff;
+  transition: transform 0.1s linear;
+}
 
-  .calendar-row {
-    height: 3.25rem;
-    padding-bottom: .85rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    overflow: hidden;
-    transition: height .3s ease-out;
-  }
+.calendar-row {
+  height: 3.25rem;
+  padding-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  overflow: hidden;
+  transition: height 0.3s ease-out;
+}
 
-  .calendar-day.current {
-    width: 2.2rem;
-    height: 2.2rem;
-    background: #7b91f4;
-    border-radius: 50%;
-    color: #fff;
-  }
+.calendar-day.current {
+  width: 2.2rem;
+  height: 2.2rem;
+  background: #7b91f4;
+  border-radius: 50%;
+  color: #fff;
+}
 
-  .calendar-day.current i:first-child {
-    font-size: .75rem;
-  }
+.calendar-day.current i:first-child {
+  font-size: 0.75rem;
+}
 
-  .calendar-day.current i:last-child {
-    color: #fff;
-  }
+.calendar-day.current i:last-child {
+  color: #fff;
+}
 
-  .calendar-day.exception:before {
-    content: '';
-    width: 12px;
-    height: 12px;
-    background: #ffad8f;
-    border-radius: 50%;
-    position: absolute;
-    left: 50%;
-    bottom: -.4rem;
-    margin-left: -4px;
-    z-index: 99;
-  }
-  .calendar-day.zhengchang:before {
-    content: '';
-    width: 12px;
-    height: 12px;
-    z-index: 99;
-    background: @main-color;
-    border-radius: 50%;
-    position: absolute;
-    left: 50%;
-    bottom: -.4rem;
-    margin-left: -4px;
-  }
-  .calendar-day i:last-child {
-    font-size: 20px;
-    color: #8a8a8a;
-  }
+.calendar-day.exception:before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: #ffad8f;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  bottom: -0.4rem;
+  margin-left: -4px;
+  z-index: 99;
+}
+.calendar-day.zhengchang:before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  z-index: 99;
+  background: @u-type-primary;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  bottom: -0.4rem;
+  margin-left: -4px;
+}
+.calendar-day i:last-child {
+  font-size: 20px;
+  color: #8a8a8a;
+}
 
-  .calendar-btn {
-    height: 1.5rem;
-    background: #fff;
-    border-top: 2px solid #e9e9e9;
-    text-align: center;
-  }
+.calendar-btn {
+  height: 1.5rem;
+  background: #fff;
+  border-top: 2px solid #e9e9e9;
+  text-align: center;
+}
 
-  .calendar-btn i {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    background-repeat: no-repeat;
-    background-size: cover;
-    transition: transform .4s linear;
-  }
-  .calendar-btn.active i {
-    transform: rotate(180deg);
-  }
-  .showCal {
-    height: 3.2rem;
-    -webkit-transition: height .6s ease;
-    transition: height .6s ease;
-    overflow: hidden;
-  }
+.calendar-btn i {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: transform 0.4s linear;
+}
+.calendar-btn.active i {
+  transform: rotate(180deg);
+}
+.showCal {
+  height: 3.2rem;
+  -webkit-transition: height 0.6s ease;
+  transition: height 0.6s ease;
+  overflow: hidden;
+}
 </style>
 
 <script>
 import lunnarCalc from './js/calendar'
 
 // -> 获取本月最后一天
-function getLastDate (date) {
+function getLastDate(date) {
   var newdate = new Date(date.getTime())
   var newYear = newdate.getFullYear()
-  var newMonth = (newdate.getMonth()) + 1
+  var newMonth = newdate.getMonth() + 1
   if (newMonth >= 12) {
     newYear += 1
     newMonth = 0
@@ -188,14 +200,14 @@ function getLastDate (date) {
   return newdate
 }
 // -> 获取本月第一天
-function getFirstDate (date) {
+function getFirstDate(date) {
   var newdate = new Date(date.getTime())
   newdate.setDate(1)
   return newdate
 }
 export default {
   name: 'calendar1',
-  data () {
+  data() {
     var newd = new Date()
     return {
       dateShow: this.isDate,
@@ -219,7 +231,7 @@ export default {
     },
     isDate: {
       type: Array,
-      default: function () {
+      default: function() {
         return []
       }
     },
@@ -240,11 +252,10 @@ export default {
       default: 'START_SUN'
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     // 渲染日历列表
-    caleList () {
+    caleList() {
       // -> 根据 this.date -> 给出日历二位数组
       var firstDay = getFirstDate(this.currentNow)
       var lastDay = getLastDate(this.currentNow)
@@ -292,7 +303,7 @@ export default {
       }
       this.sortDate = sortDate
     },
-    toogleCal () {
+    toogleCal() {
       if (this.isOpen) {
         this.downStyle = 'rotate(0deg)'
         document.getElementById('calendar').style.height = '3.2rem'
@@ -303,15 +314,15 @@ export default {
       this.isOpen = !this.isOpen
       this.$emit('toggle')
     },
-    changeDate (day) {
+    changeDate(day) {
       this.currentDate = day.date
       this.$emit('get-date', { year: this.currentYear, month: this.currentMonth, day: day.date })
     },
-    swipeStart () {},
-    swipe (evt) {
+    swipeStart() {},
+    swipe(evt) {
       this.$refs.calendar.style.transform = `translateX(${evt.deltaX}px)`
     },
-    swipeEnd (evt) {
+    swipeEnd(evt) {
       if (evt.deltaX > 100) {
         this.$refs.calendar.style.transform = 'translateX(100%)'
         this.changeMonth('prev')
@@ -324,7 +335,7 @@ export default {
       }
       this.$refs.calendar.style.transform = 'translateX(0px)'
     },
-    changeMonth (dir) {
+    changeMonth(dir) {
       var currM = this.currentMonth
       if (dir === 'prev') {
         if (currM === 1) {
@@ -363,7 +374,7 @@ export default {
         })
       })
     },
-    setTime (day) {
+    setTime(day) {
       this.currentYear = day.split('-')[0]
       this.currentMonth = parseInt(day.split('-')[1])
       this.currentNow.setFullYear(this.currentYear)
@@ -372,9 +383,8 @@ export default {
       this.caleList()
     }
   },
-  mounted () {
+  mounted() {
     this.caleList()
   }
 }
-
 </script>

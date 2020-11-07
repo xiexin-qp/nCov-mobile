@@ -1,5 +1,5 @@
 <template>
-  <div class="qui-fx-f1 qui-fx-ver">
+  <div class="u-fx-f1 u-fx-ver">
     <header-com isBack :title="$route.query.title"></header-com>
     <div class="top-menu">
       <dropdown-menu
@@ -21,7 +21,7 @@ export default {
     DropdownMenu,
     HeaderCom
   },
-  data () {
+  data() {
     return {
       time: 'ALL',
       status: 'ALL',
@@ -101,10 +101,10 @@ export default {
   },
   computed: {},
   methods: {
-    activeMenu (index) {
+    activeMenu(index) {
       this.typeMenu = index
     },
-    screen (a) {
+    screen(a) {
       console.log(a)
       if (this.typeMenu === 0) {
         this.time = this.dropdownList[this.typeMenu].typeName
@@ -118,5 +118,4 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>
